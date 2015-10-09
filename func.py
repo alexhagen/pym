@@ -1,6 +1,9 @@
 import math
 import numpy as np
-from ..plotting import twod as ahp
+import sys
+sys.path.append("/Users/ahagen/code");
+#from ..plotting import twod as ahp
+from pyg import twod as ahp
 from scipy import nanmean
 from scipy.optimize import curve_fit
 from scipy.odr import *
@@ -191,7 +194,7 @@ class curve(object):
 				plot.add_line_yy(x,y,xerr=self.u_x,yerr=self.u_y,name=self.name,linestyle=linestyle,linecolor=linecolor);
 		return plot;
 	def decimate(self,R):
-		pad_size = pymath.ceil(float(self.x.size)/R)*R - self.x.size;
+		pad_size = math.ceil(float(self.x.size)/R)*R - self.x.size;
 		arr_x_padded = np.append(self.x, np.zeros(pad_size)*np.NaN);
 		self.x = nanmean(arr_x_padded.reshape(-1,R), axis=1);
 		arr_y_padded = np.append(self.y, np.zeros(pad_size)*np.NaN);

@@ -81,6 +81,11 @@ class curve(object):
 				# if it is not in the data range, extrapolate
 				y[index] = self.extrapolate(xi);
 		return y;
+	def find(self,y):
+		""" ``pym.curve.find(y)`` finds the interpolated ordinate ``x`` such
+		that the interpolation of the curve is equal to ``y``.
+		"""
+		
 	def normalize(self,xmin=None,xmax=None,norm='max'):
 		if norm is 'max':
 			self.y = self.y / self.y.max();

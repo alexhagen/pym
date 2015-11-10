@@ -28,26 +28,26 @@ class rand_gen(object):
 
 class curve(object):
 	def __init__(self,x,y,name='',u_x=None,u_y=None,data='smooth'):
-		self.name = name;
-		self.data = data;
+		self.name = name
+		self.data = data
 		# assert that x and y are 1d lists of same size
-		if isinstance(x,list):
-			self.x = np.array(x);
+		if isinstance(x, list):
+			self.x = np.array(x)
 		else:
-			self.x = x;
-		if isinstance(y,list):
-			self.y = np.array(y);
+			self.x = x
+		if isinstance(y, list):
+			self.y = np.array(y)
 		else:
-			self.y = y;
-		if isinstance(u_x,list):
-			self.u_x = np.array(u_x);
+			self.y = y
+		if isinstance(u_x, list):
+			self.u_x = np.array(u_x)
 		else:
-			self.u_x = u_x;
-		if isinstance(u_y,list):
-			self.u_y = np.array(u_y);
+			self.u_x = u_x
+		if isinstance(u_y, list):
+			self.u_y = np.array(u_y)
 		else:
-			self.u_y = u_y;
-		self.sort();
+			self.u_y = u_y
+		self.sort()
 	def sort(self):
 		""" ``ah_py.curve.sort()`` sorts the list depending on the **x** coordinate."""
 		idx = self.x.argsort();
@@ -57,10 +57,10 @@ class curve(object):
 			self.u_x = self.u_x[idx];
 		if self.u_y is not None:
 			self.u_y = self.u_y[idx];
-	def add_data(self,x,y):
+	def add_data(self, x, y):
 		""" ``ah_py.curve.add_data(x,y)`` adds data to the already populated x and y."""
-		self.x = np.append(self.x,x);
-		self.y = np.append(self.y,y);
+		self.x = np.append(self.x, x)
+		self.y = np.append(self.y, y)
 		self.sort();
 	def inrange(self,x):
 		""" ``ah_py.curve.inrange(x)`` checks if input ``x`` is in the range of the
@@ -85,7 +85,7 @@ class curve(object):
 		""" ``pym.curve.find(y)`` finds the interpolated ordinate ``x`` such
 		that the interpolation of the curve is equal to ``y``.
 		"""
-		
+
 	def normalize(self,xmin=None,xmax=None,norm='max'):
 		if norm is 'max':
 			self.y = self.y / self.y.max();

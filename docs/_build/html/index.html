@@ -216,6 +216,46 @@ casts the linear interpolation as a line in point slope form and solves</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="func.curve.normalize">
+<code class="descname">normalize</code><span class="sig-paren">(</span><em>xmin=None</em>, <em>xmax=None</em>, <em>norm='max'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">normalize()</span></code> normalizes the entire curve to be normalized.</p>
+<p><strong>Caution! This will change all of the y values in the entire curve!</strong></p>
+<p>Normalize will take the data of the curve (optionally just the data
+between <code class="docutils literal"><span class="pre">xmin</span></code> and <code class="docutils literal"><span class="pre">xmax</span></code>) and normalize it based on the option
+given by <code class="docutils literal"><span class="pre">norm</span></code>.  The options for norm are <code class="docutils literal"><span class="pre">max</span></code> and <code class="docutils literal"><span class="pre">int</span></code>. For a
+<code class="docutils literal"><span class="pre">max</span></code> normalization, first the function finds the maximum value of
+the curve in the range of the <span class="math">\(x\)</span> data and adjusts all <span class="math">\(y\)</span>
+values according to</p>
+<div class="math">
+\[y = \frac{y}{y_{max}}\]</div>
+<p>For an <code class="docutils literal"><span class="pre">int</span></code> normalization, the function adjusts all <span class="math">\(y\)</span> values
+according to</p>
+<div class="math">
+\[y=\frac{y}{\int_{x_{min}}^{x_{max}}y \left( x \right) dx}\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>xmin</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; optional argument giving the lower bound of the
+integral in an integral normalization or the lower bound in which
+to find the max in a max normalization</li>
+<li><strong>xmax</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; optional argument giving the upper bound of the
+integral in an integral normalization or the upper bound in which
+to find the max in a max normalization</li>
+<li><strong>norm</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; a string of &#8216;max&#8217; or &#8216;int&#8217; (default &#8216;max&#8217;) which
+defines which of the two types of normalization to perform</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="func.curve.sort">
 <code class="descname">sort</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.sort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.sort" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">sort()</span></code> sorts the list depending on the <span class="math">\(x\)</span> coordinate.</p>

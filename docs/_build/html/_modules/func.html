@@ -160,7 +160,39 @@
 <span class="sd">		that the interpolation of the curve is equal to ``y``.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 </div>
-	<span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s">&#39;max&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="curve.normalize"><a class="viewcode-back" href="../index.html#func.curve.normalize">[docs]</a>	<span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s">&#39;max&#39;</span><span class="p">):</span>
+		<span class="sd">r&quot;&quot;&quot; ``normalize()`` normalizes the entire curve to be normalized.</span>
+
+<span class="sd">		**Caution! This will change all of the y values in the entire curve!**</span>
+
+<span class="sd">		Normalize will take the data of the curve (optionally just the data</span>
+<span class="sd">		between ``xmin`` and ``xmax``) and normalize it based on the option</span>
+<span class="sd">		given by ``norm``.  The options for norm are ``max`` and ``int``. For a</span>
+<span class="sd">		``max`` normalization, first the function finds the maximum value of</span>
+<span class="sd">		the curve in the range of the :math:`x` data and adjusts all :math:`y`</span>
+<span class="sd">		values according to</span>
+
+<span class="sd">		.. math::</span>
+
+<span class="sd">			y = \frac{y}{y_{max}}</span>
+
+<span class="sd">		For an ``int`` normalization, the function adjusts all :math:`y` values</span>
+<span class="sd">		according to</span>
+
+<span class="sd">		.. math::</span>
+
+<span class="sd">			y=\frac{y}{\int_{x_{min}}^{x_{max}}y \left( x \right) dx}</span>
+
+<span class="sd">		:param float xmin: optional argument giving the lower bound of the</span>
+<span class="sd">			integral in an integral normalization or the lower bound in which</span>
+<span class="sd">			to find the max in a max normalization</span>
+<span class="sd">		:param float xmax: optional argument giving the upper bound of the</span>
+<span class="sd">			integral in an integral normalization or the upper bound in which</span>
+<span class="sd">			to find the max in a max normalization</span>
+<span class="sd">		:param str norm: a string of &#39;max&#39; or &#39;int&#39; (default &#39;max&#39;) which</span>
+<span class="sd">			defines which of the two types of normalization to perform</span>
+<span class="sd">		:return: None</span>
+<span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">if</span> <span class="n">norm</span> <span class="ow">is</span> <span class="s">&#39;max&#39;</span><span class="p">:</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 		<span class="k">elif</span> <span class="n">norm</span> <span class="ow">is</span> <span class="s">&#39;int&#39;</span><span class="p">:</span>
@@ -170,7 +202,7 @@
 				<span class="n">xmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> \
 				<span class="bp">self</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
-
+</div>
 	<span class="k">def</span> <span class="nf">average</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 		<span class="k">if</span> <span class="n">xmin</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
 			<span class="n">xmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>

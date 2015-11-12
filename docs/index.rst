@@ -10,19 +10,18 @@ Welcome to pym's documentation!
 
   write an introduction for this documentation
 
-.. automodule:: func
+.. autoclass:: func.curve
   :members:
   :show-inheritance:
+
+
+Indices and tables
+==================
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
-
-
-
-Indices and tables
-==================
 
 * :ref:`genindex`
 * :ref:`modindex`

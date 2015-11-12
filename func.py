@@ -10,13 +10,6 @@ from scipy.odr import *
 
 
 class rand_gen(object):
-	r""" A ``rand_gen`` class object generates random numbers and tracks them.
-
-	If you are going to be doing monte carlo type simulation, it is very
-	important that your random is actually random.  The ``rand_gen`` class
-	helps analyze this.  You can simply return random values from the rand_gen
-	object, and it will store and check these values later for true randomness.
-	"""
 	def __init__(self):
 		n = 0
 		rands = []
@@ -38,6 +31,27 @@ class rand_gen(object):
 
 
 class curve(object):
+	r""" An object to expose some numerical methods and plotting tools.
+
+	A ``curve`` object takes any two dimensional dataset and its uncertainty
+	(both in the :math:`x` and :math:`y` direction).  Each data set includes
+	:math:`x` and :math:`y` data and uncertainty associated with that, as well
+	as a name and a data shape designation (whether this is smooth data or
+	binned).
+
+	:param list-like x: The ordinate data of the curve
+	:param list-like u_x: The uncertainty in the ordinate data of the curve
+	:param list-like y: The abscissa data of the curve
+	:param list-like u_y: The uncertainty in the abscissa data of the curve
+	:param str name: The name of the data set, used for plotting, etc.
+	:param str data: The type of data, whether 'smooth' or 'binned'. This
+		parameter affects the interpolation (and in turn, many other functions)
+		by determining what the value is between data points.  For smooth data,
+		linear interpolation is enacted to find values between points, for
+		binned data, constant interpolation is used.
+	:return: the ``curve`` object.
+	:rtype: curve
+	"""
 	def __init__(self, x, y, name='', u_x=None, u_y=None, data='smooth'):
 		self.name = name
 		self.data = data
@@ -59,89 +73,158 @@ class curve(object):
 		else:
 			self.u_y = u_y
 		self.sort()
+
 	def sort(self):
-		""" ``ah_py.curve.sort()`` sorts the list depending on the **x** coordinate."""
-		idx = self.x.argsort();
-		self.x = self.x[idx];
-		self.y = self.y[idx];
+		""" ``sort()`` sorts the list depending on the :math:`x` coordinate."""
+		idx = self.x.argsort()
+		self.x = self.x[idx]
+		self.y = self.y[idx]
 		if self.u_x is not None:
-			self.u_x = self.u_x[idx];
+			self.u_x = self.u_x[idx]
 		if self.u_y is not None:
-			self.u_y = self.u_y[idx];
+			self.u_y = self.u_y[idx]
+
 	def add_data(self, x, y):
-		""" ``ah_py.curve.add_data(x,y)`` adds data to the already populated x and y."""
+		""" ``add_data(x,y)`` adds data to the already populated x and y.
+
+		:param list-like x: The ordinate data to add to the already populated
+			curve object.
+		:param list-like y: The abscissa data to add to the already populated
+			curve object.
+		:return: A curve object with the added data, fully sorted.
+		:rtype: curve
+		"""
 		self.x = np.append(self.x, x)
 		self.y = np.append(self.y, y)
-		self.sort();
-	def inrange(self,x):
-		""" ``ah_py.curve.inrange(x)`` checks if input ``x`` is in the range of the
-	covered by the ``ah_py.curve`` instance's array ``x``."""
+		self.sort()
+
+	def inrange(self, x):
+		""" ``inrange(x)`` checks if a point is within the range of data.
+
+		:param float x: The data point to check if it is in the range of the
+			existing curve data.
+		:return: Whether or not the data is in the range of the curve data.
+		:rtype: bool
+		"""
 		if x >= self.x.min() and x <= self.x.max():
-			return True;
+			return True
 		else:
-			return False;
-	def at(self,x):
-		""" ``ah_py.curve.at(x)`` interpolates or extrapolates the curve to give a y
-	value for the curve at input ``x``."""
-		y = np.ones_like(x);
+			return False
+
+	def at(self, x):
+		""" ``at(x)`` finds a value at x.
+
+		``at(x)`` uses interpolation or extrapolation to determine the value
+		of the curve at a given point, :math:`x`.  The function first checks
+		if :math:`x` is in the range of the curve.  If it is in the range, the
+		function calls :py:func:`interpolate` to determine the value.  If it is
+		not in the range, the function calls :py:func:`extrapolate` to
+		determine the value.
+
+		:param float x: The coordinate of which the value is desired.
+		:returns: the value of the curve at point :math:`x`
+		:rtype: float
+		"""
+		y = np.ones_like(x)
 		for index, xi in np.ndenumerate(x):
 			if xi >= self.x.min() and xi <= self.x.max():
 				# if it is in the data range, interpolate
-				y[index] = self.interpolate(xi);
+				y[index] = self.interpolate(xi)
 			else:
 				# if it is not in the data range, extrapolate
-				y[index] = self.extrapolate(xi);
-		return y;
-	def find(self,y):
+				y[index] = self.extrapolate(xi)
+		return y
+
+	def find(self, y):
 		""" ``pym.curve.find(y)`` finds the interpolated ordinate ``x`` such
 		that the interpolation of the curve is equal to ``y``.
 		"""
 
-	def normalize(self,xmin=None,xmax=None,norm='max'):
+	def normalize(self, xmin=None, xmax=None, norm='max'):
 		if norm is 'max':
-			self.y = self.y / self.y.max();
+			self.y = self.y / self.y.max()
 		elif norm is 'int':
 			if xmin is None:
-				xmin = self.x.min();
+				xmin = self.x.min()
 			if xmax is None:
-				xmax = self.x.max();
+				xmax = self.x.max()
 			self.y = self.y / \
-				self.integrate(xmin,xmax);
-	def average(self,xmin=None,xmax=None):
+				self.integrate(xmin, xmax)
+
+	def average(self, xmin=None, xmax=None):
 		if xmin is None:
-			xmin = self.x.min();
+			xmin = self.x.min()
 		if xmax is None:
-			xmax = self.x.max();
-		mean = self.integrate(xmin,xmax) \
-			/ (xmax - xmin);
-		return mean;
-	def interpolate(self,x):
+			xmax = self.x.max()
+		mean = self.integrate(xmin, xmax) \
+			/ (xmax - xmin)
+		return mean
+
+	def interpolate(self, x):
+		r""" ``interpolate(x)`` finds the value of a point in the curve range.
+
+		The function uses linear interpolation to find the value of a point in
+		the range of the curve data.  First, it uses
+		:py:func:`find_nearest_down` and :py:func:`find_nearest_up` to find the
+		two points comprising the interval which :math:`x` exists in.  Then, it
+		casts the linear interpolation as a line in point slope form and solves
+
+		.. math::
+
+			y=\frac{\left(y_{1}-y_{0}\right)}{\left(x_{1}-x_{0}\right)}
+			\left(x-x_{0}\right)+y_{0}
+
+		:param float x: The coordinate of the desired value.
+		:return: the value of the curve at :math:`x`
+		:rtype: float
+		"""
 		# if not, we have to do linear interpolation
 		# find closest value below
-		x_down,y_down = self.find_nearest_down(x);
+		x_down, y_down = self.find_nearest_down(x)
 		# find the closest value above
-		x_up,y_up = self.find_nearest_up(x);
+		x_up, y_up = self.find_nearest_up(x)
 		# find the percentage of x distance between
-		x_dist = (x-x_down);
+		x_dist = (x - x_down)
 		# find the slope
-		m = (y_up-y_down)/(x_up-x_down);
+		m = (y_up - y_down) / (x_up - x_down)
 		# find the y value
-		y = y_down + x_dist * m;
-		return y;
-	def extrapolate(self,x):
-		#print "You need to write the extrapolate method!";
+		y = y_down + x_dist * m
+		return y
+
+	def extrapolate(self, x):
+		r""" ``extrapolate(x)`` finds value of a point out of the curve range.
+
+		The function uses linear extrapolation to find the value of a point
+		without the range of the already existing curve.  First, it determines
+		whether the requested point is above or below the existing data. Then,
+		it uses :py:func:`find_nearest_down` or :py:func:`find_nearest_up` to
+		find the nearest point.  Then it uses :py:func:`find_nearest_down` or
+		:py:func:`find_nearest_up` to find the seconds nearest point.  Finally,
+		it solves the following equation to determine the value
+
+		.. math::
+
+			y=\frac{\left(y_{1}-y_{0}\right)}{\left(x_{1}-x_{0}\right)}
+			\left(x-x_{0}\right)+y_{0}
+
+		:param float x: the ordinate of the value requested
+		:returns: the value of the curve at point :math:`x`
+		:rtype: float
+		"""
+		# find whether the point is above or below
 		if x < self.x.min():
 			x1 = self.x[0];
-			x2 = self.x[1];
+			x2 = self.x[1]
 		elif x > self.x.max():
-			x1 = self.x[-1];
-			x2 = self.x[-2];
+			x1 = self.x[-1]
+			x2 = self.x[-2]
 		# now find the slope
-		m = (self.at(x1) - self.at(x2))/(x1 - x2);
+		m = (self.at(x1) - self.at(x2)) / (x1 - x2)
 		# find the y change between closest point and new point
-		dy = m * (x - x1);
+		dy = m * (x - x1)
 		# find the new point
-		return self.at(x1) + dy;
+		return self.at(x1) + dy
+
 	def find_nearest_down(self,x):
 		idx = (np.abs(x-self.x)).argmin()
 		return (self.x[idx-1], self.y[idx-1])

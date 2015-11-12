@@ -1,33 +1,44 @@
 import math
 import numpy as np
 import sys
-sys.path.append("/Users/ahagen/code");
-#from ..plotting import twod as ahp
+import os
+sys.path.append("/Users/ahagen/code")
 from pyg import twod as ahp
 from scipy import nanmean
 from scipy.optimize import curve_fit
 from scipy.odr import *
 
+
 class rand_gen(object):
+	r""" A ``rand_gen`` class object generates random numbers and tracks them.
+
+	If you are going to be doing monte carlo type simulation, it is very
+	important that your random is actually random.  The ``rand_gen`` class
+	helps analyze this.  You can simply return random values from the rand_gen
+	object, and it will store and check these values later for true randomness.
+	"""
 	def __init__(self):
-		n = 0;
-		rands = [];
+		n = 0
+		rands = []
+
 	def rand(self):
 		# sample a random value
-		r = np.random.rand();
+		r = np.random.rand()
 		# add these rands into our list of rands
-		self.rands.append(r);
+		self.rands.append(r)
 		# increment the number of rands used
-		self.n = self.n + 1;
-		return r;
+		self.n = self.n + 1
+		return r
+
 	def check_randomness(self):
 		# check the average and std of the rands used
-		r_bar = np.average(self.rands);
-		r_std = np.std(self.rands);
-		return (r_bar,r_std);
+		r_bar = np.average(self.rands)
+		r_std = np.std(self.rands)
+		return (r_bar, r_std)
+
 
 class curve(object):
-	def __init__(self,x,y,name='',u_x=None,u_y=None,data='smooth'):
+	def __init__(self, x, y, name='', u_x=None, u_y=None, data='smooth'):
 		self.name = name
 		self.data = data
 		# assert that x and y are 1d lists of same size

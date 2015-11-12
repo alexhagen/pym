@@ -1,49 +1,36 @@
 ---
 layout: post
-title: pyg
-description: "a graphing library in python"
+title: pym
+description: "a math library in python"
 category: code
-tags: [python, visualization]
+tags: [python, numerical methods]
 image:
   feature: "http://alexhagen.github.io/pyg/images/pyg_banner_1.png"
 ---
 
-# pyg - A graphing library in python
+# pym - A graphing library in python
 
-Last Updated on 11/2/15
+Last Updated on 11/12/15
 
 Written by [Alex Hagen](http://alexhagen.github.io)
 
-Hosted at [github.com/alexhagen/pyg](http://github.com/alexhagen/pyg)
+Hosted at [github.com/alexhagen/pym](http://github.com/alexhagen/pym)
 
-Documentation at [alexhagen.github.io/pyg/docs](docs/)
+Documentation at [alexhagen.github.io/pym/docs](docs/)
 
-`pyg` (pronounced <i>pig</i>) is my graphing library for `python`, building off of
-`matplotlib`.  Realistically, it only is very useful for a couple cases.
+`pym` (pronounced <i>pim</i>) is a pretty simple numerical methods library for
+python.  It can be used to do interpolation, extrapolation, integration,
+normalization, etc.  In general, it is a replication of Brian Bradie's book
+*A Friendly Introduction to Numerical Methods* in code.  Usage should be fairly
+simple, with the documentation [documentation](docs/) providing a practical
+guide to using the library.
 
-- If you're using my [`pym`](http://alexhagen.github.io/pym/) library for
-interpolation, decimation, or other operations on data sets, `pyg` is a lazy
-and easy way to create graphs from these objects.
-- If you've got a specific style in mind, and you want to pass that in as an
-`rc.Params` object, `pyg` can help you keep that style consistent.
-- If you're wanting to publish, `pyg` has some exporting features that make
-figures exported as <i>1-column</i>, <i>2-column</i>, or <i>full-page</i> look
-great in journal articles.
-- If you want to tinker, `pyg` is a good starting point for making functions
-to consistently graph data with the same annotations, such as measurements,
-data-pointers, and other features.
+## Pym Demonstrations and Screenshots
 
-If one of those cases are something you're interested in, you can look below
-for samples and demos or take a look at the [documentation](docs/).
+### Installation
 
-## Pyg Demonstrations and Screenshots
+### Curve creation and graphing using [pyg](../pym/)
 
-### A simple pyg linegraph
+### Integration and normalization
 
-### Publication figures with pyg
-
-### Pyg and Pym integration
-
-### Data-pointers on plots
-
-### Dual axes
+### Curve arithmetic

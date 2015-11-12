@@ -268,12 +268,14 @@ class curve(object):
         # find the new point
         return self.at(x1) + dy
 
-    def find_nearest_down(self,x):
-        idx = (np.abs(x-self.x)).argmin()
-        return (self.x[idx-1], self.y[idx-1])
-    def find_nearest_up(self,x):
-        idx = (np.abs(x-self.x)).argmin()
+    def find_nearest_down(self, x):
+        idx = (np.abs(x - self.x)).argmin()
+        return (self.x[idx - 1], self.y[idx - 1])
+
+    def find_nearest_up(self, x):
+        idx = (np.abs(x - self.x)).argmin()
         return (self.x[idx], self.y[idx])
+
     def integrate(self,x_min,x_max,quad='lin'):
         # for now, we'll just do simpsons rule until I write
         # more sophisticated

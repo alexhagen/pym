@@ -3,12 +3,19 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to pym's documentation!
+Pym - a Python Math library
 ===============================
 
-.. todo::
-
-  write an introduction for this documentation
+Pym is a library for some numerical methods written in python for general use.
+It strives to be lightweight and easy to use, but if you haven't read the
+introduction and motivation `here <http://alexhagen.github.io/pym/>`_, you
+might want to.  In general, you should use this library if you want to use
+easy integration, interpolation, extrapolation, and some graphing methods.
+Many of the numerical method algorithms come from Brian Bradie's great book,
+A Friendly Introduction to Numerical Analysis, and the theory and support for
+those methods can be found in that book. This documentation will give cursory
+explanations of the numerical methods used, but is written to be more
+of a practical guide for coders. Good luck and happy coding!
 
 .. autoclass:: func.curve
   :members:

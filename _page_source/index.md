@@ -29,7 +29,7 @@ guide to using the library.
 
 ### Installation
 
-### Curve creation and graphing using [pyg](../pym/)
+### Curve creation and graphing using [pyg](../pyg/)
 
 ### Integration and normalization
 

@@ -8,7 +8,7 @@ image:
   feature: "http://alexhagen.github.io/pyg/images/pyg_banner_1.png"
 ---
 
-# pym - A graphing library in python
+# pym - A math and numerical methods library in python
 
 Last Updated on 11/12/15
 

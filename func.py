@@ -133,7 +133,23 @@ class curve(object):
         :return: a list of :math:`x` that have value :math:`y`
         :rtype: list
         """
-        #
+        # take the entire list of y's and subtract the value.  those intervals
+        # where the sign changes are where the function crosses the value
+        y_p = y - self.y
+        # find where the sign change is
+        (interval, ) = np.where(np.multiply(y_p[:-1], y_p[1:]) < 0.)
+        # using those intervals, create y_0s and y_1s
+        y_left = self.y[interval]
+        y_right = self.y[interval + 1]
+        x_left = self.x[interval]
+        x_right = self.x[interval + 1]
+        # generate an array by solving the point slope form equation
+        x_where = np.zeros_like(y_left)
+        for i in range(len(y_left)):
+            x_where[i] = ((x_right[i] - x_left[i]) / (y_right[i] - y_left[i]))\
+                * (y - y_left[i]) + x_left[i]
+        # return all of those intervals
+        return x_where
 
     def normalize(self, xmin=None, xmax=None, norm='max'):
         r""" ``normalize()`` normalizes the entire curve to be normalized.

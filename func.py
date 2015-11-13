@@ -2,7 +2,7 @@ import math
 import numpy as np
 import sys
 import os
-sys.path.append("/Users/ahagen/code")
+sys.path.append(os.environ['HOME'] + '/code/')
 from pyg import twod as ahp
 from scipy import nanmean
 from scipy.optimize import curve_fit

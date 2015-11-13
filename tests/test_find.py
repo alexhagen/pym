@@ -1,6 +1,7 @@
 import sys
 import numpy as np
-sys.path.append("/Users/ahagen/code")
+import os
+sys.path.append(os.environ['HOME'] + '/code/')
 from pym import func as ahf
 
 x = np.arange(0., 24.)

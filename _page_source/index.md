@@ -5,7 +5,7 @@ description: "a math library in python"
 category: code
 tags: [python, numerical methods]
 image:
-  feature: "http://alexhagen.github.io/pyg/images/pyg_banner_1.png"
+  feature: "http://alexhagen.github.io/pyg/images/pyg_banner_2.png"
 ---
 
 # pym - A math and numerical methods library in python

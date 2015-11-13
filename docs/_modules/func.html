@@ -43,7 +43,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;/Users/ahagen/code&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;HOME&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;/code/&#39;</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">pyg</span> <span class="kn">import</span> <span class="n">twod</span> <span class="k">as</span> <span class="n">ahp</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">nanmean</span>
 <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">curve_fit</span>
@@ -51,316 +51,385 @@
 
 
 <div class="viewcode-block" id="curve"><a class="viewcode-back" href="../index.html#func.curve">[docs]</a><span class="k">class</span> <span class="nc">curve</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-	<span class="sd">r&quot;&quot;&quot; An object to expose some numerical methods and plotting tools.</span>
+    <span class="sd">r&quot;&quot;&quot; An object to expose some numerical methods and plotting tools.</span>
 
-<span class="sd">	A ``curve`` object takes any two dimensional dataset and its uncertainty</span>
-<span class="sd">	(both in the :math:`x` and :math:`y` direction).  Each data set includes</span>
-<span class="sd">	:math:`x` and :math:`y` data and uncertainty associated with that, as well</span>
-<span class="sd">	as a name and a data shape designation (whether this is smooth data or</span>
-<span class="sd">	binned).</span>
+<span class="sd">    A ``curve`` object takes any two dimensional dataset and its uncertainty</span>
+<span class="sd">    (both in the :math:`x` and :math:`y` direction).  Each data set includes</span>
+<span class="sd">    :math:`x` and :math:`y` data and uncertainty associated with that, as well</span>
+<span class="sd">    as a name and a data shape designation (whether this is smooth data or</span>
+<span class="sd">    binned).</span>
 
-<span class="sd">	:param list-like x: The ordinate data of the curve</span>
-<span class="sd">	:param list-like u_x: The uncertainty in the ordinate data of the curve</span>
-<span class="sd">	:param list-like y: The abscissa data of the curve</span>
-<span class="sd">	:param list-like u_y: The uncertainty in the abscissa data of the curve</span>
-<span class="sd">	:param str name: The name of the data set, used for plotting, etc.</span>
-<span class="sd">	:param str data: The type of data, whether &#39;smooth&#39; or &#39;binned&#39;. This</span>
-<span class="sd">		parameter affects the interpolation (and in turn, many other functions)</span>
-<span class="sd">		by determining what the value is between data points.  For smooth data,</span>
-<span class="sd">		linear interpolation is enacted to find values between points, for</span>
-<span class="sd">		binned data, constant interpolation is used.</span>
-<span class="sd">	:return: the ``curve`` object.</span>
-<span class="sd">	:rtype: curve</span>
-<span class="sd">	&quot;&quot;&quot;</span>
-	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">u_x</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">u_y</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="s">&#39;smooth&#39;</span><span class="p">):</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
-		<span class="c"># assert that x and y are 1d lists of same size</span>
-		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-		<span class="k">else</span><span class="p">:</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
-		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-		<span class="k">else</span><span class="p">:</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
-		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">u_x</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">u_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">u_x</span><span class="p">)</span>
-		<span class="k">else</span><span class="p">:</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">u_x</span> <span class="o">=</span> <span class="n">u_x</span>
-		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">u_y</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">u_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">u_y</span><span class="p">)</span>
-		<span class="k">else</span><span class="p">:</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">u_y</span> <span class="o">=</span> <span class="n">u_y</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<span class="sd">    :param list-like x: The ordinate data of the curve</span>
+<span class="sd">    :param list-like u_x: The uncertainty in the ordinate data of the curve</span>
+<span class="sd">    :param list-like y: The abscissa data of the curve</span>
+<span class="sd">    :param list-like u_y: The uncertainty in the abscissa data of the curve</span>
+<span class="sd">    :param str name: The name of the data set, used for plotting, etc.</span>
+<span class="sd">    :param str data: The type of data, whether &#39;smooth&#39; or &#39;binned&#39;. This</span>
+<span class="sd">        parameter affects the interpolation (and in turn, many other functions)</span>
+<span class="sd">        by determining what the value is between data points.  For smooth data,</span>
+<span class="sd">        linear interpolation is enacted to find values between points, for</span>
+<span class="sd">        binned data, constant interpolation is used.</span>
+<span class="sd">    :return: the ``curve`` object.</span>
+<span class="sd">    :rtype: curve</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">u_x</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">u_y</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="s">&#39;smooth&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="c"># assert that x and y are 1d lists of same size</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">u_x</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">u_x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span> <span class="o">=</span> <span class="n">u_x</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">u_y</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">u_y</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span> <span class="o">=</span> <span class="n">u_y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 
-<div class="viewcode-block" id="curve.sort"><a class="viewcode-back" href="../index.html#func.curve.sort">[docs]</a>	<span class="k">def</span> <span class="nf">sort</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; ``sort()`` sorts the list depending on the :math:`x` coordinate.&quot;&quot;&quot;</span>
-		<span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
-		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">u_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
-		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">u_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+<div class="viewcode-block" id="curve.sort"><a class="viewcode-back" href="../index.html#func.curve.sort">[docs]</a>    <span class="k">def</span> <span class="nf">sort</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``sort()`` sorts the list depending on the :math:`x` coordinate.&quot;&quot;&quot;</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="curve.add_data"><a class="viewcode-back" href="../index.html#func.curve.add_data">[docs]</a>	<span class="k">def</span> <span class="nf">add_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; ``add_data(x,y)`` adds data to the already populated x and y.</span>
+<div class="viewcode-block" id="curve.add_data"><a class="viewcode-back" href="../index.html#func.curve.add_data">[docs]</a>    <span class="k">def</span> <span class="nf">add_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``add_data(x,y)`` adds data to the already populated x and y.</span>
 
-<span class="sd">		:param list-like x: The ordinate data to add to the already populated</span>
-<span class="sd">			curve object.</span>
-<span class="sd">		:param list-like y: The abscissa data to add to the already populated</span>
-<span class="sd">			curve object.</span>
-<span class="sd">		:return: A curve object with the added data, fully sorted.</span>
-<span class="sd">		:rtype: curve</span>
-<span class="sd">		&quot;&quot;&quot;</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<span class="sd">        :param list-like x: The ordinate data to add to the already populated</span>
+<span class="sd">            curve object.</span>
+<span class="sd">        :param list-like y: The abscissa data to add to the already populated</span>
+<span class="sd">            curve object.</span>
+<span class="sd">        :return: A curve object with the added data, fully sorted.</span>
+<span class="sd">        :rtype: curve</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="curve.inrange"><a class="viewcode-back" href="../index.html#func.curve.inrange">[docs]</a>	<span class="k">def</span> <span class="nf">inrange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; ``inrange(x)`` checks if a point is within the range of data.</span>
+<div class="viewcode-block" id="curve.inrange"><a class="viewcode-back" href="../index.html#func.curve.inrange">[docs]</a>    <span class="k">def</span> <span class="nf">inrange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``inrange(x)`` checks if a point is within the range of data.</span>
 
-<span class="sd">		:param float x: The data point to check if it is in the range of the</span>
-<span class="sd">			existing curve data.</span>
-<span class="sd">		:return: Whether or not the data is in the range of the curve data.</span>
-<span class="sd">		:rtype: bool</span>
-<span class="sd">		&quot;&quot;&quot;</span>
-		<span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">():</span>
-			<span class="k">return</span> <span class="bp">True</span>
-		<span class="k">else</span><span class="p">:</span>
-			<span class="k">return</span> <span class="bp">False</span>
+<span class="sd">        :param float x: The data point to check if it is in the range of the</span>
+<span class="sd">            existing curve data.</span>
+<span class="sd">        :return: Whether or not the data is in the range of the curve data.</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
 </div>
-<div class="viewcode-block" id="curve.at"><a class="viewcode-back" href="../index.html#func.curve.at">[docs]</a>	<span class="k">def</span> <span class="nf">at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; ``at(x)`` finds a value at x.</span>
+<div class="viewcode-block" id="curve.at"><a class="viewcode-back" href="../index.html#func.curve.at">[docs]</a>    <span class="k">def</span> <span class="nf">at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``at(x)`` finds a value at x.</span>
 
-<span class="sd">		``at(x)`` uses interpolation or extrapolation to determine the value</span>
-<span class="sd">		of the curve at a given point, :math:`x`.  The function first checks</span>
-<span class="sd">		if :math:`x` is in the range of the curve.  If it is in the range, the</span>
-<span class="sd">		function calls :py:func:`interpolate` to determine the value.  If it is</span>
-<span class="sd">		not in the range, the function calls :py:func:`extrapolate` to</span>
-<span class="sd">		determine the value.</span>
+<span class="sd">        ``at(x)`` uses interpolation or extrapolation to determine the value</span>
+<span class="sd">        of the curve at a given point, :math:`x`.  The function first checks</span>
+<span class="sd">        if :math:`x` is in the range of the curve.  If it is in the range, the</span>
+<span class="sd">        function calls :py:func:`interpolate` to determine the value.  If it is</span>
+<span class="sd">        not in the range, the function calls :py:func:`extrapolate` to</span>
+<span class="sd">        determine the value.</span>
 
-<span class="sd">		:param float x: The coordinate of which the value is desired.</span>
-<span class="sd">		:returns: the value of the curve at point :math:`x`</span>
-<span class="sd">		:rtype: float</span>
-<span class="sd">		&quot;&quot;&quot;</span>
-		<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-		<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">xi</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">ndenumerate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-			<span class="k">if</span> <span class="n">xi</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="ow">and</span> <span class="n">xi</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">():</span>
-				<span class="c"># if it is in the data range, interpolate</span>
-				<span class="n">y</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">xi</span><span class="p">)</span>
-			<span class="k">else</span><span class="p">:</span>
-				<span class="c"># if it is not in the data range, extrapolate</span>
-				<span class="n">y</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extrapolate</span><span class="p">(</span><span class="n">xi</span><span class="p">)</span>
-		<span class="k">return</span> <span class="n">y</span>
+<span class="sd">        :param float x: The coordinate of which the value is desired.</span>
+<span class="sd">        :returns: the value of the curve at point :math:`x`</span>
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">xi</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">ndenumerate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">xi</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="ow">and</span> <span class="n">xi</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">():</span>
+                <span class="c"># if it is in the data range, interpolate</span>
+                <span class="n">y</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">xi</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c"># if it is not in the data range, extrapolate</span>
+                <span class="n">y</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extrapolate</span><span class="p">(</span><span class="n">xi</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">y</span>
 </div>
-<div class="viewcode-block" id="curve.find"><a class="viewcode-back" href="../index.html#func.curve.find">[docs]</a>	<span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot; ``pym.curve.find(y)`` finds the interpolated ordinate ``x`` such</span>
-<span class="sd">		that the interpolation of the curve is equal to ``y``.</span>
-<span class="sd">		&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="curve.find"><a class="viewcode-back" href="../index.html#func.curve.find">[docs]</a>    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot; ``find(y)`` finds values of :math:`x` that have value :math:`y`</span>
+
+<span class="sd">        This function takes a parameter :math:`y` and finds all of the ordinate</span>
+<span class="sd">        coordinates that have that value.  Basically, this is a root-finding</span>
+<span class="sd">        problem, but since we have a linear interpolation, the actual</span>
+<span class="sd">        root-finding is trivial.  The function first finds all intervals in</span>
+<span class="sd">        the dataset that include the value :math:`y`, and then solves the</span>
+<span class="sd">        interpolation to find those :math:`x` values according to</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            x=\left(y-y_{0}\right)\frac{\left(x_{1}-x_{0}\right)}</span>
+<span class="sd">            {\left(y_{1}-y_{0}\right)}+x_{0}</span>
+
+<span class="sd">        :param float y: the value which ordinate values are desired</span>
+<span class="sd">        :return: a list of :math:`x` that have value :math:`y`</span>
+<span class="sd">        :rtype: list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># take the entire list of y&#39;s and subtract the value.  those intervals</span>
+        <span class="c"># where the sign changes are where the function crosses the value</span>
+        <span class="n">y_p</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
+        <span class="c"># find where the sign change is</span>
+        <span class="p">(</span><span class="n">interval</span><span class="p">,</span> <span class="p">)</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">y_p</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">y_p</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">&lt;</span> <span class="mf">0.</span><span class="p">)</span>
+        <span class="c"># using those intervals, create y_0s and y_1s</span>
+        <span class="n">y_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">interval</span><span class="p">]</span>
+        <span class="n">y_right</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">interval</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">x_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">interval</span><span class="p">]</span>
+        <span class="n">x_right</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">interval</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="c"># generate an array by solving the point slope form equation</span>
+        <span class="n">x_where</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">y_left</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_left</span><span class="p">)):</span>
+            <span class="n">x_where</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">x_right</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">x_left</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">y_right</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">y_left</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>\
+                <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_left</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="n">x_left</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="c"># return all of those intervals</span>
+        <span class="k">return</span> <span class="n">x_where</span>
 </div>
-	<span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s">&#39;max&#39;</span><span class="p">):</span>
-		<span class="k">if</span> <span class="n">norm</span> <span class="ow">is</span> <span class="s">&#39;max&#39;</span><span class="p">:</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-		<span class="k">elif</span> <span class="n">norm</span> <span class="ow">is</span> <span class="s">&#39;int&#39;</span><span class="p">:</span>
-			<span class="k">if</span> <span class="n">xmin</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-				<span class="n">xmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-			<span class="k">if</span> <span class="n">xmax</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-				<span class="n">xmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> \
-				<span class="bp">self</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+<div class="viewcode-block" id="curve.normalize"><a class="viewcode-back" href="../index.html#func.curve.normalize">[docs]</a>    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s">&#39;max&#39;</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot; ``normalize()`` normalizes the entire curve to be normalized.</span>
 
-	<span class="k">def</span> <span class="nf">average</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-		<span class="k">if</span> <span class="n">xmin</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-			<span class="n">xmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-		<span class="k">if</span> <span class="n">xmax</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-			<span class="n">xmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-		<span class="n">mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span> \
-			<span class="o">/</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">)</span>
-		<span class="k">return</span> <span class="n">mean</span>
+<span class="sd">        **Caution! This will change all of the y values in the entire curve!**</span>
 
-<div class="viewcode-block" id="curve.interpolate"><a class="viewcode-back" href="../index.html#func.curve.interpolate">[docs]</a>	<span class="k">def</span> <span class="nf">interpolate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-		<span class="sd">r&quot;&quot;&quot; ``interpolate(x)`` finds the value of a point in the curve range.</span>
+<span class="sd">        Normalize will take the data of the curve (optionally just the data</span>
+<span class="sd">        between ``xmin`` and ``xmax``) and normalize it based on the option</span>
+<span class="sd">        given by ``norm``.  The options for norm are ``max`` and ``int``. For a</span>
+<span class="sd">        ``max`` normalization, first the function finds the maximum value of</span>
+<span class="sd">        the curve in the range of the :math:`x` data and adjusts all :math:`y`</span>
+<span class="sd">        values according to</span>
 
-<span class="sd">		The function uses linear interpolation to find the value of a point in</span>
-<span class="sd">		the range of the curve data.  First, it uses</span>
-<span class="sd">		:py:func:`find_nearest_down` and :py:func:`find_nearest_up` to find the</span>
-<span class="sd">		two points comprising the interval which :math:`x` exists in.  Then, it</span>
-<span class="sd">		casts the linear interpolation as a line in point slope form and solves</span>
+<span class="sd">        .. math::</span>
 
-<span class="sd">		.. math::</span>
+<span class="sd">            y = \frac{y}{y_{max}}</span>
 
-<span class="sd">			y=\frac{\left(y_{1}-y_{0}\right)}{\left(x_{1}-x_{0}\right)}</span>
-<span class="sd">			\left(x-x_{0}\right)+y_{0}</span>
+<span class="sd">        For an ``int`` normalization, the function adjusts all :math:`y` values</span>
+<span class="sd">        according to</span>
 
-<span class="sd">		:param float x: The coordinate of the desired value.</span>
-<span class="sd">		:return: the value of the curve at :math:`x`</span>
-<span class="sd">		:rtype: float</span>
-<span class="sd">		&quot;&quot;&quot;</span>
-		<span class="c"># if not, we have to do linear interpolation</span>
-		<span class="c"># find closest value below</span>
-		<span class="n">x_down</span><span class="p">,</span> <span class="n">y_down</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_nearest_down</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-		<span class="c"># find the closest value above</span>
-		<span class="n">x_up</span><span class="p">,</span> <span class="n">y_up</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_nearest_up</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-		<span class="c"># find the percentage of x distance between</span>
-		<span class="n">x_dist</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x_down</span><span class="p">)</span>
-		<span class="c"># find the slope</span>
-		<span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_up</span> <span class="o">-</span> <span class="n">y_down</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">x_up</span> <span class="o">-</span> <span class="n">x_down</span><span class="p">)</span>
-		<span class="c"># find the y value</span>
-		<span class="n">y</span> <span class="o">=</span> <span class="n">y_down</span> <span class="o">+</span> <span class="n">x_dist</span> <span class="o">*</span> <span class="n">m</span>
-		<span class="k">return</span> <span class="n">y</span>
+<span class="sd">        .. math::</span>
+
+<span class="sd">            y=\frac{y}{\int_{x_{min}}^{x_{max}}y \left( x \right) dx}</span>
+
+<span class="sd">        :param float xmin: optional argument giving the lower bound of the</span>
+<span class="sd">            integral in an integral normalization or the lower bound in which</span>
+<span class="sd">            to find the max in a max normalization</span>
+<span class="sd">        :param float xmax: optional argument giving the upper bound of the</span>
+<span class="sd">            integral in an integral normalization or the upper bound in which</span>
+<span class="sd">            to find the max in a max normalization</span>
+<span class="sd">        :param str norm: a string of &#39;max&#39; or &#39;int&#39; (default &#39;max&#39;) which</span>
+<span class="sd">            defines which of the two types of normalization to perform</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">norm</span> <span class="ow">is</span> <span class="s">&#39;max&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">norm</span> <span class="ow">is</span> <span class="s">&#39;int&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">xmin</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">xmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">xmax</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">xmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="curve.extrapolate"><a class="viewcode-back" href="../index.html#func.curve.extrapolate">[docs]</a>	<span class="k">def</span> <span class="nf">extrapolate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-		<span class="sd">r&quot;&quot;&quot; ``extrapolate(x)`` finds value of a point out of the curve range.</span>
+    <span class="k">def</span> <span class="nf">average</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">xmin</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">xmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">xmax</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">xmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="n">mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span> \
+            <span class="o">/</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mean</span>
 
-<span class="sd">		The function uses linear extrapolation to find the value of a point</span>
-<span class="sd">		without the range of the already existing curve.  First, it determines</span>
-<span class="sd">		whether the requested point is above or below the existing data. Then,</span>
-<span class="sd">		it uses :py:func:`find_nearest_down` or :py:func:`find_nearest_up` to</span>
-<span class="sd">		find the nearest point.  Then it uses :py:func:`find_nearest_down` or</span>
-<span class="sd">		:py:func:`find_nearest_up` to find the seconds nearest point.  Finally,</span>
-<span class="sd">		it solves the following equation to determine the value</span>
+<div class="viewcode-block" id="curve.interpolate"><a class="viewcode-back" href="../index.html#func.curve.interpolate">[docs]</a>    <span class="k">def</span> <span class="nf">interpolate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot; ``interpolate(x)`` finds the value of a point in the curve range.</span>
 
-<span class="sd">		.. math::</span>
+<span class="sd">        The function uses linear interpolation to find the value of a point in</span>
+<span class="sd">        the range of the curve data.  First, it uses</span>
+<span class="sd">        :py:func:`find_nearest_down` and :py:func:`find_nearest_up` to find the</span>
+<span class="sd">        two points comprising the interval which :math:`x` exists in.  Then, it</span>
+<span class="sd">        casts the linear interpolation as a line in point slope form and solves</span>
 
-<span class="sd">			y=\frac{\left(y_{1}-y_{0}\right)}{\left(x_{1}-x_{0}\right)}</span>
-<span class="sd">			\left(x-x_{0}\right)+y_{0}</span>
+<span class="sd">        .. math::</span>
 
-<span class="sd">		:param float x: the ordinate of the value requested</span>
-<span class="sd">		:returns: the value of the curve at point :math:`x`</span>
-<span class="sd">		:rtype: float</span>
-<span class="sd">		&quot;&quot;&quot;</span>
-		<span class="c"># find whether the point is above or below</span>
-		<span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">():</span>
-			<span class="n">x1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-			<span class="n">x2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-		<span class="k">elif</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">():</span>
-			<span class="n">x1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-			<span class="n">x2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
-		<span class="c"># now find the slope</span>
-		<span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">x2</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">x1</span> <span class="o">-</span> <span class="n">x2</span><span class="p">)</span>
-		<span class="c"># find the y change between closest point and new point</span>
-		<span class="n">dy</span> <span class="o">=</span> <span class="n">m</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span>
-		<span class="c"># find the new point</span>
-		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span> <span class="o">+</span> <span class="n">dy</span>
+<span class="sd">            y=\frac{\left(y_{1}-y_{0}\right)}{\left(x_{1}-x_{0}\right)}</span>
+<span class="sd">            \left(x-x_{0}\right)+y_{0}</span>
+
+<span class="sd">        :param float x: The coordinate of the desired value.</span>
+<span class="sd">        :return: the value of the curve at :math:`x`</span>
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># if not, we have to do linear interpolation</span>
+        <span class="c"># find closest value below</span>
+        <span class="n">x_down</span><span class="p">,</span> <span class="n">y_down</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_nearest_down</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="c"># find the closest value above</span>
+        <span class="n">x_up</span><span class="p">,</span> <span class="n">y_up</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_nearest_up</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="c"># find the percentage of x distance between</span>
+        <span class="n">x_dist</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x_down</span><span class="p">)</span>
+        <span class="c"># find the slope</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_up</span> <span class="o">-</span> <span class="n">y_down</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">x_up</span> <span class="o">-</span> <span class="n">x_down</span><span class="p">)</span>
+        <span class="c"># find the y value</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y_down</span> <span class="o">+</span> <span class="n">x_dist</span> <span class="o">*</span> <span class="n">m</span>
+        <span class="k">return</span> <span class="n">y</span>
 </div>
-	<span class="k">def</span> <span class="nf">find_nearest_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
-		<span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
-		<span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-	<span class="k">def</span> <span class="nf">find_nearest_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
-		<span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
-		<span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
-	<span class="k">def</span> <span class="nf">integrate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x_min</span><span class="p">,</span><span class="n">x_max</span><span class="p">,</span><span class="n">quad</span><span class="o">=</span><span class="s">&#39;lin&#39;</span><span class="p">):</span>
-		<span class="c"># for now, we&#39;ll just do simpsons rule until I write</span>
-		<span class="c"># more sophisticated</span>
-		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trapezoidal</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span><span class="n">x_max</span><span class="p">,</span><span class="n">quad</span><span class="p">);</span>
-	<span class="k">def</span> <span class="nf">trapezoidal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x_min</span><span class="p">,</span><span class="n">x_max</span><span class="p">,</span><span class="n">quad</span><span class="o">=</span><span class="s">&#39;lin&#39;</span><span class="p">):</span>
-		<span class="c"># first we assert that all values are in the region</span>
-		<span class="c"># then, we find a bunch of x&#39;s between these values</span>
-		<span class="n">numpoints</span> <span class="o">=</span> <span class="mi">61</span><span class="p">;</span>
-		<span class="k">if</span> <span class="n">quad</span> <span class="ow">is</span> <span class="s">&#39;lin&#39;</span><span class="p">:</span>
-			<span class="n">x_sub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span><span class="n">x_max</span><span class="p">,</span><span class="n">numpoints</span><span class="p">);</span>
-		<span class="k">elif</span> <span class="n">quad</span> <span class="ow">is</span> <span class="s">&#39;log&#39;</span><span class="p">:</span>
-			<span class="n">x_sub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x_min</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x_max</span><span class="p">),</span><span class="n">num</span><span class="o">=</span><span class="n">numpoints</span><span class="p">);</span>
-		<span class="c"># then, between each x, we find the value there</span>
-		<span class="n">y_sub</span> <span class="o">=</span> <span class="p">[</span> <span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">x_i</span><span class="p">)</span> <span class="k">for</span> <span class="n">x_i</span> <span class="ow">in</span> <span class="n">x_sub</span> <span class="p">];</span>
-		<span class="c"># then, we do the trapezoidal rule</span>
-		<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span> <span class="p">((</span><span class="n">x_sub</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x_sub</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">*</span><span class="n">y_sub</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> \
-			<span class="p">((</span><span class="n">x_sub</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x_sub</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="n">y_sub</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">y_sub</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span><span class="o">/</span><span class="mi">2</span> \
-			<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">x_sub</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">]);</span>
-	<span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">addto</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">linecolor</span><span class="o">=</span><span class="s">&#39;black&#39;</span><span class="p">,</span>
-		<span class="n">yy</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">xerr</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">yerr</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-		<span class="k">if</span> <span class="n">addto</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-			<span class="n">plot</span> <span class="o">=</span> <span class="n">ahp</span><span class="o">.</span><span class="n">ah2d</span><span class="p">();</span>
-		<span class="k">else</span><span class="p">:</span>
-			<span class="n">plot</span> <span class="o">=</span> <span class="n">addto</span><span class="p">;</span>
-		<span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">y</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-			<span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">;</span>
-			<span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">;</span>
-		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="ow">is</span> <span class="s">&#39;binned&#39;</span><span class="p">:</span>
-			<span class="c"># plot the bins</span>
-			<span class="c"># setup a matix</span>
-			<span class="c"># preallocate this later ***********************************</span>
-			<span class="n">plot_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]);</span>
-			<span class="n">plot_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]);</span>
-			<span class="c"># plot the thick bars</span>
-			<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-				<span class="n">plot_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plot_x</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-				<span class="n">plot_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plot_y</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-				<span class="n">plot_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plot_x</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]);</span>
-				<span class="n">plot_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plot_y</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-				<span class="n">plot_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plot_x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">);</span>
-				<span class="n">plot_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plot_y</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">);</span>
-			<span class="n">plot</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="n">plot_x</span><span class="p">,</span><span class="n">plot_y</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span><span class="n">linecolor</span><span class="o">=</span><span class="n">linecolor</span><span class="p">,</span>
-				<span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">);</span>
-			<span class="n">conn_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]);</span>
-			<span class="n">conn_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]);</span>
-			<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
-				<span class="n">conn_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn_x</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-				<span class="n">conn_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn_y</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]);</span>
-				<span class="n">conn_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn_x</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-				<span class="n">conn_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn_y</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-				<span class="n">conn_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn_x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">);</span>
-				<span class="n">conn_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn_y</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">);</span>
-			<span class="n">plot</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="n">conn_x</span><span class="p">,</span><span class="n">conn_y</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s">&#39;connectors&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">linecolor</span><span class="o">=</span><span class="n">linecolor</span><span class="p">);</span>
-			<span class="n">plot</span><span class="o">.</span><span class="n">markers_off</span><span class="p">();</span>
-			<span class="n">plot</span><span class="o">.</span><span class="n">lines_on</span><span class="p">();</span>
-		<span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="ow">is</span> <span class="s">&#39;smooth&#39;</span><span class="p">:</span>
-			<span class="k">if</span> <span class="n">yy</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
-				<span class="n">plot</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">xerr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u_x</span><span class="p">,</span><span class="n">yerr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u_y</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">,</span><span class="n">linecolor</span><span class="o">=</span><span class="n">linecolor</span><span class="p">);</span>
-			<span class="k">else</span><span class="p">:</span>
-				<span class="n">plot</span><span class="o">.</span><span class="n">add_line_yy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">xerr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u_x</span><span class="p">,</span><span class="n">yerr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u_y</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">,</span><span class="n">linecolor</span><span class="o">=</span><span class="n">linecolor</span><span class="p">);</span>
-		<span class="k">return</span> <span class="n">plot</span><span class="p">;</span>
-	<span class="k">def</span> <span class="nf">decimate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">R</span><span class="p">):</span>
-		<span class="n">pad_size</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">)</span><span class="o">/</span><span class="n">R</span><span class="p">)</span><span class="o">*</span><span class="n">R</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">;</span>
-		<span class="n">arr_x_padded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">pad_size</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">);</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">nanmean</span><span class="p">(</span><span class="n">arr_x_padded</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">R</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">);</span>
-		<span class="n">arr_y_padded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">pad_size</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">);</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">nanmean</span><span class="p">(</span><span class="n">arr_y_padded</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">R</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">);</span>
-	<span class="k">def</span> <span class="nf">fit_exp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="k">def</span> <span class="nf">exp_func</span><span class="p">(</span><span class="n">coeffs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-			<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span><span class="n">x</span><span class="p">));</span>
-		<span class="n">coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">),</span><span class="mi">1</span><span class="p">);</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">fun</span> <span class="o">=</span> <span class="n">exp_func</span><span class="p">;</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="n">coeffs</span><span class="p">;</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">fit_exp_bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">;</span>
-	<span class="k">def</span> <span class="nf">fit_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fun</span><span class="p">,</span><span class="n">guess</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">u_y</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">fun</span> <span class="o">=</span> <span class="n">fun</span><span class="p">;</span>
-		<span class="n">fit</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">p0</span> <span class="o">=</span> <span class="n">guess</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="n">u_y</span><span class="p">,</span><span class="n">absolute_sigma</span><span class="o">=</span><span class="bp">True</span><span class="p">);</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="n">fit</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">fit_exp_bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">;</span>
-	<span class="k">def</span> <span class="nf">fit_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
-		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_exp_bool</span><span class="p">:</span>
-			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fun</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">,</span><span class="n">x</span><span class="p">);</span>
-		<span class="k">else</span><span class="p">:</span>
-			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fun</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">);</span>
-	<span class="k">def</span> <span class="nf">fit_square</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="k">def</span> <span class="nf">square_func</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
-			<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span><span class="n">x</span><span class="p">);</span>
-		<span class="n">coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">fun</span> <span class="o">=</span> <span class="n">square_func</span><span class="p">;</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="n">coeffs</span><span class="p">;</span>
-	<span class="k">def</span> <span class="nf">plot_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">xmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">xmax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">addto</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-		<span class="k">if</span> <span class="n">addto</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-			<span class="n">plot</span> <span class="o">=</span> <span class="n">ahp</span><span class="o">.</span><span class="n">ah2d</span><span class="p">();</span>
-		<span class="k">else</span><span class="p">:</span>
-			<span class="n">plot</span> <span class="o">=</span> <span class="n">addto</span><span class="p">;</span>
-		<span class="k">if</span> <span class="n">xmin</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-			<span class="n">xmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">();</span>
-		<span class="k">if</span> <span class="n">xmax</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-			<span class="n">xmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">();</span>
-		<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span><span class="n">xmax</span><span class="p">,</span><span class="n">num</span><span class="o">=</span><span class="mi">1000</span><span class="p">);</span>
-		<span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_at</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
-		<span class="n">plot</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s">&#39;fit&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">);</span>
-		<span class="k">return</span> <span class="n">plot</span><span class="p">;</span></div>
+<div class="viewcode-block" id="curve.extrapolate"><a class="viewcode-back" href="../index.html#func.curve.extrapolate">[docs]</a>    <span class="k">def</span> <span class="nf">extrapolate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot; ``extrapolate(x)`` finds value of a point out of the curve range.</span>
+
+<span class="sd">        The function uses linear extrapolation to find the value of a point</span>
+<span class="sd">        without the range of the already existing curve.  First, it determines</span>
+<span class="sd">        whether the requested point is above or below the existing data. Then,</span>
+<span class="sd">        it uses :py:func:`find_nearest_down` or :py:func:`find_nearest_up` to</span>
+<span class="sd">        find the nearest point.  Then it uses :py:func:`find_nearest_down` or</span>
+<span class="sd">        :py:func:`find_nearest_up` to find the seconds nearest point.  Finally,</span>
+<span class="sd">        it solves the following equation to determine the value</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            y=\frac{\left(y_{1}-y_{0}\right)}{\left(x_{1}-x_{0}\right)}</span>
+<span class="sd">            \left(x-x_{0}\right)+y_{0}</span>
+
+<span class="sd">        :param float x: the ordinate of the value requested</span>
+<span class="sd">        :returns: the value of the curve at point :math:`x`</span>
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># find whether the point is above or below</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">():</span>
+            <span class="n">x1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">x2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">():</span>
+            <span class="n">x1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">x2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="c"># now find the slope</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">x2</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">x1</span> <span class="o">-</span> <span class="n">x2</span><span class="p">)</span>
+        <span class="c"># find the y change between closest point and new point</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="n">m</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span>
+        <span class="c"># find the new point</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span> <span class="o">+</span> <span class="n">dy</span>
+</div>
+    <span class="k">def</span> <span class="nf">find_nearest_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">find_nearest_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">integrate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x_min</span><span class="p">,</span><span class="n">x_max</span><span class="p">,</span><span class="n">quad</span><span class="o">=</span><span class="s">&#39;lin&#39;</span><span class="p">):</span>
+        <span class="c"># for now, we&#39;ll just do simpsons rule until I write</span>
+        <span class="c"># more sophisticated</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trapezoidal</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span><span class="n">x_max</span><span class="p">,</span><span class="n">quad</span><span class="p">);</span>
+    <span class="k">def</span> <span class="nf">trapezoidal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x_min</span><span class="p">,</span><span class="n">x_max</span><span class="p">,</span><span class="n">quad</span><span class="o">=</span><span class="s">&#39;lin&#39;</span><span class="p">):</span>
+        <span class="c"># first we assert that all values are in the region</span>
+        <span class="c"># then, we find a bunch of x&#39;s between these values</span>
+        <span class="n">numpoints</span> <span class="o">=</span> <span class="mi">61</span><span class="p">;</span>
+        <span class="k">if</span> <span class="n">quad</span> <span class="ow">is</span> <span class="s">&#39;lin&#39;</span><span class="p">:</span>
+            <span class="n">x_sub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span><span class="n">x_max</span><span class="p">,</span><span class="n">numpoints</span><span class="p">);</span>
+        <span class="k">elif</span> <span class="n">quad</span> <span class="ow">is</span> <span class="s">&#39;log&#39;</span><span class="p">:</span>
+            <span class="n">x_sub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x_min</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x_max</span><span class="p">),</span><span class="n">num</span><span class="o">=</span><span class="n">numpoints</span><span class="p">);</span>
+        <span class="c"># then, between each x, we find the value there</span>
+        <span class="n">y_sub</span> <span class="o">=</span> <span class="p">[</span> <span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">x_i</span><span class="p">)</span> <span class="k">for</span> <span class="n">x_i</span> <span class="ow">in</span> <span class="n">x_sub</span> <span class="p">];</span>
+        <span class="c"># then, we do the trapezoidal rule</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span> <span class="p">((</span><span class="n">x_sub</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x_sub</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">*</span><span class="n">y_sub</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> \
+            <span class="p">((</span><span class="n">x_sub</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x_sub</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="n">y_sub</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">y_sub</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span><span class="o">/</span><span class="mi">2</span> \
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">x_sub</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">]);</span>
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">addto</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">linecolor</span><span class="o">=</span><span class="s">&#39;black&#39;</span><span class="p">,</span>
+        <span class="n">yy</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">xerr</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">yerr</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">addto</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">plot</span> <span class="o">=</span> <span class="n">ahp</span><span class="o">.</span><span class="n">ah2d</span><span class="p">();</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plot</span> <span class="o">=</span> <span class="n">addto</span><span class="p">;</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">y</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">;</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="ow">is</span> <span class="s">&#39;binned&#39;</span><span class="p">:</span>
+            <span class="c"># plot the bins</span>
+            <span class="c"># setup a matix</span>
+            <span class="c"># preallocate this later ***********************************</span>
+            <span class="n">plot_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]);</span>
+            <span class="n">plot_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]);</span>
+            <span class="c"># plot the thick bars</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">plot_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plot_x</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+                <span class="n">plot_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plot_y</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+                <span class="n">plot_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plot_x</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]);</span>
+                <span class="n">plot_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plot_y</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+                <span class="n">plot_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plot_x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">);</span>
+                <span class="n">plot_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plot_y</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">);</span>
+            <span class="n">plot</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="n">plot_x</span><span class="p">,</span><span class="n">plot_y</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span><span class="n">linecolor</span><span class="o">=</span><span class="n">linecolor</span><span class="p">,</span>
+                <span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">);</span>
+            <span class="n">conn_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]);</span>
+            <span class="n">conn_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]);</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+                <span class="n">conn_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn_x</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+                <span class="n">conn_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn_y</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]);</span>
+                <span class="n">conn_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn_x</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+                <span class="n">conn_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn_y</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+                <span class="n">conn_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn_x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">);</span>
+                <span class="n">conn_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn_y</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">);</span>
+            <span class="n">plot</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="n">conn_x</span><span class="p">,</span><span class="n">conn_y</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s">&#39;connectors&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">linecolor</span><span class="o">=</span><span class="n">linecolor</span><span class="p">);</span>
+            <span class="n">plot</span><span class="o">.</span><span class="n">markers_off</span><span class="p">();</span>
+            <span class="n">plot</span><span class="o">.</span><span class="n">lines_on</span><span class="p">();</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="ow">is</span> <span class="s">&#39;smooth&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">yy</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+                <span class="n">plot</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">xerr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u_x</span><span class="p">,</span><span class="n">yerr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u_y</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">,</span><span class="n">linecolor</span><span class="o">=</span><span class="n">linecolor</span><span class="p">);</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">plot</span><span class="o">.</span><span class="n">add_line_yy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">xerr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u_x</span><span class="p">,</span><span class="n">yerr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u_y</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">,</span><span class="n">linecolor</span><span class="o">=</span><span class="n">linecolor</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">plot</span><span class="p">;</span>
+    <span class="k">def</span> <span class="nf">decimate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">R</span><span class="p">):</span>
+        <span class="n">pad_size</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">)</span><span class="o">/</span><span class="n">R</span><span class="p">)</span><span class="o">*</span><span class="n">R</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">;</span>
+        <span class="n">arr_x_padded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">pad_size</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">);</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">nanmean</span><span class="p">(</span><span class="n">arr_x_padded</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">R</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">);</span>
+        <span class="n">arr_y_padded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">pad_size</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">);</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">nanmean</span><span class="p">(</span><span class="n">arr_y_padded</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">R</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">);</span>
+    <span class="k">def</span> <span class="nf">fit_exp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">exp_func</span><span class="p">(</span><span class="n">coeffs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span><span class="n">x</span><span class="p">));</span>
+        <span class="n">coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">),</span><span class="mi">1</span><span class="p">);</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fun</span> <span class="o">=</span> <span class="n">exp_func</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="n">coeffs</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit_exp_bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">;</span>
+    <span class="k">def</span> <span class="nf">fit_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fun</span><span class="p">,</span><span class="n">guess</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">u_y</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fun</span> <span class="o">=</span> <span class="n">fun</span><span class="p">;</span>
+        <span class="n">fit</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">p0</span> <span class="o">=</span> <span class="n">guess</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="n">u_y</span><span class="p">,</span><span class="n">absolute_sigma</span><span class="o">=</span><span class="bp">True</span><span class="p">);</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="n">fit</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit_exp_bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">;</span>
+    <span class="k">def</span> <span class="nf">fit_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_exp_bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fun</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">,</span><span class="n">x</span><span class="p">);</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fun</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">);</span>
+    <span class="k">def</span> <span class="nf">fit_square</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">square_func</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span><span class="n">x</span><span class="p">);</span>
+        <span class="n">coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fun</span> <span class="o">=</span> <span class="n">square_func</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="n">coeffs</span><span class="p">;</span>
+    <span class="k">def</span> <span class="nf">plot_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">xmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">xmax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">addto</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">addto</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">plot</span> <span class="o">=</span> <span class="n">ahp</span><span class="o">.</span><span class="n">ah2d</span><span class="p">();</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plot</span> <span class="o">=</span> <span class="n">addto</span><span class="p">;</span>
+        <span class="k">if</span> <span class="n">xmin</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">xmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">();</span>
+        <span class="k">if</span> <span class="n">xmax</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">xmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">();</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span><span class="n">xmax</span><span class="p">,</span><span class="n">num</span><span class="o">=</span><span class="mi">1000</span><span class="p">);</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_at</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+        <span class="n">plot</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s">&#39;fit&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">plot</span><span class="p">;</span></div>
 </pre></div>
 
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pym_logo.svg" alt="Logo"/>
+            </a></p><div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>

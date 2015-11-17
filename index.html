@@ -38,7 +38,7 @@ MathJax.Hub.Config({
 <meta property="og:locale" content="en_US">
 <meta property="og:title" content="pym &#8211; Alex Hagen">
 <meta property="og:description" content="a math library in python">
-<meta property="og:url" content="http://alexhagen.github.io/index.html">
+<meta property="og:url" content="http://alexhagen.github.io/">
 <meta property="og:site_name" content="Alex Hagen">
 
 <link rel="icon" type="image/x-icon" href="http://alexhagen.github.io/assets/img/favicon.ico" />
@@ -151,6 +151,28 @@ guide to using the library.</p>
 
 <h3>Installation</h3>
 
+<p>To install <code>pym</code>, all we have to do is install <code>numpy</code>, <code>scipy</code>, and
+<code>matplotlib</code>,then download <code>pym</code> to our code directory (or wherever, really).
+To do this, we can use</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">
+<span class="gp">$ </span>pip install numpy
+<span class="gp">$ </span>pip install scipy
+<span class="gp">$ </span>pip install matplotlib
+<span class="gp">$ </span>pip install colours
+<span class="gp">$ </span><span class="nb">cd</span> ~/code
+<span class="gp">$ </span>git clone https://github.com/alexhagen/pym.git
+
+</code></pre></div>
+<p>and then, we can use the library within any script by using</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python">
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">'HOME'</span><span class="p">]</span> <span class="o">+</span> <span class="s">'/code'</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pym</span> <span class="kn">import</span> <span class="n">func</span> <span class="k">as</span> <span class="n">pymc</span>
+
+<span class="c"># use pym from here on</span>
+
+</code></pre></div>
 <h3>Curve creation and graphing using <a href="../pyg/">pyg</a></h3>
 
 <h3>Integration and normalization</h3>

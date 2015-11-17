@@ -152,7 +152,7 @@ guide to using the library.</p>
 <h3>Installation</h3>
 
 <p>To install <code>pym</code>, all we have to do is install <code>numpy</code>, <code>scipy</code>, and
-<code>matplotlib</code>,then download <code>pym</code> to our code directory (or wherever, really).
+<code>matplotlib</code>, then download <code>pym</code> to our code directory (or wherever, really).
 To do this, we can use</p>
 <div class="highlight"><pre><code class="language-bash" data-lang="bash">
 <span class="gp">$ </span>pip install numpy
@@ -164,16 +164,47 @@ To do this, we can use</p>
 
 </code></pre></div>
 <p>and then, we can use the library within any script by using</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python">
-<span class="kn">import</span> <span class="nn">sys</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">'HOME'</span><span class="p">]</span> <span class="o">+</span> <span class="s">'/code'</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">pym</span> <span class="kn">import</span> <span class="n">func</span> <span class="k">as</span> <span class="n">pymc</span>
 
 <span class="c"># use pym from here on</span>
-
 </code></pre></div>
 <h3>Curve creation and graphing using <a href="../pyg/">pyg</a></h3>
+
+<p>The basis of <code>pym</code> is the <code>curve</code> class, which holds x and y data, as well as
+its associated error.  We can create a function with a sinusoid in it by using
+the following code</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">'HOME'</span><span class="p">]</span> <span class="o">+</span> <span class="s">'/code'</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pym</span> <span class="kn">import</span> <span class="n">func</span> <span class="k">as</span> <span class="n">pymc</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="n">x_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">4.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">y1_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x_data</span><span class="p">)</span>
+<span class="n">y2_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x_data</span><span class="p">)</span>
+
+<span class="n">y1</span> <span class="o">=</span> <span class="n">pymc</span><span class="o">.</span><span class="n">curve</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y1_data</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'$</span><span class="err">\</span><span class="s">sin </span><span class="err">\</span><span class="s">left( x </span><span class="se">\r</span><span class="s">ight)$'</span><span class="p">)</span>
+<span class="n">y2</span> <span class="o">=</span> <span class="n">pymc</span><span class="o">.</span><span class="n">curve</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y2_data</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'$</span><span class="err">\</span><span class="s">cos </span><span class="err">\</span><span class="s">left( x </span><span class="se">\r</span><span class="s">ight)$'</span><span class="p">)</span>
+
+<span class="n">plot</span> <span class="o">=</span> <span class="n">y1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linecolor</span><span class="o">=</span><span class="s">'#285668'</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s">'-'</span><span class="p">)</span>
+<span class="n">y2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linecolor</span><span class="o">=</span><span class="s">'#FC8D82'</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s">'-'</span><span class="p">,</span> <span class="n">addto</span><span class="o">=</span><span class="n">plot</span><span class="p">)</span>
+
+<span class="n">plot</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y1_data</span><span class="p">,</span> <span class="n">y2_data</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s">'#ccccff'</span><span class="p">)</span>
+
+<span class="n">plot</span><span class="o">.</span><span class="n">lines_on</span><span class="p">()</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">markers_off</span><span class="p">()</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">4.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+
+<span class="n">plot</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'$x$'</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'$y$'</span><span class="p">)</span>
+
+<span class="n">plot</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s">'../../images/curve_plotting'</span><span class="p">,</span> <span class="n">formats</span><span class="o">=</span><span class="p">[</span><span class="s">'websvg'</span><span class="p">],</span> <span class="n">sizes</span><span class="o">=</span><span class="p">[</span><span class="s">'2'</span><span class="p">])</span>
+</code></pre></div>
+<p><img src="http://alexhagen.github.io/pym/images/curve_plottingweb.svg" alt="curve_plotting"></p>
 
 <h3>Integration and normalization</h3>
 

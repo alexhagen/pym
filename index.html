@@ -182,33 +182,88 @@ the following code</p>
 <span class="kn">from</span> <span class="nn">pym</span> <span class="kn">import</span> <span class="n">func</span> <span class="k">as</span> <span class="n">pymc</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
+<span class="c"># use numpy to create some trigonometric functions across two periods</span>
 <span class="n">x_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">4.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
 <span class="n">y1_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x_data</span><span class="p">)</span>
 <span class="n">y2_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x_data</span><span class="p">)</span>
 
+<span class="c"># define these data as ahm.curves to expose the interface to the numerical</span>
+<span class="c"># methods</span>
 <span class="n">y1</span> <span class="o">=</span> <span class="n">pymc</span><span class="o">.</span><span class="n">curve</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y1_data</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'$</span><span class="err">\</span><span class="s">sin </span><span class="err">\</span><span class="s">left( x </span><span class="se">\r</span><span class="s">ight)$'</span><span class="p">)</span>
 <span class="n">y2</span> <span class="o">=</span> <span class="n">pymc</span><span class="o">.</span><span class="n">curve</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y2_data</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'$</span><span class="err">\</span><span class="s">cos </span><span class="err">\</span><span class="s">left( x </span><span class="se">\r</span><span class="s">ight)$'</span><span class="p">)</span>
 
+<span class="c"># Plot these using the function pym.plot which returns a pyg.ah2d object</span>
 <span class="n">plot</span> <span class="o">=</span> <span class="n">y1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linecolor</span><span class="o">=</span><span class="s">'#285668'</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s">'-'</span><span class="p">)</span>
 <span class="n">y2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linecolor</span><span class="o">=</span><span class="s">'#FC8D82'</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s">'-'</span><span class="p">,</span> <span class="n">addto</span><span class="o">=</span><span class="n">plot</span><span class="p">)</span>
 
+<span class="c"># make it pretty with some shading, lines, changing limits, and labels</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y1_data</span><span class="p">,</span> <span class="n">y2_data</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s">'#ccccff'</span><span class="p">)</span>
-
 <span class="n">plot</span><span class="o">.</span><span class="n">lines_on</span><span class="p">()</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">markers_off</span><span class="p">()</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">4.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-
 <span class="n">plot</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'$x$'</span><span class="p">)</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'$y$'</span><span class="p">)</span>
 
+<span class="c"># export it to a websvg (which doesnt convert text to paths)</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s">'../../images/curve_plotting'</span><span class="p">,</span> <span class="n">formats</span><span class="o">=</span><span class="p">[</span><span class="s">'websvg'</span><span class="p">],</span> <span class="n">sizes</span><span class="o">=</span><span class="p">[</span><span class="s">'2'</span><span class="p">])</span>
 </code></pre></div>
 <p><img src="http://alexhagen.github.io/pym/images/curve_plottingweb.svg" alt="curve_plotting"></p>
 
 <h3>Integration and normalization</h3>
 
+<p>One of the useful options of <code>pym</code> is the ability to normalize a function,
+either according to its maximum, or according to its integral.  The following is
+and example of this integration, showing that after integration, we attain an
+integral of 1.0.</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">'HOME'</span><span class="p">]</span> <span class="o">+</span> <span class="s">'/code'</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pym</span> <span class="kn">import</span> <span class="n">func</span> <span class="k">as</span> <span class="n">pymc</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="c"># use numpy to create a monotonic function to play with</span>
+<span class="n">x_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">y_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c"># define these data as ahm.curves to expose the interface to the numerical</span>
+<span class="c"># methods</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">pymc</span><span class="o">.</span><span class="n">curve</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y_data</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'$x^{2}$'</span><span class="p">)</span>
+
+<span class="c"># Plot the unmodified function, shade the integral, and add a pointer with the</span>
+<span class="c"># integral value</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linecolor</span><span class="o">=</span><span class="s">'#285668'</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s">'-'</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">y_data</span><span class="p">),</span> <span class="n">y_data</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s">'#ccccff'</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">add_data_pointer</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">point</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+                      <span class="n">string</span><span class="o">=</span><span class="s">r'$</span><span class="err">\</span><span class="s">int f </span><span class="err">\</span><span class="s">left( x </span><span class="err">\</span><span class="s">right) dx = </span><span class="si">%.2</span><span class="s">f$'</span> <span class="o">%</span>
+                      <span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span> <span class="n">place</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">3.</span><span class="p">))</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">lines_on</span><span class="p">()</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">markers_off</span><span class="p">()</span>
+
+<span class="c"># now normalize the curve with respect to the integral</span>
+<span class="n">y</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s">'int'</span><span class="p">)</span>
+<span class="c"># Plot the modified function, shade the integral, and add a pointer with the</span>
+<span class="c"># integral value</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">addto</span><span class="o">=</span><span class="n">plot</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s">'#FC8D82'</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s">'-'</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">y</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s">'#ffdddd'</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">add_data_pointer</span><span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="n">point</span><span class="o">=</span><span class="mf">0.125</span><span class="p">,</span>
+                      <span class="n">string</span><span class="o">=</span><span class="s">r'$</span><span class="err">\</span><span class="s">int f_{norm} </span><span class="err">\</span><span class="s">left( x </span><span class="err">\</span><span class="s">right) dx = </span><span class="si">%.2</span><span class="s">f$'</span> <span class="o">%</span>
+                      <span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span> <span class="n">place</span><span class="o">=</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">))</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">lines_on</span><span class="p">()</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">markers_off</span><span class="p">()</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'$x$'</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'$y$'</span><span class="p">)</span>
+
+<span class="c"># export it to a websvg (which doesnt convert text to paths)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s">'../../images/int_norm'</span><span class="p">,</span> <span class="n">formats</span><span class="o">=</span><span class="p">[</span><span class="s">'websvg'</span><span class="p">],</span> <span class="n">sizes</span><span class="o">=</span><span class="p">[</span><span class="s">'2'</span><span class="p">])</span>
+</code></pre></div>
+<p><img src="http://alexhagen.github.io/pym/images/int_normweb.svg" alt="int_norm"></p>
+
 <h3>Curve arithmetic</h3>
+
+<p>Curve arithmetic (as in adding curves like <code>curve1 + curve2</code> or multiplying
+them with <code>curve1 * curve2</code>) is coming as soon as I can code it (or need it and
+so have to code it).</p>
 
 
 

@@ -173,6 +173,11 @@ To do this, we can use</p>
 </code></pre></div>
 <h3>Curve creation and graphing using <a href="../pyg/">pyg</a></h3>
 
+<figure>
+    <img src="http://alexhagen.github.io/pym/images/curve_plottingweb.svg">
+    <figcaption>A curve plotted using the pym and pyg libraries</figcaption>
+</figure>
+
 <p>The basis of <code>pym</code> is the <code>curve</code> class, which holds x and y data, as well as
 its associated error.  We can create a function with a sinusoid in it by using
 the following code</p>
@@ -208,9 +213,13 @@ the following code</p>
 <span class="c"># export it to a websvg (which doesnt convert text to paths)</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s">'../../images/curve_plotting'</span><span class="p">,</span> <span class="n">formats</span><span class="o">=</span><span class="p">[</span><span class="s">'websvg'</span><span class="p">],</span> <span class="n">sizes</span><span class="o">=</span><span class="p">[</span><span class="s">'2'</span><span class="p">])</span>
 </code></pre></div>
-<p><img src="http://alexhagen.github.io/pym/images/curve_plottingweb.svg" alt="curve_plotting"></p>
-
 <h3>Integration and normalization</h3>
+
+<figure>
+    <img src="http://alexhagen.github.io/pym/images/int_normweb.svg">
+    <figcaption>Illustration of normalization and integration using pym library,
+    visualized through a pyg graph</figcaption>
+</figure>
 
 <p>One of the useful options of <code>pym</code> is the ability to normalize a function,
 either according to its maximum, or according to its integral.  The following is
@@ -257,8 +266,6 @@ integral of 1.0.</p>
 <span class="c"># export it to a websvg (which doesnt convert text to paths)</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s">'../../images/int_norm'</span><span class="p">,</span> <span class="n">formats</span><span class="o">=</span><span class="p">[</span><span class="s">'websvg'</span><span class="p">],</span> <span class="n">sizes</span><span class="o">=</span><span class="p">[</span><span class="s">'2'</span><span class="p">])</span>
 </code></pre></div>
-<p><img src="http://alexhagen.github.io/pym/images/int_normweb.svg" alt="int_norm"></p>
-
 <h3>Curve arithmetic</h3>
 
 <p>Curve arithmetic (as in adding curves like <code>curve1 + curve2</code> or multiplying

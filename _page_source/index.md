@@ -57,6 +57,12 @@ from pym import func as pymc
 
 ### Curve creation and graphing using [pyg](../pyg/)
 
+<figure>
+    <img src="http://alexhagen.github.io/pym/images/curve_plottingweb.svg">
+    <figcaption>A curve plotted using the pym and pyg libraries</figcaption>
+</figure>
+
+
 The basis of `pym` is the `curve` class, which holds x and y data, as well as
 its associated error.  We can create a function with a sinusoid in it by using
 the following code
@@ -95,9 +101,13 @@ plot.ylabel('$y$')
 plot.export('../../images/curve_plotting', formats=['websvg'], sizes=['2'])
 ```
 
-![curve_plotting](http://alexhagen.github.io/pym/images/curve_plottingweb.svg)
-
 ### Integration and normalization
+
+<figure>
+    <img src="http://alexhagen.github.io/pym/images/int_normweb.svg">
+    <figcaption>Illustration of normalization and integration using pym library,
+    visualized through a pyg graph</figcaption>
+</figure>
 
 One of the useful options of `pym` is the ability to normalize a function,
 either according to its maximum, or according to its integral.  The following is
@@ -146,8 +156,6 @@ plot.ylabel('$y$')
 # export it to a websvg (which doesnt convert text to paths)
 plot.export('../../images/int_norm', formats=['websvg'], sizes=['2'])
 ```
-
-![int_norm](http://alexhagen.github.io/pym/images/int_normweb.svg)
 
 ### Curve arithmetic
 

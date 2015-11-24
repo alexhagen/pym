@@ -366,16 +366,18 @@ class curve(object):
         coeffs = np.polyfit(self.x,self.y,2);
         self.fun = square_func;
         self.coeffs = coeffs;
-    def plot_fit(self,xmin=None,xmax=None,addto=None,linestyle=None):
+
+    def plot_fit(self, xmin=None, xmax=None, addto=None, linestyle=None):
         if addto is None:
-            plot = ahp.ah2d();
+            plot = ahp.ah2d()
         else:
-            plot = addto;
+            plot = addto
         if xmin is None:
-            xmin = self.x.min();
+            xmin = self.x.min()
         if xmax is None:
-            xmax = self.x.max();
-        x = np.linspace(xmin,xmax,num=1000);
-        y = self.fit_at(x);
-        plot.add_line(x,y,name=self.name+'fit',linestyle=linestyle);
-        return plot;
+            xmax = self.x.max()
+        self.fitx = np.linspace(xmin, xmax, num=1000)
+        self.fity = self.fit_at(self.fitx)
+        plot.add_line(self.fitx, self.fity, name=self.name + 'fit',
+                      linestyle=linestyle)
+        return plot

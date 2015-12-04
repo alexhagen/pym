@@ -255,10 +255,10 @@ class curve(object):
         :rtype: float
         """
         # find whether the point is above or below
-        if x < self.x.min():
+        if x <= self.x.min():
             x1 = self.x[0]
             x2 = self.x[1]
-        elif x > self.x.max():
+        elif x >= self.x.max():
             x1 = self.x[-1]
             x2 = self.x[-2]
         # now find the slope

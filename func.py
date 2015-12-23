@@ -350,11 +350,21 @@ class curve(object):
         self.fun = exp_func;
         self.coeffs = coeffs;
         self.fit_exp_bool = True;
-    def fit_gen(self,fun,guess=None,u_y=None):
-        self.fun = fun;
-        fit = curve_fit(fun, self.x, self.y, p0 = guess,sigma=u_y,absolute_sigma=True);
-        self.coeffs = fit[0];
-        self.fit_exp_bool = False;
+    def fit_lin(self):
+        def lin_func(coeffs=None, x=None):
+            return np.polyval(coeffs, x)
+        coeffs = np.polyfit(self.x, self.y, 1)
+        self.fun = lin_func;
+        self.coeffs = coeffs;
+        self.fit_exp_bool = True
+
+
+    def fit_gen(self, fun, guess=None, u_y=None):
+        self.fun = fun
+        fit = curve_fit(fun, self.x, self.y, p0=guess,
+                        sigma=u_y, absolute_sigma=True)
+        self.coeffs = fit[0]
+        self.fit_exp_bool = False
     def fit_at(self,x):
         if self.fit_exp_bool:
             return self.fun(self.coeffs,x);
@@ -365,9 +375,18 @@ class curve(object):
             return np.polyval(coeffs,x);
         coeffs = np.polyfit(self.x,self.y,2);
         self.fun = square_func;
-        self.coeffs = coeffs;
+        self.coeffs = coeffs
+        self.fit_exp_bool = True
+    def fit_cube(self):
+        def cube_func(coeffs,x):
+            return np.polyval(coeffs,x);
+        coeffs = np.polyfit(self.x,self.y,3);
+        self.fun = cube_func;
+        self.coeffs = coeffs
+        self.fit_exp_bool = True
 
-    def plot_fit(self, xmin=None, xmax=None, addto=None, linestyle=None):
+    def plot_fit(self, xmin=None, xmax=None, addto=None, linestyle=None,
+                 linecolor=None, name=None):
         if addto is None:
             plot = ahp.ah2d()
         else:
@@ -378,6 +397,8 @@ class curve(object):
             xmax = self.x.max()
         self.fitx = np.linspace(xmin, xmax, num=1000)
         self.fity = self.fit_at(self.fitx)
-        plot.add_line(self.fitx, self.fity, name=self.name + 'fit',
-                      linestyle=linestyle)
+        if name is None:
+            name = self.name + 'fit'
+        plot.add_line(self.fitx, self.fity, name=name,
+                      linestyle=linestyle, linecolor=linecolor)
         return plot

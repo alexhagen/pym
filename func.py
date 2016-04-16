@@ -279,7 +279,11 @@ class curve(object):
     def integrate(self,x_min,x_max,quad='lin'):
         # for now, we'll just do simpsons rule until I write
         # more sophisticated
-        return self.trapezoidal(x_min,x_max,quad);
+        return self.trapezoidal(x_min,x_max,quad)
+    def derivative(self, _x, epsilon=None):
+        if epsilon is None:
+            epsilon = (self.x.max() - self.x.min())/1.E-5
+        return (self.at(_x + epsilon) - self.at(_x - epsilon)) / (2. * epsilon)
     def trapezoidal(self,x_min,x_max,quad='lin'):
         # first we assert that all values are in the region
         # then, we find a bunch of x's between these values
@@ -300,6 +304,10 @@ class curve(object):
             plot = ahp.ah2d();
         else:
             plot = addto;
+        if xerr is None:
+            xerr = self.u_x
+        if yerr is None:
+            yerr = self.u_y
         if x is None and y is None:
             x = self.x;
             y = self.y;
@@ -386,7 +394,7 @@ class curve(object):
         self.fit_exp_bool = True
 
     def plot_fit(self, xmin=None, xmax=None, addto=None, linestyle=None,
-                 linecolor=None, name=None):
+                 linecolor=None, name=None, axes=None):
         if addto is None:
             plot = ahp.ah2d()
         else:
@@ -400,5 +408,5 @@ class curve(object):
         if name is None:
             name = self.name + 'fit'
         plot.add_line(self.fitx, self.fity, name=name,
-                      linestyle=linestyle, linecolor=linecolor)
+                      linestyle=linestyle, linecolor=linecolor, axes=axes)
         return plot

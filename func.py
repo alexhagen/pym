@@ -276,6 +276,17 @@ class curve(object):
         idx = (np.abs(x - self.x)).argmin()
         return (self.x[idx], self.y[idx])
 
+    def crop(self, y_min=None, y_max=None):
+        if y_min is not None:
+            for i in range(len(self.x)):
+                if self.y[i] < y_min:
+                    self.y[i] = y_min
+        if y_max is not None:
+            for i in range(len(self.x)):
+                if self.y[i] > y_max:
+                    self.y[i] = y_max
+
+
     def integrate(self,x_min,x_max,quad='lin'):
         # for now, we'll just do simpsons rule until I write
         # more sophisticated

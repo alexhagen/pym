@@ -34,6 +34,7 @@ class curve(object):
     def __init__(self, x, y, name='', u_x=None, u_y=None, data='smooth'):
         self.name = name
         self.data = data
+        self.epsilon = 0.05
         # assert that x and y are 1d lists of same size
         if isinstance(x, list):
             self.x = np.array(x)
@@ -276,6 +277,16 @@ class curve(object):
         idx = (np.abs(x - self.x)).argmin()
         return (self.x[idx], self.y[idx])
 
+    def copy(self):
+        newx = self.x.copy()
+        newy = self.y.copy()
+        if self.u_y is not None:
+            newuy = self.u_y.copy()
+        if self.u_x is not None:
+            newux = self.u_x.copy()
+        newname = self.name
+        return curve(newx, newy, u_y=newuy, u_x=newux, name=newname)
+
     def crop(self, y_min=None, y_max=None):
         if y_min is not None:
             for i in range(len(self.x)):
@@ -286,7 +297,117 @@ class curve(object):
                 if self.y[i] > y_max:
                     self.y[i] = y_max
 
+    def trim(self, trimcurv):
+        delete = []
+        for i in range(len(self.y)):
+            keep = 0
+            for j in range(len(trimcurv.x)):
+                if np.abs(self.x[i] - trimcurv.x[j]) < \
+                   (self.epsilon * self.x[i]):
+                    keep = 1
+            if keep == 0:
+                delete = np.append(delete, int(i))
+        self.x = np.delete(self.x, delete)
+        self.y = np.delete(self.y, delete)
+        if self.u_x is not None:
+            self.u_x = np.delete(self.u_x, delete)
+        if self.u_y is not None:
+            self.u_y = np.delete(self.u_y, delete)
 
+    def curve_mult(self, mult):
+        # first, trim the curves to have only common data
+        self.trim(mult)
+        curve2 = mult
+        for i in range(len(self.y)):
+            test = np.argmin(np.abs(curve2.x - self.x[i]))
+            p = self.y[i] * curve2.y[test]
+            if self.u_y is not None:
+                self.u_y[i] = p * np.sqrt((self.u_y[i] / self.y[i])**2 +
+                                          (curve2.u_y[test] /
+                                           curve2.y[test]**2))
+            self.y[i] = p
+        #    for j in range(len(curve2.y)):
+        #        print np.abs(self.x[i] - curve2.x[j])
+        #        if np.abs(self.x[i] - curve2.x[j]) < \
+        #           (self.epsilon * self.x[i]):
+        #            self.y[i] = self.y[i] * curve2.y[j]
+
+    def multiply(self, mult):
+        r""" ``multiply(mult)`` multiplies the curve by a value.
+
+        The ``multiply`` function will multiply the curve by the value passed
+        to it in ``mult``.  This value can be an array with the same size or a
+        scalar of type integer or float.  Note that this will only change the
+        value (``y``) of the function, not the abscissa (``x``).
+
+        :param number mult: the number to multiply the curve by
+        :returns: none
+        """
+        if isinstance(mult, int) or isinstance(mult, float):
+            for i in range(len(self.y)):
+                self.y[i] = mult * self.y[i]
+                if self.u_y is not None:
+                    self.u_y[i] = mult * self.u_y[i]
+        if isinstance(mult, curve):
+            self.curve_mult(mult)
+
+    def __rmul__(self, mult):
+        print "rmult"
+        self.multiply(mult)
+        return self
+
+    def __mul__(self, mult):
+        print "mult"
+        self.multiply(mult)
+        return self
+
+    def curve_div(self, num):
+        # first, trim the curves to have only common data
+        self.trim(num)
+        curve2 = num
+        for i in range(len(self.y)):
+            test = np.argmin(np.abs(curve2.x - self.x[i]))
+            r = self.y[i] / curve2.y[test]
+            self.y[i] = r
+            if self.u_y is not None:
+                self.u_y[i] = r * np.sqrt(self.u_y[i]**2 + curve2.u_y[test]**2)
+
+    def divide(self, numerator):
+        r""" ``divides(mult)`` divides a value by the curve.
+
+        The ``divide`` function will divide the value provided in ``numerator``
+        by the values in the curve.  This value can be an array with the same
+        size or a scalar of type integer or float.  Note that this will only
+        change the value (``y``) of the function, not the abscissa (``x``).
+
+        :param number numerator: the number to be divided by the curve
+        :returns: none
+        """
+        oldy = self.y.copy()
+        if isinstance(numerator, int) or isinstance(numerator, float):
+            for i in range(len(self.y)):
+                self.y[i] = numerator / self.y[i]
+                if self.u_y is not None:
+                    self.u_y[i] = self.y[i] * self.u_y[i] / oldy[i]
+        if isinstance(numerator, curve):
+            self.curve_div(numerator)
+
+    def __rdiv__(self, num):
+        print "rdiv"
+        if not isinstance(num, curve):
+            self.divide(num)
+        return self
+
+    def __div__(self, denom):
+        print "div"
+        self.multiply(1.0 / denom)
+        return self
+    def add(self, addto, name=None):
+        oldy = self.y.copy()
+        if isinstance(addto, curve):
+            self.y = oldy + addto.y
+        if name is not None:
+            self.name = name
     def integrate(self,x_min,x_max,quad='lin'):
         # for now, we'll just do simpsons rule until I write
         # more sophisticated

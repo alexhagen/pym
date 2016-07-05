@@ -431,7 +431,7 @@ class curve(object):
             ((x_sub[i+1]-x_sub[i])*(y_sub[i+1]-y_sub[i]))/2 \
             for i in np.arange(0,len(x_sub)-1) ]);
     def plot(self,x=None,y=None,addto=None,linestyle=None,linecolor='black',
-        yy=False,xerr=None,yerr=None, env='plot'):
+        yy=False,xerr=None,yerr=None, legend=True, env='plot'):
         if addto is None:
             plot = ahp.ah2d(env=env);
         else:
@@ -458,7 +458,7 @@ class curve(object):
                 plot_x = np.append(plot_x,np.nan);
                 plot_y = np.append(plot_y,np.nan);
             plot.add_line(plot_x,plot_y,name=self.name,linewidth=4.0,linecolor=linecolor,
-                linestyle='-');
+                linestyle='-', legend=legend);
             conn_x = np.array([]);
             conn_y = np.array([]);
             for i in np.arange(1,len(x)):

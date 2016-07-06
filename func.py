@@ -60,9 +60,15 @@ class curve(object):
         self.x = self.x[idx]
         self.y = self.y[idx]
         if self.u_x is not None:
-            self.u_x = self.u_x[idx]
+            if len(self.u_x.shape) > 1:
+                self.u_x = self.u_x[:, idx]
+            else:
+                self.u_x = self.u_x[idx]
         if self.u_y is not None:
-            self.u_y = self.u_y[idx]
+            if len(self.u_y.shape) > 1:
+                self.u_y = self.u_y[:, idx]
+            else:
+                self.u_y = self.u_y[idx]
 
     def add_data(self, x, y):
         """ ``add_data(x,y)`` adds data to the already populated x and y.
@@ -431,7 +437,7 @@ class curve(object):
             ((x_sub[i+1]-x_sub[i])*(y_sub[i+1]-y_sub[i]))/2 \
             for i in np.arange(0,len(x_sub)-1) ]);
     def plot(self,x=None,y=None,addto=None,linestyle=None,linecolor='black',
-        yy=False,xerr=None,yerr=None, legend=True, env='plot'):
+        yy=False,xerr=None,yerr=None, legend=True, env='plot', axes=None):
         if addto is None:
             plot = ahp.ah2d(env=env);
         else:
@@ -473,9 +479,9 @@ class curve(object):
             plot.lines_on();
         elif self.data is 'smooth':
             if yy is False:
-                plot.add_line(x,y,xerr=self.u_x,yerr=self.u_y,name=self.name,linestyle=linestyle,linecolor=linecolor);
+                plot.add_line(x,y,xerr=self.u_x,yerr=self.u_y,name=self.name,linestyle=linestyle,linecolor=linecolor, axes=axes);
             else:
-                plot.add_line_yy(x,y,xerr=self.u_x,yerr=self.u_y,name=self.name,linestyle=linestyle,linecolor=linecolor);
+                plot.add_line_yy(x,y,xerr=self.u_x,yerr=self.u_y,name=self.name,linestyle=linestyle,linecolor=linecolor, axes=axes);
         return plot;
     def decimate(self,R):
         pad_size = math.ceil(float(self.x.size)/R)*R - self.x.size;

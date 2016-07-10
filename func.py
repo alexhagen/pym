@@ -489,13 +489,19 @@ class curve(object):
         self.x = nanmean(arr_x_padded.reshape(-1,R), axis=1);
         arr_y_padded = np.append(self.y, np.zeros(pad_size)*np.NaN);
         self.y = nanmean(arr_y_padded.reshape(-1,R), axis=1);
+
     def fit_exp(self):
-        def exp_func(coeffs=None,x=None):
-            return np.exp(np.polyval(coeffs,x));
-        coeffs = np.polyfit(self.x,np.log(self.y),1);
-        self.fun = exp_func;
-        self.coeffs = coeffs;
-        self.fit_exp_bool = True;
+        print self.x
+        print self.y
+        def exp_func(coeffs=None, x=None):
+            return np.exp(np.polyval(coeffs, x))
+        polyx = np.array([x1 for x1 in self.x], dtype=float)
+        logy = np.array([np.log(y1) for y1 in self.y], dtype=float)
+        coeffs = np.polyfit(polyx, logy, 1.0)
+        self.fun = exp_func
+        self.coeffs = coeffs
+        self.fit_exp_bool = True
+
     def fit_lin(self):
         def lin_func(coeffs=None, x=None):
             return np.polyval(coeffs, x)

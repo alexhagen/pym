@@ -293,15 +293,47 @@ class curve(object):
         newname = self.name
         return curve(newx, newy, u_y=newuy, u_x=newux, name=newname)
 
-    def crop(self, y_min=None, y_max=None):
+    def crop(self, y_min=None, y_max=None, x_min=None, x_max=None,
+             replace=None):
+        remove = [False for i in range(len(self.x))]
         if y_min is not None:
             for i in range(len(self.x)):
                 if self.y[i] < y_min:
-                    self.y[i] = y_min
+                    if replace is None:
+                        self.y[i] = y_min
+                    elif replace is "remove":
+                        remove[i] = True
+
         if y_max is not None:
             for i in range(len(self.x)):
                 if self.y[i] > y_max:
-                    self.y[i] = y_max
+                    if replace is None:
+                        self.y[i] = y_max
+                    elif replace is "remove":
+                        remove[i] = True
+        if x_min is not None:
+            for i in range(len(self.x)):
+                if self.x[i] < x_min:
+                    if replace is None:
+                        self.x[i] = x_min
+                    elif replace is "remove":
+                        remove[i] = True
+
+        if x_max is not None:
+            for i in range(len(self.x)):
+                if self.x[i] > x_max:
+                    if replace is None:
+                        self.x[i] = x_max
+                    elif replace is "remove":
+                        remove[i] = True                
+        if replace is "remove":
+            self.x = np.delete(self.x, np.where(remove))
+            if self.u_x is not None:
+                self.u_x = np.delete(self.u_x, np.where(remove))
+            self.y = np.delete(self.y, np.where(remove))
+            if self.u_y is not None:
+                self.u_y = np.delete(self.u_y, np.where(remove))
+        return self
 
     def trim(self, trimcurv):
         delete = []

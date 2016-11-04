@@ -1,6 +1,9 @@
 # Mac Files
 .DS_Store
 
+# Ignore the build of the documentation
+docs/_build/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

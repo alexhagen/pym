@@ -138,41 +138,35 @@ determine the value.</p>
 <dl class="method">
 <dt id="func.curve.average">
 <code class="descname">average</code><span class="sig-paren">(</span><em>xmin=None</em>, <em>xmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.average"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.average" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt><code class="docutils literal"><span class="pre">average()</span></code> will find the average <code class="docutils literal"><span class="pre">y</span></code>-value across the entire</dt>
-<dd><p class="first">range.</p>
+<dd><p><code class="docutils literal"><span class="pre">average()</span></code> will find the average <code class="docutils literal"><span class="pre">y</span></code>-value across the entire
+range.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param float xmin:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">The lower bound of <code class="docutils literal"><span class="pre">x</span></code>-value to include in the
-average.  Default:  <code class="docutils literal"><span class="pre">x.min()</span></code></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>xmin</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The lower bound of <code class="docutils literal"><span class="pre">x</span></code>-value to include in the
+average.  Default:  <code class="docutils literal"><span class="pre">x.min()</span></code></li>
+<li><strong>xmax</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The upper bound of <code class="docutils literal"><span class="pre">x</span></code>-value to include in the
+average.  Default: <code class="docutils literal"><span class="pre">x.max()</span></code></li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param float xmax:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body">The upper bound of <code class="docutils literal"><span class="pre">x</span></code>-value to include in the
-average.  Default: <code class="docutils literal"><span class="pre">x.max()</span></code></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">A float value equal to</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A float value equal to</p>
+</td>
 </tr>
 </tbody>
 </table>
-<div class="last math">
-\[ar{y} = \]</div>
-</dd>
-<dt>rac{int_{x_{min}}^{x_{max}} y dx}</dt>
-<dd><blockquote class="first">
-<div>{int_{x_{min}}^{x_{max}} dx}</div></blockquote>
-<table class="last docutils field-list" frame="void" rules="none">
+<div class="math">
+\[\bar{y} = \frac{\int_{x_{min}}^{x_{max}} y dx}{\int_{x_{min}}^{x_{max}} dx}\]</div>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">float</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)">float</a></td>
 </tr>
 </tbody>
 </table>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="method">

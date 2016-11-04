@@ -243,7 +243,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="curve.average"><a class="viewcode-back" href="../index.html#func.curve.average">[docs]</a>    <span class="k">def</span> <span class="nf">average</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ``average()`` will find the average ``y``-value across the entire</span>
+        <span class="sd">r&quot;&quot;&quot; ``average()`` will find the average ``y``-value across the entire</span>
 <span class="sd">        range.</span>
 
 <span class="sd">        :param float xmin: The lower bound of ``x``-value to include in the</span>
@@ -254,8 +254,7 @@
 
 <span class="sd">        .. math::</span>
 
-<span class="sd">            \bar{y} = \frac{\int_{x_{min}}^{x_{max}} y dx}</span>
-<span class="sd">            {\int_{x_{min}}^{x_{max}} dx}</span>
+<span class="sd">            \bar{y} = \frac{\int_{x_{min}}^{x_{max}} y dx}{\int_{x_{min}}^{x_{max}} dx}</span>
 
 
 <span class="sd">        :rtype: float</span>

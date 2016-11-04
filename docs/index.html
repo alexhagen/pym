@@ -158,12 +158,62 @@ average.  Default: <code class="docutils literal"><span class="pre">x.max()</spa
 </tbody>
 </table>
 <div class="math">
-\[\bar{y} = \frac{\int_{x_{min}}^{x_{max}} y dx}{\int_{x_{min}}^{x_{max}} dx}\]</div>
+\[\bar{y} = \frac{\int_{x_{min}}^{x_{max}} y dx}
+{\int_{x_{min}}^{x_{max}} dx}\]</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)">float</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">copy()</span></code> performs a deep copy of the curve and passes it out to
+another <code class="docutils literal"><span class="pre">curve</span></code> object so that it can be manipulated out-of-place.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a copy of the <code class="docutils literal"><span class="pre">curve</span></code> object calling the function</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#func.curve" title="func.curve">curve</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.crop">
+<code class="descname">crop</code><span class="sig-paren">(</span><em>y_min=None</em>, <em>y_max=None</em>, <em>x_min=None</em>, <em>x_max=None</em>, <em>replace=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.crop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.crop" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">crop(y_min,</span> <span class="pre">y_max,</span> <span class="pre">x_min,</span> <span class="pre">x_max,</span> <span class="pre">replace)</span></code> will find any data
+points that fall outside of the rectangle with corners at
+<code class="docutils literal"><span class="pre">(x_min,</span> <span class="pre">y_min)</span></code> to <code class="docutils literal"><span class="pre">(x_max,</span> <span class="pre">y_max)</span></code> and replace it with the value
+specified as <code class="docutils literal"><span class="pre">return</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x_min</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; A value for which any values with <span class="math">\(x&lt;x_{min}\)</span>
+will be replaced with the value <code class="docutils literal"><span class="pre">replace</span></code>.</li>
+<li><strong>x_max</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; A value for which any values with <span class="math">\(x&gt;x_{max}\)</span>
+will be replaced with the value <code class="docutils literal"><span class="pre">replace</span></code>.</li>
+<li><strong>y_min</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; A value for which any values with <span class="math">\(y&lt;y_{min}\)</span>
+will be replaced with the value <code class="docutils literal"><span class="pre">replace</span></code>.</li>
+<li><strong>y_max</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; A value for which any values with <span class="math">\(y&gt;y_{max}\)</span>
+will be replaced with the value <code class="docutils literal"><span class="pre">replace</span></code>.</li>
+<li><strong>replace</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The value to replace any value outside of the
+rectangle with.  Default <code class="docutils literal"><span class="pre">None</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/library/constants.html#None" title="(in Python v2.7)">None</a></p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -239,6 +289,50 @@ interpolation to find those <span class="math">\(x\)</span> values according to<
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a list of <span class="math">\(x\)</span> that have value <span class="math">\(y\)</span></td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/library/functions.html#list" title="(in Python v2.7)">list</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.find_nearest_down">
+<code class="descname">find_nearest_down</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.find_nearest_down"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.find_nearest_down" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">find_nearest_down(x)</span></code> will find the actual data point that is
+closest in negative <code class="docutils literal"><span class="pre">x</span></code>-distance to the data point <code class="docutils literal"><span class="pre">x</span></code> passed to the
+function</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The data point <code class="docutils literal"><span class="pre">x</span></code> which to find the closest value
+below.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a tuple containing the <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> value of the data point
+immediately below in <code class="docutils literal"><span class="pre">x</span></code> value to the value passed to the function</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)">tuple</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.find_nearest_up">
+<code class="descname">find_nearest_up</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.find_nearest_up"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.find_nearest_up" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">find_nearest_up(x)</span></code> will find the actual data point that is
+closest in positive <code class="docutils literal"><span class="pre">x</span></code>-distance to the data point <code class="docutils literal"><span class="pre">x</span></code> passed to the
+function</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The data point <code class="docutils literal"><span class="pre">x</span></code> which to find the closest value
+above.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a tuple containing the <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> value of the data point
+immediately above in <code class="docutils literal"><span class="pre">x</span></code> value to the value passed to the function</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)">tuple</a></td>
 </tr>
 </tbody>
 </table>

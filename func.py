@@ -202,6 +202,23 @@ class curve(object):
                 self.integrate(xmin, xmax)
 
     def average(self, xmin=None, xmax=None):
+        r""" ``average()`` will find the average ``y``-value across the entire
+        range.
+
+        :param float xmin: The lower bound of ``x``-value to include in the
+            average.  Default:  ``x.min()``
+        :param float xmax: The upper bound of ``x``-value to include in the
+            average.  Default: ``x.max()``
+        :return: A float value equal to
+
+        .. math::
+
+            \bar{y} = \frac{\int_{x_{min}}^{x_{max}} y dx}
+            {\int_{x_{min}}^{x_{max}} dx}
+
+
+        :rtype: float
+        """
         if xmin is None:
             xmin = self.x.min()
         if xmax is None:
@@ -276,14 +293,40 @@ class curve(object):
         return self.at(x1) + dy
 
     def find_nearest_down(self, x):
+        r""" ``find_nearest_down(x)`` will find the actual data point that is
+        closest in negative ``x``-distance to the data point ``x`` passed to the
+        function
+
+        :param float x: The data point ``x`` which to find the closest value
+            below.
+        :return: a tuple containing the ``x`` and ``y`` value of the data point
+            immediately below in ``x`` value to the value passed to the function
+        :rtype: tuple
+        """
         idx = (np.abs(x - self.x)).argmin()
         return (self.x[idx - 1], self.y[idx - 1])
 
     def find_nearest_up(self, x):
+        r""" ``find_nearest_up(x)`` will find the actual data point that is
+        closest in positive ``x``-distance to the data point ``x`` passed to the
+        function
+
+        :param float x: The data point ``x`` which to find the closest value
+            above.
+        :return: a tuple containing the ``x`` and ``y`` value of the data point
+            immediately above in ``x`` value to the value passed to the function
+        :rtype: tuple
+        """
         idx = (np.abs(x - self.x)).argmin()
         return (self.x[idx], self.y[idx])
 
     def copy(self):
+        r""" ``copy()`` performs a deep copy of the curve and passes it out to
+        another ``curve`` object so that it can be manipulated out-of-place.
+
+        :return: a copy of the ``curve`` object calling the function
+        :rtype: curve
+        """
         newx = self.x.copy()
         newy = self.y.copy()
         if self.u_y is not None:
@@ -295,6 +338,24 @@ class curve(object):
 
     def crop(self, y_min=None, y_max=None, x_min=None, x_max=None,
              replace=None):
+        r""" ``crop(y_min, y_max, x_min, x_max, replace)`` will find any data
+        points that fall outside of the rectangle with corners at
+        ``(x_min, y_min)`` to ``(x_max, y_max)`` and replace it with the value
+        specified as ``return``.
+
+
+        :param float x_min: A value for which any values with :math:`x<x_{min}`
+            will be replaced with the value ``replace``.
+        :param float x_max: A value for which any values with :math:`x>x_{max}`
+            will be replaced with the value ``replace``.
+        :param float y_min: A value for which any values with :math:`y<y_{min}`
+            will be replaced with the value ``replace``.
+        :param float y_max: A value for which any values with :math:`y>y_{max}`
+            will be replaced with the value ``replace``.
+        :param float replace: The value to replace any value outside of the
+            rectangle with.  Default ``None``.
+        :rtype: None
+        """
         remove = [False for i in range(len(self.x))]
         if y_min is not None:
             for i in range(len(self.x)):
@@ -325,7 +386,7 @@ class curve(object):
                     if replace is None:
                         self.x[i] = x_max
                     elif replace is "remove":
-                        remove[i] = True                
+                        remove[i] = True
         if replace is "remove":
             self.x = np.delete(self.x, np.where(remove))
             if self.u_x is not None:

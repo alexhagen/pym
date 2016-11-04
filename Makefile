@@ -7,7 +7,7 @@ docs: FORCE
 	mkdir -p ~/pages/pym/docs; \
 	cd ~/code/pym/docs/; \
 	make html; \
-	cp -r .build/html/* ~/pages/pym/docs/; \
+	cp -r _build/html/* ~/pages/pym/docs/; \
 	cd ~/pages/pym/docs; \
 	git add *; \
 	git commit -am "$(MSG)"; \

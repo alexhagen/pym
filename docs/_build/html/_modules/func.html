@@ -242,14 +242,31 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">average</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="curve.average"><a class="viewcode-back" href="../index.html#func.curve.average">[docs]</a>    <span class="k">def</span> <span class="nf">average</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot; ``average()`` will find the average ``y``-value across the entire</span>
+<span class="sd">        range.</span>
+
+<span class="sd">        :param float xmin: The lower bound of ``x``-value to include in the</span>
+<span class="sd">            average.  Default:  ``x.min()``</span>
+<span class="sd">        :param float xmax: The upper bound of ``x``-value to include in the</span>
+<span class="sd">            average.  Default: ``x.max()``</span>
+<span class="sd">        :return: A float value equal to</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \bar{y} = \frac{\int_{x_{min}}^{x_{max}} y dx}</span>
+<span class="sd">            {\int_{x_{min}}^{x_{max}} dx}</span>
+
+
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">xmin</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">xmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">xmax</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">xmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="n">mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span> \
             <span class="o">/</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">mean</span>
+        <span class="k">return</span> <span class="n">mean</span></div>
 
 <div class="viewcode-block" id="curve.interpolate"><a class="viewcode-back" href="../index.html#func.curve.interpolate">[docs]</a>    <span class="k">def</span> <span class="nf">interpolate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot; ``interpolate(x)`` finds the value of a point in the curve range.</span>
@@ -316,15 +333,41 @@
         <span class="c1"># find the new point</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span> <span class="o">+</span> <span class="n">dy</span></div>
 
-    <span class="k">def</span> <span class="nf">find_nearest_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+<div class="viewcode-block" id="curve.find_nearest_down"><a class="viewcode-back" href="../index.html#func.curve.find_nearest_down">[docs]</a>    <span class="k">def</span> <span class="nf">find_nearest_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot; ``find_nearest_down(x)`` will find the actual data point that is</span>
+<span class="sd">        closest in negative ``x``-distance to the data point ``x`` passed to the</span>
+<span class="sd">        function</span>
 
-    <span class="k">def</span> <span class="nf">find_nearest_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="sd">        :param float x: The data point ``x`` which to find the closest value</span>
+<span class="sd">            below.</span>
+<span class="sd">        :return: a tuple containing the ``x`` and ``y`` value of the data point</span>
+<span class="sd">            immediately below in ``x`` value to the value passed to the function</span>
+<span class="sd">        :rtype: tuple</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span></div>
 
-    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="curve.find_nearest_up"><a class="viewcode-back" href="../index.html#func.curve.find_nearest_up">[docs]</a>    <span class="k">def</span> <span class="nf">find_nearest_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot; ``find_nearest_up(x)`` will find the actual data point that is</span>
+<span class="sd">        closest in positive ``x``-distance to the data point ``x`` passed to the</span>
+<span class="sd">        function</span>
+
+<span class="sd">        :param float x: The data point ``x`` which to find the closest value</span>
+<span class="sd">            above.</span>
+<span class="sd">        :return: a tuple containing the ``x`` and ``y`` value of the data point</span>
+<span class="sd">            immediately above in ``x`` value to the value passed to the function</span>
+<span class="sd">        :rtype: tuple</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="curve.copy"><a class="viewcode-back" href="../index.html#func.curve.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot; ``copy()`` performs a deep copy of the curve and passes it out to</span>
+<span class="sd">        another ``curve`` object so that it can be manipulated out-of-place.</span>
+
+<span class="sd">        :return: a copy of the ``curve`` object calling the function</span>
+<span class="sd">        :rtype: curve</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">newx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">newy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
@@ -332,10 +375,28 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">newux</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">newname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
-        <span class="k">return</span> <span class="n">curve</span><span class="p">(</span><span class="n">newx</span><span class="p">,</span> <span class="n">newy</span><span class="p">,</span> <span class="n">u_y</span><span class="o">=</span><span class="n">newuy</span><span class="p">,</span> <span class="n">u_x</span><span class="o">=</span><span class="n">newux</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">newname</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">curve</span><span class="p">(</span><span class="n">newx</span><span class="p">,</span> <span class="n">newy</span><span class="p">,</span> <span class="n">u_y</span><span class="o">=</span><span class="n">newuy</span><span class="p">,</span> <span class="n">u_x</span><span class="o">=</span><span class="n">newux</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">newname</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">crop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_min</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">y_max</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">x_min</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">x_max</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<div class="viewcode-block" id="curve.crop"><a class="viewcode-back" href="../index.html#func.curve.crop">[docs]</a>    <span class="k">def</span> <span class="nf">crop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_min</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">y_max</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">x_min</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">x_max</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
              <span class="n">replace</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot; ``crop(y_min, y_max, x_min, x_max, replace)`` will find any data</span>
+<span class="sd">        points that fall outside of the rectangle with corners at</span>
+<span class="sd">        ``(x_min, y_min)`` to ``(x_max, y_max)`` and replace it with the value</span>
+<span class="sd">        specified as ``return``.</span>
+
+
+<span class="sd">        :param float x_min: A value for which any values with :math:`x&lt;x_{min}`</span>
+<span class="sd">            will be replaced with the value ``replace``.</span>
+<span class="sd">        :param float x_max: A value for which any values with :math:`x&gt;x_{max}`</span>
+<span class="sd">            will be replaced with the value ``replace``.</span>
+<span class="sd">        :param float y_min: A value for which any values with :math:`y&lt;y_{min}`</span>
+<span class="sd">            will be replaced with the value ``replace``.</span>
+<span class="sd">        :param float y_max: A value for which any values with :math:`y&gt;y_{max}`</span>
+<span class="sd">            will be replaced with the value ``replace``.</span>
+<span class="sd">        :param float replace: The value to replace any value outside of the</span>
+<span class="sd">            rectangle with.  Default ``None``.</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">remove</span> <span class="o">=</span> <span class="p">[</span><span class="bp">False</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">))]</span>
         <span class="k">if</span> <span class="n">y_min</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)):</span>
@@ -366,7 +427,7 @@
                     <span class="k">if</span> <span class="n">replace</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_max</span>
                     <span class="k">elif</span> <span class="n">replace</span> <span class="ow">is</span> <span class="s2">&quot;remove&quot;</span><span class="p">:</span>
-                        <span class="n">remove</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>                
+                        <span class="n">remove</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="k">if</span> <span class="n">replace</span> <span class="ow">is</span> <span class="s2">&quot;remove&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">remove</span><span class="p">))</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
@@ -374,7 +435,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">remove</span><span class="p">))</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_y</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">remove</span><span class="p">))</span>
-        <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
     <span class="k">def</span> <span class="nf">trim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trimcurv</span><span class="p">):</span>
         <span class="n">delete</span> <span class="o">=</span> <span class="p">[]</span>

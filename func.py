@@ -491,14 +491,25 @@ class curve(object):
         if isinstance(numerator, curve):
             self.curve_div(numerator)
 
+    def __or__(self, other):
+        """ a convienience class to add data to the already populated x and y.
+
+        :param list-like x: The ordinate data to add to the already populated
+            curve object.
+        :param list-like y: The abscissa data to add to the already populated
+            curve object.
+        :return: A curve object with the added data, fully sorted.
+        :rtype: curve
+        """
+        self.add_data(other.x, other.y)
+        return self
+
     def __rdiv__(self, num):
-        print "rdiv"
         if not isinstance(num, curve):
             self.divide(num)
         return self
 
     def __div__(self, denom):
-        print "div"
         self.multiply(1.0 / denom)
         return self
     def add(self, addto, name=None):
@@ -529,10 +540,11 @@ class curve(object):
         return np.sum([ ((x_sub[i+1]-x_sub[i])*y_sub[i]) + \
             ((x_sub[i+1]-x_sub[i])*(y_sub[i+1]-y_sub[i]))/2 \
             for i in np.arange(0,len(x_sub)-1) ]);
-    def plot(self,x=None,y=None,addto=None,linestyle=None,linecolor='black',
-        yy=False,xerr=None,yerr=None, legend=True, env='plot', axes=None):
+    def plot(self, x=None, y=None, addto=None, linestyle=None,
+             linecolor='black', yy=False, xerr=None, yerr=None, legend=True,
+             env='plot', axes=None, polar=False):
         if addto is None:
-            plot = ahp.ah2d(env=env);
+            plot = ahp.ah2d(env=env, polar=polar);
         else:
             plot = addto;
         if xerr is None:

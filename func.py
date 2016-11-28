@@ -568,6 +568,8 @@ class curve(object):
                 plot_y = np.append(plot_y,y[i]);
                 plot_x = np.append(plot_x,np.nan);
                 plot_y = np.append(plot_y,np.nan);
+                self.binned_data_x = plot_x
+                self.binned_data_y = plot_y
             plot.add_line(plot_x,plot_y,name=self.name,linewidth=4.0,linecolor=linecolor,
                 linestyle='-', legend=legend);
             conn_x = np.array([]);

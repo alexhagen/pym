@@ -117,8 +117,7 @@ integral of 1.0.
 ```python
 import sys
 import os
-sys.path.append(os.environ['HOME'] + '/code')
-from pym import func as pymc
+from pym import func as pym
 import numpy as np
 
 # use numpy to create a monotonic function to play with
@@ -127,7 +126,7 @@ y_data = np.power(x_data, 2)
 
 # define these data as ahm.curves to expose the interface to the numerical
 # methods
-y = pymc.curve(x_data, y_data, name='$x^{2}$')
+y = pym.curve(x_data, y_data, name='$x^{2}$')
 
 # Plot the unmodified function, shade the integral, and add a pointer with the
 # integral value

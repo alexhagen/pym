@@ -10,7 +10,7 @@ docs: FORCE
 	cp -r _build/html/* ~/pages/pym/docs/; \
 	cd ~/pages/pym/docs; \
 	git add *; \
-	git commit -am "$(MSG)"; \
+	git commit -am "$(shell git log -1 --pretty=%B | tr -d '\n')"; \
 	git push origin gh-pages; \
 	cd ~/code/pym
 

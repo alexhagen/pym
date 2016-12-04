@@ -544,7 +544,7 @@ class curve(object):
              linecolor='black', yy=False, xerr=None, yerr=None, legend=True,
              env='plot', axes=None, polar=False):
         if addto is None:
-            plot = ahp.ah2d(env=env, polar=polar);
+            plot = ahp.pyg2d(env=env, polar=polar);
         else:
             plot = addto;
         if xerr is None:
@@ -647,7 +647,7 @@ class curve(object):
     def plot_fit(self, xmin=None, xmax=None, addto=None, linestyle=None,
                  linecolor=None, name=None, axes=None):
         if addto is None:
-            plot = ahp.ah2d()
+            plot = ahp.pyg2d()
         else:
             plot = addto
         if xmin is None:

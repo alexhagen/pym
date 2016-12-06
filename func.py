@@ -158,7 +158,7 @@ class curve(object):
         # return all of those intervals
         return x_where
 
-    def normalize(self, xmin=None, xmax=None, norm='max'):
+    def normalize(self, xmin=None, xmax=None, norm='int'):
         r""" ``normalize()`` normalizes the entire curve to be normalized.
 
         **Caution! This will change all of the y values in the entire curve!**
@@ -194,12 +194,8 @@ class curve(object):
         if norm is 'max':
             self.y = self.y / self.y.max()
         elif norm is 'int':
-            if xmin is None:
-                xmin = self.x.min()
-            if xmax is None:
-                xmax = self.x.max()
             self.y = self.y / \
-                self.integrate(xmin, xmax)
+                self.integrate()
 
     def average(self, xmin=None, xmax=None):
         r""" ``average()`` will find the average ``y``-value across the entire
@@ -406,6 +402,7 @@ class curve(object):
                     keep = 1
             if keep == 0:
                 delete = np.append(delete, int(i))
+        delete = [int(_d) for _d in delete]
         self.x = np.delete(self.x, delete)
         self.y = np.delete(self.y, delete)
         if self.u_x is not None:
@@ -451,12 +448,10 @@ class curve(object):
             self.curve_mult(mult)
 
     def __rmul__(self, mult):
-        print "rmult"
         self.multiply(mult)
         return self
 
     def __mul__(self, mult):
-        print "mult"
         self.multiply(mult)
         return self
 
@@ -518,9 +513,13 @@ class curve(object):
             self.y = oldy + addto.y
         if name is not None:
             self.name = name
-    def integrate(self,x_min,x_max,quad='lin'):
+    def integrate(self,x_min=None, x_max=None, quad='lin'):
         # for now, we'll just do simpsons rule until I write
         # more sophisticated
+        if x_min is None:
+            x_min = np.min(self.x)
+        if x_max is None:
+            x_max = np.max(self.x)
         return self.trapezoidal(x_min,x_max,quad)
     def derivative(self, _x, epsilon=None):
         if epsilon is None:
@@ -598,8 +597,6 @@ class curve(object):
         self.y = nanmean(arr_y_padded.reshape(-1,R), axis=1);
 
     def fit_exp(self):
-        print self.x
-        print self.y
         def exp_func(coeffs=None, x=None):
             return np.exp(np.polyval(coeffs, x))
         polyx = np.array([x1 for x1 in self.x], dtype=float)

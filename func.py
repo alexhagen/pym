@@ -520,7 +520,24 @@ class curve(object):
             x_min = np.min(self.x)
         if x_max is None:
             x_max = np.max(self.x)
-        return self.trapezoidal(x_min,x_max,quad)
+        if self.binned is False:
+            return self.trapezoidal(x_min,x_max,quad)
+        else:
+            return self.bin_int(x_min, x_max)
+
+    def bin_int(self,x_min=None, x_max=None):
+        # for now, we'll just do simpsons rule until I write
+        # more sophisticated
+        if x_min is None:
+            x_min = np.min(self.x)
+        if x_max is None:
+            x_max = np.max(self.x)
+        return np.sum([bin_height * bin_width
+                       for bin_height, bin_width
+                       in zip(self.y, np.array([0.] + self.x)
+                       - np.array(self.x + self.x[-1]))])
+
+
     def derivative(self, _x, epsilon=None):
         if epsilon is None:
             epsilon = (self.x.max() - self.x.min())/1.E-5

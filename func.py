@@ -520,7 +520,7 @@ class curve(object):
             x_min = np.min(self.x)
         if x_max is None:
             x_max = np.max(self.x)
-        if self.binned is False:
+        if self.data != 'binned':
             return self.trapezoidal(x_min,x_max,quad)
         else:
             return self.bin_int(x_min, x_max)

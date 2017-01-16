@@ -325,12 +325,69 @@ class curve(object):
         """
         newx = self.x.copy()
         newy = self.y.copy()
+        newuy = None
+        newux = None
         if self.u_y is not None:
             newuy = self.u_y.copy()
         if self.u_x is not None:
             newux = self.u_x.copy()
         newname = self.name
         return curve(newx, newy, u_y=newuy, u_x=newux, name=newname)
+
+    def round_to_amt(self, num, amt):
+        recip = 1.0 / amt
+        return round(num * amt) / amt
+
+    def rolling_avg(self, bin_width=0.1):
+        r""" ``rolling_avg(bin_width)`` redistributes the data on a certain bin
+        width, propogating the error needed.
+
+
+        :param float bin_width: The width in which the redistribution will
+            happen.
+        :rtype: None
+        """
+        new_x = []
+        new_y = []
+        new_u_x = []
+        new_u_y = []
+        # find the start bin (round the minimum value to the next lowest bin)
+        bin_start = self.round_to_amt(np.min(self.x), bin_width)
+        # then, for everything in a certain bin:
+        for left in np.arange(bin_start, np.max(self.x), bin_width):
+            # average to find the mean
+            sample = [y for x, y in zip(self.x, self.y)
+                      if x >= left and x < left + bin_width]
+            if self.u_y is not None:
+                u_sample = [u_y for x, u_y in zip(self.x, self.u_y)
+                            if x >= left and x < left + bin_width]
+            if self.u_x is not None:
+                u_left = [u_x for x, u_x in zip(self.x, self.u_x)
+                          if x >= left and x < left + bin_width]
+            if len(sample) > 0:
+                # determine the standard deviation
+                std = np.std(sample)
+                # propagate the uncertainty and add the standard deviation
+                if self.u_y is not None:
+                    u_y_sample = np.sqrt(np.std(u_sample)**2 + std**2)
+                else:
+                    u_y_sample = std
+                if self.u_x is not None:
+                    u_x_sample = np.sqrt((bin_width/2.)**2 + \
+                        (np.mean(u_left))**2)
+                else:
+                    u_x_sample = bin_width/2.
+                # add to new distribution
+                new_x.extend([left + bin_width / 2.])
+                new_y.extend([np.mean(sample)])
+                new_u_y.extend([u_y_sample])
+                new_u_x.extend([u_x_sample])
+        self.x = np.array(new_x)
+        self.y = np.array(new_y)
+        self.u_y = np.array(new_u_y)
+        self.u_x = np.array(new_u_x)
+        self.sort()
+        return self
 
     def crop(self, y_min=None, y_max=None, x_min=None, x_max=None,
              replace=None):
@@ -360,6 +417,8 @@ class curve(object):
                         self.y[i] = y_min
                     elif replace is "remove":
                         remove[i] = True
+                if self.y[i] - self.u_y[i] < y_min:
+                    self.u_y[i] = self.y[i] - y_min
 
         if y_max is not None:
             for i in range(len(self.x)):
@@ -368,6 +427,9 @@ class curve(object):
                         self.y[i] = y_max
                     elif replace is "remove":
                         remove[i] = True
+                if self.y[i] + self.u_y[i] > y_max:
+                    self.u_y[i] = y_max - self.y[i]
+
         if x_min is not None:
             for i in range(len(self.x)):
                 if self.x[i] < x_min:

@@ -1,4 +1,5 @@
 _build/
+docs/_build/*
 
 # Mac Files
 .DS_Store

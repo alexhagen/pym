@@ -455,40 +455,43 @@ class curve(object):
         return self
 
     def trim(self, trimcurv):
-        delete = []
-        for i in range(len(self.y)):
-            keep = 0
-            for j in range(len(trimcurv.x)):
-                if np.abs(self.x[i] - trimcurv.x[j]) < \
-                   (self.epsilon * self.x[i]):
-                    keep = 1
-            if keep == 0:
-                delete = np.append(delete, int(i))
-        delete = [int(_d) for _d in delete]
-        self.x = np.delete(self.x, delete)
-        self.y = np.delete(self.y, delete)
-        if self.u_x is not None:
-            self.u_x = np.delete(self.u_x, delete)
-        if self.u_y is not None:
-            self.u_y = np.delete(self.u_y, delete)
+        print "trimming the curve"
+        minx = np.min(self.x)
+        maxx = np.max(self.x)
+        if np.min(trimcurv.x) > minx:
+            minx = np.min(trimcurv.x)
+        if np.max(trimcurv.x) < maxx:
+            maxx = np.max(trimcurv.x)
+        xs = []
+        ys = []
+        for newx in np.linspace(minx, maxx, 50):
+            xs.extend([newx])
+            ys.extend([self.at(newx)])
+        self.x = np.array(xs)
+        self.y = np.array(ys)
+        self.u_x = None
+        self.u_y = None
+        self.sort()
+        return self
 
     def curve_mult(self, mult):
         # first, trim the curves to have only common data
         self.trim(mult)
         curve2 = mult
-        for i in range(len(self.y)):
-            test = np.argmin(np.abs(curve2.x - self.x[i]))
-            p = self.y[i] * curve2.y[test]
-            if self.u_y is not None:
-                self.u_y[i] = p * np.sqrt((self.u_y[i] / self.y[i])**2 +
-                                          (curve2.u_y[test] /
-                                           curve2.y[test]**2))
-            self.y[i] = p
-        #    for j in range(len(curve2.y)):
-        #        print np.abs(self.x[i] - curve2.x[j])
-        #        if np.abs(self.x[i] - curve2.x[j]) < \
-        #           (self.epsilon * self.x[i]):
-        #            self.y[i] = self.y[i] * curve2.y[j]
+        xs = []
+        ys = []
+        u_ys = []
+        u_xs = []
+        for newx in np.linspace(self.x[0], self.x[-1], 50):
+            r = self.at(newx) * curve2.at(newx)
+            xs.extend([newx])
+            ys.extend([r])
+        self.x = np.array(xs)
+        self.y = np.array(ys)
+        self.u_y = None
+        self.u_x = None
+        self.sort()
+        return self
 
     def multiply(self, mult):
         r""" ``multiply(mult)`` multiplies the curve by a value.
@@ -518,15 +521,26 @@ class curve(object):
         return self
 
     def curve_div(self, num):
+        print "curve div"
         # first, trim the curves to have only common data
         self.trim(num)
+        self.sort()
         curve2 = num
-        for i in range(len(self.y)):
-            test = np.argmin(np.abs(curve2.x - self.x[i]))
-            r = self.y[i] / curve2.y[test]
-            self.y[i] = r
-            if self.u_y is not None:
-                self.u_y[i] = r * np.sqrt(self.u_y[i]**2 + curve2.u_y[test]**2)
+        xs = []
+        ys = []
+        u_ys = []
+        u_xs = []
+        for newx in np.linspace(self.x[0], self.x[-1], 50):
+            r = self.at(newx) / curve2.at(newx)
+            xs.extend([newx])
+            ys.extend([r])
+        self.x = xs
+        self.y = ys
+        self.u_y = None
+        self.u_x = None
+        self.sort()
+        return self
+
 
     def divide(self, numerator):
         r""" ``divides(mult)`` divides a value by the curve.
@@ -564,11 +578,15 @@ class curve(object):
     def __rdiv__(self, num):
         if not isinstance(num, curve):
             self.divide(num)
+        else:
+            self.curve_div(num)
         return self
 
     def __div__(self, denom):
         self.multiply(1.0 / denom)
+        print "__div__"
         return self
+
     def add(self, addto, name=None):
         oldy = self.y.copy()
         if isinstance(addto, curve):

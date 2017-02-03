@@ -111,14 +111,21 @@ class curve(object):
         :returns: the value of the curve at point :math:`x`
         :rtype: float
         """
+        if isinstance(x, float):
+            x = [x]
         y = np.ones_like(x)
-        for index, xi in np.ndenumerate(x):
-            if xi >= self.x.min() and xi <= self.x.max():
-                # if it is in the data range, interpolate
-                y[index] = self.interpolate(xi)
+        for index, xi in zip(range(len(x)), x):
+            if xi in self.x:
+                y[index] = self.y[list(self.x).index(xi)]
             else:
-                # if it is not in the data range, extrapolate
-                y[index] = self.extrapolate(xi)
+                if xi > self.x.min() and xi < self.x.max():
+                    # if it is in the data range, interpolate
+                    y[index] = self.interpolate(xi)
+                else:
+                    # if it is not in the data range, extrapolate
+                    y[index] = self.extrapolate(xi)
+        if len(y) == 1:
+            y = y[0]
         return y
 
     def find(self, y):
@@ -300,7 +307,7 @@ class curve(object):
         :rtype: tuple
         """
         idx = (np.abs(x - self.x)).argmin()
-        return (self.x[idx - 1], self.y[idx - 1])
+        return (self.x[idx], self.y[idx])
 
     def find_nearest_up(self, x):
         r""" ``find_nearest_up(x)`` will find the actual data point that is
@@ -314,7 +321,7 @@ class curve(object):
         :rtype: tuple
         """
         idx = (np.abs(x - self.x)).argmin()
-        return (self.x[idx], self.y[idx])
+        return (self.x[idx + 1], self.y[idx + 1])
 
     def copy(self):
         r""" ``copy()`` performs a deep copy of the curve and passes it out to
@@ -587,6 +594,12 @@ class curve(object):
         print "__div__"
         return self
 
+    def __sub__(self, right):
+        oldy = right.y.copy()
+        right.y = -right.y
+        self.add(right)
+        return self
+
     def add(self, addto, name=None):
         oldy = self.y.copy()
         if isinstance(addto, curve):
@@ -606,8 +619,6 @@ class curve(object):
             return self.bin_int(x_min, x_max)
 
     def bin_int(self,x_min=None, x_max=None):
-        # for now, we'll just do simpsons rule until I write
-        # more sophisticated
         if x_min is None:
             x_min = np.min(self.x)
         if x_max is None:
@@ -718,6 +729,13 @@ class curve(object):
                         sigma=u_y, absolute_sigma=True)
         self.coeffs = fit[0]
         self.fit_exp_bool = False
+
+    def fit_gauss(self, guess=None):
+        def gauss_fun(x, a, mu, sig):
+            return a * np.exp(-np.power(x - mu, 2.) / (2. * np.power(sig, 2.)))
+        self.fit_gen(gauss_fun, guess=guess)
+        return self
+
     def fit_at(self,x):
         if self.fit_exp_bool:
             return self.fun(self.coeffs,x);

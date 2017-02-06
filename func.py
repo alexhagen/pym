@@ -307,7 +307,7 @@ class curve(object):
         :rtype: tuple
         """
         idx = (np.abs(x - self.x)).argmin()
-        return (self.x[idx], self.y[idx])
+        return (self.x[idx - 1], self.y[idx - 1])
 
     def find_nearest_up(self, x):
         r""" ``find_nearest_up(x)`` will find the actual data point that is
@@ -321,7 +321,7 @@ class curve(object):
         :rtype: tuple
         """
         idx = (np.abs(x - self.x)).argmin()
-        return (self.x[idx + 1], self.y[idx + 1])
+        return (self.x[idx], self.y[idx])
 
     def copy(self):
         r""" ``copy()`` performs a deep copy of the curve and passes it out to

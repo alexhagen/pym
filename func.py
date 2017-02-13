@@ -527,8 +527,13 @@ class curve(object):
         self.multiply(mult)
         return self
 
-    def curve_div(self, num):
-        print "curve div"
+    def curve_div(self, right):
+        # copy each so we're not making changes in place
+        _left = self.copy()
+        _right = right.copy()
+        # we want to find an abscissa that has the most points with at least
+        # one true data point and that doesn't require any extrapolation
+        
         # first, trim the curves to have only common data
         self.trim(num)
         self.sort()
@@ -562,6 +567,7 @@ class curve(object):
         """
         oldy = self.y.copy()
         if isinstance(numerator, int) or isinstance(numerator, float):
+            numerator = float(numerator)
             for i in range(len(self.y)):
                 self.y[i] = numerator / self.y[i]
                 if self.u_y is not None:
@@ -591,21 +597,38 @@ class curve(object):
 
     def __div__(self, denom):
         self.multiply(1.0 / denom)
-        print "__div__"
         return self
 
     def __sub__(self, right):
-        oldy = right.y.copy()
-        right.y = -right.y
-        self.add(right)
-        return self
+        left = self.copy()
+        _right = right.copy()
+        _right.y = -_right.y
+        left = left.add(_right)
+        return left
 
-    def add(self, addto, name=None):
-        oldy = self.y.copy()
-        if isinstance(addto, curve):
-            self.y = oldy + addto.y
+    def add(self, right, name=None):
+        r""" ``add(value)`` adds a value to the curve.
+
+        The ``add`` function will add the provided value to the curve and
+        return a copy of the curve with the added value
+
+        :param number right: the number or curve to be added to the curve
+        :returns: copy of self + right
+        """
+        left = self.copy()
+        _right = right.copy()
+        if isinstance(_right, curve):
+            # first trim the curves to the same range (smallest)
+            # and resample these to the most points we can get
+            left.y += _right.y
+        elif instance(_right, float):
+            left.y += _right
+        elif isinstance(_right, int):
+            left.y += float(_right)
         if name is not None:
-            self.name = name
+            left.name = name
+        return left
+
     def integrate(self,x_min=None, x_max=None, quad='lin'):
         # for now, we'll just do simpsons rule until I write
         # more sophisticated

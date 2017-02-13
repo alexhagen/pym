@@ -1,4 +1,7 @@
-all: docs
+all: tests docs
+
+tests:
+	python tests/curve_tests.py
 
 docs: FORCE
 	mkdir -p ~/pages/pym/docs; \

@@ -274,6 +274,40 @@ class curve(object):
             y = y[0]
         return y
 
+    def u_y_at(self, x):
+        """ ``u_y_at(x)`` finds a the uncertainty of a value at x.
+
+        ``u_y_at(x)`` uses interpolation or extrapolation to determine the
+        uncertainty of the value of the curve at a given point, :math:`x`.  The
+        function first checks if :math:`x` is in the range of the curve.  If it
+        is in the range, the function calls :py:func:`interpolate` and
+        :py:func:`propogate_error` to find the uncertainty of the point.  If it
+        is not in the range, the function calls :py:func:`extrapolate` and
+        :py:func:`propogate_error` to determine the value.
+
+        :param float x: The coordinate of which the value is desired.
+        :returns: the uncertainty of the value of the curve at point :math:`x`
+        :rtype: float
+        """
+        if isinstance(x, float):
+            x = [x]
+        u_y = np.ones_like(x)
+        for index, xi in zip(range(len(x)), x):
+            if xi in self.x:
+                u_y[index] = self.u_y[list(self.x).index(xi)]
+            else:
+                if xi > self.x.min() and xi < self.x.max():
+                    # if it is in the data range, interpolate
+                    u_y[index] = self.interpolate(xi)
+                    # find the uncertainty interpolated
+                else:
+                    # if it is not in the data range, extrapolate
+                    u_y[index] = self.extrapolate(xi)
+                    # find the uncertainty extrapolated
+        if len(u_y) == 1:
+            u_y = u_y[0]
+        return u_y
+
     def find(self, y):
         r""" ``find(y)`` finds values of :math:`x` that have value :math:`y`
 

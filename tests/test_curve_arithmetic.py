@@ -17,23 +17,6 @@ class CurveTestCase(unittest.TestCase):
                            [4., 2., 0.],
                            name="y=-x @ dx = 2")
 
-    def test_interpolation_first_point(self):
-        # the value between the first point and second point should be
-        # interpolated correctly
-        self.assertEqual(self.A.at(0.5), 0.5,
-                         'incorrect first point interpolation')
-
-    def test_interpolation_last_point(self):
-        # the value between the last point and penultimate point should be
-        # interpolated correctly
-        self.assertEqual(self.A.at(3.5), 3.5,
-                         'incorrect last point interpolation')
-
-    def test_interpolation_central(self):
-        # any value in the interior should be interpolated correctly
-        self.assertEqual(self.A.at(1.75), 1.75,
-                         'incorrect central point interpolation')
-
     def test_curve_subtraction(self):
         # the curves should subtract correctly
         newcurve = self.A - self.B
@@ -51,13 +34,6 @@ class CurveTestCase(unittest.TestCase):
         del self.B
         del self.C
         del self.D
-
-
-def suite():
-    suite = uinttest.TestSuite()
-    suite.addTest(CurveTestCase('test_interpolation_first_point'))
-    suite.addTest(CurveTestCase('test_interpolation_last_point'))
-    return suite
 
 if __name__ == '__main__':
     interpolation = unittest.TestLoader().loadTestsFromTestCase(CurveTestCase)

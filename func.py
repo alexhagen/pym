@@ -31,6 +31,10 @@ class curve(object):
     :return: the ``curve`` object.
     :rtype: curve
     """
+
+    ###########################################################################
+    # Data Input - tests in tests/test_data_input.py
+    ###########################################################################
     def __init__(self, x, y, name='', u_x=None, u_y=None, data='smooth'):
         self.name = name
         self.data = data
@@ -84,6 +88,119 @@ class curve(object):
         self.y = np.append(self.y, y)
         self.sort()
 
+    def copy(self):
+        r""" ``copy()`` performs a deep copy of the curve and passes it out to
+        another ``curve`` object so that it can be manipulated out-of-place.
+
+        :return: a copy of the ``curve`` object calling the function
+        :rtype: curve
+        """
+        newx = self.x.copy()
+        newy = self.y.copy()
+        newuy = None
+        newux = None
+        if self.u_y is not None:
+            newuy = self.u_y.copy()
+        if self.u_x is not None:
+            newux = self.u_x.copy()
+        newname = self.name
+        return curve(newx, newy, u_y=newuy, u_x=newux, name=newname)
+
+    def crop(self, y_min=None, y_max=None, x_min=None, x_max=None,
+             replace=None):
+        r""" ``crop(y_min, y_max, x_min, x_max, replace)`` will find any data
+        points that fall outside of the rectangle with corners at
+        ``(x_min, y_min)`` to ``(x_max, y_max)`` and replace it with the value
+        specified as ``return``.
+
+
+        :param float x_min: A value for which any values with :math:`x<x_{min}`
+            will be replaced with the value ``replace``.
+        :param float x_max: A value for which any values with :math:`x>x_{max}`
+            will be replaced with the value ``replace``.
+        :param float y_min: A value for which any values with :math:`y<y_{min}`
+            will be replaced with the value ``replace``.
+        :param float y_max: A value for which any values with :math:`y>y_{max}`
+            will be replaced with the value ``replace``.
+        :param float replace: The value to replace any value outside of the
+            rectangle with.  Default ``None``.
+        :rtype: None
+        """
+        remove = [False for i in range(len(self.x))]
+        if y_min is not None:
+            for i in range(len(self.x)):
+                if self.y[i] < y_min:
+                    if replace is None:
+                        self.y[i] = y_min
+                    elif replace is "remove":
+                        remove[i] = True
+                if self.y[i] - self.u_y[i] < y_min:
+                    self.u_y[i] = self.y[i] - y_min
+
+        if y_max is not None:
+            for i in range(len(self.x)):
+                if self.y[i] > y_max:
+                    if replace is None:
+                        self.y[i] = y_max
+                    elif replace is "remove":
+                        remove[i] = True
+                if self.y[i] + self.u_y[i] > y_max:
+                    self.u_y[i] = y_max - self.y[i]
+
+        if x_min is not None:
+            for i in range(len(self.x)):
+                if self.x[i] < x_min:
+                    if replace is None:
+                        self.x[i] = x_min
+                    elif replace is "remove":
+                        remove[i] = True
+
+        if x_max is not None:
+            for i in range(len(self.x)):
+                if self.x[i] > x_max:
+                    if replace is None:
+                        self.x[i] = x_max
+                    elif replace is "remove":
+                        remove[i] = True
+        if replace is "remove":
+            self.x = np.delete(self.x, np.where(remove))
+            if self.u_x is not None:
+                self.u_x = np.delete(self.u_x, np.where(remove))
+            self.y = np.delete(self.y, np.where(remove))
+            if self.u_y is not None:
+                self.u_y = np.delete(self.u_y, np.where(remove))
+        return self
+
+    def trim(self, trimcurv):
+        print "trimming the curve"
+        minx = np.min(self.x)
+        maxx = np.max(self.x)
+        if np.min(trimcurv.x) > minx:
+            minx = np.min(trimcurv.x)
+        if np.max(trimcurv.x) < maxx:
+            maxx = np.max(trimcurv.x)
+        xs = []
+        ys = []
+        for newx in np.linspace(minx, maxx, 50):
+            xs.extend([newx])
+            ys.extend([self.at(newx)])
+        self.x = np.array(xs)
+        self.y = np.array(ys)
+        self.u_x = None
+        self.u_y = None
+        self.sort()
+        return self
+
+    def decimate(self,R):
+        pad_size = math.ceil(float(self.x.size)/R)*R - self.x.size;
+        arr_x_padded = np.append(self.x, np.zeros(pad_size)*np.NaN);
+        self.x = nanmean(arr_x_padded.reshape(-1,R), axis=1);
+        arr_y_padded = np.append(self.y, np.zeros(pad_size)*np.NaN);
+        self.y = nanmean(arr_y_padded.reshape(-1,R), axis=1);
+
+    ###########################################################################
+    # Data Retrieving and Interpolation - tests in tests/test_data_interp.py
+    ###########################################################################
     def inrange(self, x):
         """ ``inrange(x)`` checks if a point is within the range of data.
 
@@ -164,71 +281,6 @@ class curve(object):
                 * (y - y_left[i]) + x_left[i]
         # return all of those intervals
         return x_where
-
-    def normalize(self, xmin=None, xmax=None, norm='int'):
-        r""" ``normalize()`` normalizes the entire curve to be normalized.
-
-        **Caution! This will change all of the y values in the entire curve!**
-
-        Normalize will take the data of the curve (optionally just the data
-        between ``xmin`` and ``xmax``) and normalize it based on the option
-        given by ``norm``.  The options for norm are ``max`` and ``int``. For a
-        ``max`` normalization, first the function finds the maximum value of
-        the curve in the range of the :math:`x` data and adjusts all :math:`y`
-        values according to
-
-        .. math::
-
-            y = \frac{y}{y_{max}}
-
-        For an ``int`` normalization, the function adjusts all :math:`y` values
-        according to
-
-        .. math::
-
-            y=\frac{y}{\int_{x_{min}}^{x_{max}}y \left( x \right) dx}
-
-        :param float xmin: optional argument giving the lower bound of the
-            integral in an integral normalization or the lower bound in which
-            to find the max in a max normalization
-        :param float xmax: optional argument giving the upper bound of the
-            integral in an integral normalization or the upper bound in which
-            to find the max in a max normalization
-        :param str norm: a string of 'max' or 'int' (default 'max') which
-            defines which of the two types of normalization to perform
-        :return: None
-        """
-        if norm is 'max':
-            self.y = self.y / self.y.max()
-        elif norm is 'int':
-            self.y = self.y / \
-                self.integrate()
-
-    def average(self, xmin=None, xmax=None):
-        r""" ``average()`` will find the average ``y``-value across the entire
-        range.
-
-        :param float xmin: The lower bound of ``x``-value to include in the
-            average.  Default:  ``x.min()``
-        :param float xmax: The upper bound of ``x``-value to include in the
-            average.  Default: ``x.max()``
-        :return: A float value equal to
-
-        .. math::
-
-            \bar{y} = \frac{\int_{x_{min}}^{x_{max}} y dx}
-            {\int_{x_{min}}^{x_{max}} dx}
-
-
-        :rtype: float
-        """
-        if xmin is None:
-            xmin = self.x.min()
-        if xmax is None:
-            xmax = self.x.max()
-        mean = self.integrate(xmin, xmax) \
-            / (xmax - xmin)
-        return mean
 
     def interpolate(self, x):
         r""" ``interpolate(x)`` finds the value of a point in the curve range.
@@ -323,23 +375,31 @@ class curve(object):
         idx = (np.abs(x - self.x)).argmin()
         return (self.x[idx], self.y[idx])
 
-    def copy(self):
-        r""" ``copy()`` performs a deep copy of the curve and passes it out to
-        another ``curve`` object so that it can be manipulated out-of-place.
+    def average(self, xmin=None, xmax=None):
+        r""" ``average()`` will find the average ``y``-value across the entire
+        range.
 
-        :return: a copy of the ``curve`` object calling the function
-        :rtype: curve
+        :param float xmin: The lower bound of ``x``-value to include in the
+            average.  Default:  ``x.min()``
+        :param float xmax: The upper bound of ``x``-value to include in the
+            average.  Default: ``x.max()``
+        :return: A float value equal to
+
+        .. math::
+
+            \bar{y} = \frac{\int_{x_{min}}^{x_{max}} y dx}
+            {\int_{x_{min}}^{x_{max}} dx}
+
+
+        :rtype: float
         """
-        newx = self.x.copy()
-        newy = self.y.copy()
-        newuy = None
-        newux = None
-        if self.u_y is not None:
-            newuy = self.u_y.copy()
-        if self.u_x is not None:
-            newux = self.u_x.copy()
-        newname = self.name
-        return curve(newx, newy, u_y=newuy, u_x=newux, name=newname)
+        if xmin is None:
+            xmin = self.x.min()
+        if xmax is None:
+            xmax = self.x.max()
+        mean = self.integrate(xmin, xmax) \
+            / (xmax - xmin)
+        return mean
 
     def round_to_amt(self, num, amt):
         recip = 1.0 / amt
@@ -396,91 +456,93 @@ class curve(object):
         self.sort()
         return self
 
-    def crop(self, y_min=None, y_max=None, x_min=None, x_max=None,
-             replace=None):
-        r""" ``crop(y_min, y_max, x_min, x_max, replace)`` will find any data
-        points that fall outside of the rectangle with corners at
-        ``(x_min, y_min)`` to ``(x_max, y_max)`` and replace it with the value
-        specified as ``return``.
+    ###########################################################################
+    # Data Integration and Normalization - tests in tests/test_data_integ.py
+    ###########################################################################
+    def integrate(self,x_min=None, x_max=None, quad='lin'):
+        # for now, we'll just do simpsons rule until I write
+        # more sophisticated
+        if x_min is None:
+            x_min = np.min(self.x)
+        if x_max is None:
+            x_max = np.max(self.x)
+        if self.data != 'binned':
+            return self.trapezoidal(x_min,x_max,quad)
+        else:
+            return self.bin_int(x_min, x_max)
 
+    def bin_int(self,x_min=None, x_max=None):
+        if x_min is None:
+            x_min = np.min(self.x)
+        if x_max is None:
+            x_max = np.max(self.x)
+        return np.sum([bin_height * bin_width
+                       for bin_height, bin_width
+                       in zip(self.y, np.array([0.] + self.x)
+                       - np.array(self.x + self.x[-1]))])
 
-        :param float x_min: A value for which any values with :math:`x<x_{min}`
-            will be replaced with the value ``replace``.
-        :param float x_max: A value for which any values with :math:`x>x_{max}`
-            will be replaced with the value ``replace``.
-        :param float y_min: A value for which any values with :math:`y<y_{min}`
-            will be replaced with the value ``replace``.
-        :param float y_max: A value for which any values with :math:`y>y_{max}`
-            will be replaced with the value ``replace``.
-        :param float replace: The value to replace any value outside of the
-            rectangle with.  Default ``None``.
-        :rtype: None
+    def derivative(self, _x, epsilon=None):
+        if epsilon is None:
+            epsilon = (self.x.max() - self.x.min())/1.E-5
+        return (self.at(_x + epsilon) - self.at(_x - epsilon)) / (2. * epsilon)
+
+    def trapezoidal(self,x_min,x_max,quad='lin'):
+        # first we assert that all values are in the region
+        # then, we find a bunch of x's between these values
+        numpoints = 61;
+        if quad is 'lin':
+            x_sub = np.linspace(x_min,x_max,numpoints);
+        elif quad is 'log':
+            x_sub = np.logspace(np.log10(x_min),np.log10(x_max),num=numpoints);
+        # then, between each x, we find the value there
+        y_sub = [ self.at(x_i) for x_i in x_sub ];
+        # then, we do the trapezoidal rule
+        return np.sum([ ((x_sub[i+1]-x_sub[i])*y_sub[i]) + \
+            ((x_sub[i+1]-x_sub[i])*(y_sub[i+1]-y_sub[i]))/2 \
+            for i in np.arange(0,len(x_sub)-1) ]);
+
+    def normalize(self, xmin=None, xmax=None, norm='int'):
+        r""" ``normalize()`` normalizes the entire curve to be normalized.
+
+        **Caution! This will change all of the y values in the entire curve!**
+
+        Normalize will take the data of the curve (optionally just the data
+        between ``xmin`` and ``xmax``) and normalize it based on the option
+        given by ``norm``.  The options for norm are ``max`` and ``int``. For a
+        ``max`` normalization, first the function finds the maximum value of
+        the curve in the range of the :math:`x` data and adjusts all :math:`y`
+        values according to
+
+        .. math::
+
+            y = \frac{y}{y_{max}}
+
+        For an ``int`` normalization, the function adjusts all :math:`y` values
+        according to
+
+        .. math::
+
+            y=\frac{y}{\int_{x_{min}}^{x_{max}}y \left( x \right) dx}
+
+        :param float xmin: optional argument giving the lower bound of the
+            integral in an integral normalization or the lower bound in which
+            to find the max in a max normalization
+        :param float xmax: optional argument giving the upper bound of the
+            integral in an integral normalization or the upper bound in which
+            to find the max in a max normalization
+        :param str norm: a string of 'max' or 'int' (default 'max') which
+            defines which of the two types of normalization to perform
+        :return: None
         """
-        remove = [False for i in range(len(self.x))]
-        if y_min is not None:
-            for i in range(len(self.x)):
-                if self.y[i] < y_min:
-                    if replace is None:
-                        self.y[i] = y_min
-                    elif replace is "remove":
-                        remove[i] = True
-                if self.y[i] - self.u_y[i] < y_min:
-                    self.u_y[i] = self.y[i] - y_min
+        if norm is 'max':
+            self.y = self.y / self.y.max()
+        elif norm is 'int':
+            self.y = self.y / \
+                self.integrate()
 
-        if y_max is not None:
-            for i in range(len(self.x)):
-                if self.y[i] > y_max:
-                    if replace is None:
-                        self.y[i] = y_max
-                    elif replace is "remove":
-                        remove[i] = True
-                if self.y[i] + self.u_y[i] > y_max:
-                    self.u_y[i] = y_max - self.y[i]
-
-        if x_min is not None:
-            for i in range(len(self.x)):
-                if self.x[i] < x_min:
-                    if replace is None:
-                        self.x[i] = x_min
-                    elif replace is "remove":
-                        remove[i] = True
-
-        if x_max is not None:
-            for i in range(len(self.x)):
-                if self.x[i] > x_max:
-                    if replace is None:
-                        self.x[i] = x_max
-                    elif replace is "remove":
-                        remove[i] = True
-        if replace is "remove":
-            self.x = np.delete(self.x, np.where(remove))
-            if self.u_x is not None:
-                self.u_x = np.delete(self.u_x, np.where(remove))
-            self.y = np.delete(self.y, np.where(remove))
-            if self.u_y is not None:
-                self.u_y = np.delete(self.u_y, np.where(remove))
-        return self
-
-    def trim(self, trimcurv):
-        print "trimming the curve"
-        minx = np.min(self.x)
-        maxx = np.max(self.x)
-        if np.min(trimcurv.x) > minx:
-            minx = np.min(trimcurv.x)
-        if np.max(trimcurv.x) < maxx:
-            maxx = np.max(trimcurv.x)
-        xs = []
-        ys = []
-        for newx in np.linspace(minx, maxx, 50):
-            xs.extend([newx])
-            ys.extend([self.at(newx)])
-        self.x = np.array(xs)
-        self.y = np.array(ys)
-        self.u_x = None
-        self.u_y = None
-        self.sort()
-        return self
-
+    ###########################################################################
+    # Curve Arithmetic - tests in tests/test_curve_arithmetic.py
+    ###########################################################################
     def curve_mult(self, mult):
         # first, trim the curves to have only common data
         self.trim(mult)
@@ -533,7 +595,7 @@ class curve(object):
         _right = right.copy()
         # we want to find an abscissa that has the most points with at least
         # one true data point and that doesn't require any extrapolation
-        
+
         # first, trim the curves to have only common data
         self.trim(num)
         self.sort()
@@ -552,7 +614,6 @@ class curve(object):
         self.u_x = None
         self.sort()
         return self
-
 
     def divide(self, numerator):
         r""" ``divides(mult)`` divides a value by the curve.
@@ -629,47 +690,65 @@ class curve(object):
             left.name = name
         return left
 
-    def integrate(self,x_min=None, x_max=None, quad='lin'):
-        # for now, we'll just do simpsons rule until I write
-        # more sophisticated
-        if x_min is None:
-            x_min = np.min(self.x)
-        if x_max is None:
-            x_max = np.max(self.x)
-        if self.data != 'binned':
-            return self.trapezoidal(x_min,x_max,quad)
+    ###########################################################################
+    # Curve Fitting - tests in tests/test_curve_fitting.py
+    ###########################################################################
+    def fit_exp(self):
+        def exp_func(coeffs=None, x=None):
+            return np.exp(np.polyval(coeffs, x))
+        polyx = np.array([x1 for x1 in self.x], dtype=float)
+        logy = np.array([np.log(y1) for y1 in self.y], dtype=float)
+        coeffs = np.polyfit(polyx, logy, 1.0)
+        self.fun = exp_func
+        self.coeffs = coeffs
+        self.fit_exp_bool = True
+
+    def fit_lin(self):
+        def lin_func(coeffs=None, x=None):
+            return np.polyval(coeffs, x)
+        coeffs = np.polyfit(self.x, self.y, 1)
+        self.fun = lin_func;
+        self.coeffs = coeffs;
+        self.fit_exp_bool = True
+
+    def fit_gen(self, fun, guess=None, u_y=None):
+        self.fun = fun
+        fit = curve_fit(fun, self.x, self.y, p0=guess,
+                        sigma=u_y, absolute_sigma=True)
+        self.coeffs = fit[0]
+        self.fit_exp_bool = False
+
+    def fit_gauss(self, guess=None):
+        def gauss_fun(x, a, mu, sig):
+            return a * np.exp(-np.power(x - mu, 2.) / (2. * np.power(sig, 2.)))
+        self.fit_gen(gauss_fun, guess=guess)
+        return self
+
+    def fit_at(self,x):
+        if self.fit_exp_bool:
+            return self.fun(self.coeffs,x);
         else:
-            return self.bin_int(x_min, x_max)
+            return self.fun(x,*self.coeffs);
 
-    def bin_int(self,x_min=None, x_max=None):
-        if x_min is None:
-            x_min = np.min(self.x)
-        if x_max is None:
-            x_max = np.max(self.x)
-        return np.sum([bin_height * bin_width
-                       for bin_height, bin_width
-                       in zip(self.y, np.array([0.] + self.x)
-                       - np.array(self.x + self.x[-1]))])
+    def fit_square(self):
+        def square_func(coeffs,x):
+            return np.polyval(coeffs,x);
+        coeffs = np.polyfit(self.x,self.y,2);
+        self.fun = square_func;
+        self.coeffs = coeffs
+        self.fit_exp_bool = True
 
+    def fit_cube(self):
+        def cube_func(coeffs,x):
+            return np.polyval(coeffs,x);
+        coeffs = np.polyfit(self.x,self.y,3);
+        self.fun = cube_func;
+        self.coeffs = coeffs
+        self.fit_exp_bool = True
 
-    def derivative(self, _x, epsilon=None):
-        if epsilon is None:
-            epsilon = (self.x.max() - self.x.min())/1.E-5
-        return (self.at(_x + epsilon) - self.at(_x - epsilon)) / (2. * epsilon)
-    def trapezoidal(self,x_min,x_max,quad='lin'):
-        # first we assert that all values are in the region
-        # then, we find a bunch of x's between these values
-        numpoints = 61;
-        if quad is 'lin':
-            x_sub = np.linspace(x_min,x_max,numpoints);
-        elif quad is 'log':
-            x_sub = np.logspace(np.log10(x_min),np.log10(x_max),num=numpoints);
-        # then, between each x, we find the value there
-        y_sub = [ self.at(x_i) for x_i in x_sub ];
-        # then, we do the trapezoidal rule
-        return np.sum([ ((x_sub[i+1]-x_sub[i])*y_sub[i]) + \
-            ((x_sub[i+1]-x_sub[i])*(y_sub[i+1]-y_sub[i]))/2 \
-            for i in np.arange(0,len(x_sub)-1) ]);
+    ###########################################################################
+    # Curve Plotting - no tests currently
+    ###########################################################################
     def plot(self, x=None, y=None, addto=None, linestyle=None,
              linecolor='black', yy=False, xerr=None, yerr=None, legend=True,
              env='plot', axes=None, polar=False):
@@ -720,64 +799,6 @@ class curve(object):
             else:
                 plot.add_line_yy(x,y,xerr=self.u_x,yerr=self.u_y,name=self.name,linestyle=linestyle,linecolor=linecolor, axes=axes);
         return plot;
-    def decimate(self,R):
-        pad_size = math.ceil(float(self.x.size)/R)*R - self.x.size;
-        arr_x_padded = np.append(self.x, np.zeros(pad_size)*np.NaN);
-        self.x = nanmean(arr_x_padded.reshape(-1,R), axis=1);
-        arr_y_padded = np.append(self.y, np.zeros(pad_size)*np.NaN);
-        self.y = nanmean(arr_y_padded.reshape(-1,R), axis=1);
-
-    def fit_exp(self):
-        def exp_func(coeffs=None, x=None):
-            return np.exp(np.polyval(coeffs, x))
-        polyx = np.array([x1 for x1 in self.x], dtype=float)
-        logy = np.array([np.log(y1) for y1 in self.y], dtype=float)
-        coeffs = np.polyfit(polyx, logy, 1.0)
-        self.fun = exp_func
-        self.coeffs = coeffs
-        self.fit_exp_bool = True
-
-    def fit_lin(self):
-        def lin_func(coeffs=None, x=None):
-            return np.polyval(coeffs, x)
-        coeffs = np.polyfit(self.x, self.y, 1)
-        self.fun = lin_func;
-        self.coeffs = coeffs;
-        self.fit_exp_bool = True
-
-
-    def fit_gen(self, fun, guess=None, u_y=None):
-        self.fun = fun
-        fit = curve_fit(fun, self.x, self.y, p0=guess,
-                        sigma=u_y, absolute_sigma=True)
-        self.coeffs = fit[0]
-        self.fit_exp_bool = False
-
-    def fit_gauss(self, guess=None):
-        def gauss_fun(x, a, mu, sig):
-            return a * np.exp(-np.power(x - mu, 2.) / (2. * np.power(sig, 2.)))
-        self.fit_gen(gauss_fun, guess=guess)
-        return self
-
-    def fit_at(self,x):
-        if self.fit_exp_bool:
-            return self.fun(self.coeffs,x);
-        else:
-            return self.fun(x,*self.coeffs);
-    def fit_square(self):
-        def square_func(coeffs,x):
-            return np.polyval(coeffs,x);
-        coeffs = np.polyfit(self.x,self.y,2);
-        self.fun = square_func;
-        self.coeffs = coeffs
-        self.fit_exp_bool = True
-    def fit_cube(self):
-        def cube_func(coeffs,x):
-            return np.polyval(coeffs,x);
-        coeffs = np.polyfit(self.x,self.y,3);
-        self.fun = cube_func;
-        self.coeffs = coeffs
-        self.fit_exp_bool = True
 
     def plot_fit(self, xmin=None, xmax=None, addto=None, linestyle=None,
                  linecolor=None, name=None, axes=None):

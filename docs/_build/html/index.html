@@ -27,7 +27,7 @@
     <link rel="top" title="pym 0.1a1 documentation" href="#" />
    
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
 
   </head>
   <body role="document">  
@@ -105,7 +105,7 @@ return a copy of the curve with the added value</p>
 
 <dl class="method">
 <dt id="func.curve.add_data">
-<code class="descname">add_data</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.add_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.add_data" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_data</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>u_x=None</em>, <em>u_y=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.add_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.add_data" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">add_data(x,y)</span></code> adds data to the already populated x and y.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -116,6 +116,8 @@ return a copy of the curve with the added value</p>
 curve object.</li>
 <li><strong>y</strong> (<em>list-like</em>) &#8211; The abscissa data to add to the already populated
 curve object.</li>
+<li><strong>u_x</strong> (<em>list-like</em>) &#8211; The uncertainty in the ordinate data to be added.</li>
+<li><strong>u_y</strong> (<em>list-like</em>) &#8211; The uncertainty in the abscissa data to be added.</li>
 </ul>
 </td>
 </tr>
@@ -230,7 +232,30 @@ rectangle with.  Default <code class="docutils literal"><span class="pre">None</
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/library/constants.html#None" title="(in Python v2.7)">None</a></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the cropped <code class="docutils literal"><span class="pre">curve</span></code> object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.decimate">
+<code class="descname">decimate</code><span class="sig-paren">(</span><em>R=None</em>, <em>length=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.decimate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.decimate" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">decimate(R)</span></code> will remove all but every <a href="#id1"><span class="problematic" id="id2">``</span></a>R``th point in the
+curve.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>R</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; An integer value telling how often to save a point.</li>
+<li><strong>length</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; <em>Alternate</em>, an integer telling how big you
+want the final array.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the decimated <code class="docutils literal"><span class="pre">curve</span></code> object</p>
 </td>
 </tr>
 </tbody>
@@ -483,6 +508,18 @@ happen.</td>
 <dt id="func.curve.sort">
 <code class="descname">sort</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.sort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.sort" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">sort()</span></code> sorts the list depending on the <span class="math">\(x\)</span> coordinate.</p>
+<p><code class="docutils literal"><span class="pre">sort()</span></code> sorts all of the data input to the curve so that it is
+ordered from decreasing <span class="math">\(x\)</span> to increasing <span class="math">\(x\)</span>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the <code class="docutils literal"><span class="pre">curve</span></code> object, but it has been sorted in-place.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#func.curve" title="func.curve">curve</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -551,8 +588,8 @@ happen.</td>
       &copy;2015, Alex Hagen.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
       
       |
       <a href="_sources/index.txt"

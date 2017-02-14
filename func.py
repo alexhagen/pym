@@ -59,7 +59,14 @@ class curve(object):
         self.sort()
 
     def sort(self):
-        """ ``sort()`` sorts the list depending on the :math:`x` coordinate."""
+        r""" ``sort()`` sorts the list depending on the :math:`x` coordinate.
+
+        ``sort()`` sorts all of the data input to the curve so that it is
+        ordered from decreasing :math:`x` to increasing :math:`x`.
+
+        :return: the ``curve`` object, but it has been sorted in-place.
+        :rtype: curve
+        """
         idx = self.x.argsort()
         self.x = self.x[idx]
         self.y = self.y[idx]
@@ -74,18 +81,24 @@ class curve(object):
             else:
                 self.u_y = self.u_y[idx]
 
-    def add_data(self, x, y):
+    def add_data(self, x, y, u_x=None, u_y=None):
         """ ``add_data(x,y)`` adds data to the already populated x and y.
 
         :param list-like x: The ordinate data to add to the already populated
             curve object.
         :param list-like y: The abscissa data to add to the already populated
             curve object.
+        :param list-like u_x: The uncertainty in the ordinate data to be added.
+        :param list-like u_y: The uncertainty in the abscissa data to be added.
         :return: A curve object with the added data, fully sorted.
         :rtype: curve
         """
         self.x = np.append(self.x, x)
         self.y = np.append(self.y, y)
+        if self.u_x is not None:
+            self.u_x = np.append(self.u_x, u_x)
+        if self.u_y is not None:
+            self.u_y = np.append(self.u_y, u_y)
         self.sort()
 
     def copy(self):
@@ -124,7 +137,7 @@ class curve(object):
             will be replaced with the value ``replace``.
         :param float replace: The value to replace any value outside of the
             rectangle with.  Default ``None``.
-        :rtype: None
+        :return: the cropped ``curve`` object
         """
         remove = [False for i in range(len(self.x))]
         if y_min is not None:
@@ -134,8 +147,9 @@ class curve(object):
                         self.y[i] = y_min
                     elif replace is "remove":
                         remove[i] = True
-                if self.y[i] - self.u_y[i] < y_min:
-                    self.u_y[i] = self.y[i] - y_min
+                if self.u_y is not None:
+                    if self.y[i] - self.u_y[i] < y_min:
+                        self.u_y[i] = self.y[i] - y_min
 
         if y_max is not None:
             for i in range(len(self.x)):
@@ -144,8 +158,9 @@ class curve(object):
                         self.y[i] = y_max
                     elif replace is "remove":
                         remove[i] = True
-                if self.y[i] + self.u_y[i] > y_max:
-                    self.u_y[i] = y_max - self.y[i]
+                if self.u_y is not None:
+                    if self.y[i] + self.u_y[i] > y_max:
+                        self.u_y[i] = y_max - self.y[i]
 
         if x_min is not None:
             for i in range(len(self.x)):
@@ -162,6 +177,7 @@ class curve(object):
                         self.x[i] = x_max
                     elif replace is "remove":
                         remove[i] = True
+
         if replace is "remove":
             self.x = np.delete(self.x, np.where(remove))
             if self.u_x is not None:
@@ -191,12 +207,25 @@ class curve(object):
         self.sort()
         return self
 
-    def decimate(self,R):
-        pad_size = math.ceil(float(self.x.size)/R)*R - self.x.size;
-        arr_x_padded = np.append(self.x, np.zeros(pad_size)*np.NaN);
-        self.x = nanmean(arr_x_padded.reshape(-1,R), axis=1);
-        arr_y_padded = np.append(self.y, np.zeros(pad_size)*np.NaN);
-        self.y = nanmean(arr_y_padded.reshape(-1,R), axis=1);
+    def decimate(self, R=None, length=None):
+        r""" ``decimate(R)`` will remove all but every ``R``th point in the
+        curve.
+
+
+        :param int R: An integer value telling how often to save a point.
+        :param int length: *Alternate*, an integer telling how big you
+            want the final array.
+        :return: the decimated ``curve`` object
+        """
+        if length is not None:
+            R = (len(self.x) / length) + 1
+        self.y = self.y[::R]
+        self.x = self.x[::R]
+        if self.u_x is not None:
+            self.u_x = self.u_x[::R]
+        if self.u_y is not None:
+            self.u_y = self.u_y[::R]
+        return self
 
     ###########################################################################
     # Data Retrieving and Interpolation - tests in tests/test_data_interp.py

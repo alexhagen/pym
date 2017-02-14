@@ -208,7 +208,7 @@ class curve(object):
         return self
 
     def decimate(self, R=None, length=None):
-        r""" ``decimate(R)`` will remove all but every ``R``th point in the
+        r""" ``decimate(R)`` will remove all but every ``R`` th point in the
         curve.
 
 

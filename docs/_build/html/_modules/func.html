@@ -315,6 +315,40 @@
             <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">y</span>
 </div>
+<div class="viewcode-block" id="curve.u_y_at"><a class="viewcode-back" href="../index.html#func.curve.u_y_at">[docs]</a>    <span class="k">def</span> <span class="nf">u_y_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``u_y_at(x)`` finds a the uncertainty of a value at x.</span>
+
+<span class="sd">        ``u_y_at(x)`` uses interpolation or extrapolation to determine the</span>
+<span class="sd">        uncertainty of the value of the curve at a given point, :math:`x`.  The</span>
+<span class="sd">        function first checks if :math:`x` is in the range of the curve.  If it</span>
+<span class="sd">        is in the range, the function calls :py:func:`interpolate` and</span>
+<span class="sd">        :py:func:`propogate_error` to find the uncertainty of the point.  If it</span>
+<span class="sd">        is not in the range, the function calls :py:func:`extrapolate` and</span>
+<span class="sd">        :py:func:`propogate_error` to determine the value.</span>
+
+<span class="sd">        :param float x: The coordinate of which the value is desired.</span>
+<span class="sd">        :returns: the uncertainty of the value of the curve at point :math:`x`</span>
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span>
+        <span class="n">u_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">xi</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">x</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">xi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">:</span>
+                <span class="n">u_y</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">xi</span><span class="p">)]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">xi</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="ow">and</span> <span class="n">xi</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">():</span>
+                    <span class="c"># if it is in the data range, interpolate</span>
+                    <span class="n">u_y</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">xi</span><span class="p">)</span>
+                    <span class="c"># find the uncertainty interpolated</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c"># if it is not in the data range, extrapolate</span>
+                    <span class="n">u_y</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extrapolate</span><span class="p">(</span><span class="n">xi</span><span class="p">)</span>
+                    <span class="c"># find the uncertainty extrapolated</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">u_y</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">u_y</span> <span class="o">=</span> <span class="n">u_y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">u_y</span>
+</div>
 <div class="viewcode-block" id="curve.find"><a class="viewcode-back" href="../index.html#func.curve.find">[docs]</a>    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot; ``find(y)`` finds values of :math:`x` that have value :math:`y`</span>
 

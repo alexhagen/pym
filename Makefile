@@ -1,7 +1,7 @@
-all: tests docs
+all: tests
 
-tests:
-	python tests/curve_tests.py
+tests: FORCE
+	nosetests --with-coverage --cover-html --cover-package=pym --cover-html-dir=docs/_build/html/coverage
 
 docs: FORCE
 	mkdir -p ~/pages/pym/docs; \

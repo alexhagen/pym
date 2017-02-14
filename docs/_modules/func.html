@@ -568,8 +568,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">mult</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="nf">curve_div</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
-        <span class="k">print</span> <span class="s2">&quot;curve div&quot;</span>
+    <span class="k">def</span> <span class="nf">curve_div</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+        <span class="c1"># copy each so we&#39;re not making changes in place</span>
+        <span class="n">_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">_right</span> <span class="o">=</span> <span class="n">right</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="c1"># we want to find an abscissa that has the most points with at least</span>
+        <span class="c1"># one true data point and that doesn&#39;t require any extrapolation</span>
+        
         <span class="c1"># first, trim the curves to have only common data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">trim</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
@@ -636,17 +641,35 @@
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">def</span> <span class="nf">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">_right</span> <span class="o">=</span> <span class="n">right</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">_right</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="n">_right</span><span class="o">.</span><span class="n">y</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">_right</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">_right</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">left</span>
 
-    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addto</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="n">oldy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">addto</span><span class="p">,</span> <span class="n">curve</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">oldy</span> <span class="o">+</span> <span class="n">addto</span><span class="o">.</span><span class="n">y</span>
+<div class="viewcode-block" id="curve.add"><a class="viewcode-back" href="../index.html#func.curve.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot; ``add(value)`` adds a value to the curve.</span>
+
+<span class="sd">        The ``add`` function will add the provided value to the curve and</span>
+<span class="sd">        return a copy of the curve with the added value</span>
+
+<span class="sd">        :param number right: the number or curve to be added to the curve</span>
+<span class="sd">        :returns: copy of self + right</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">_right</span> <span class="o">=</span> <span class="n">right</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_right</span><span class="p">,</span> <span class="n">curve</span><span class="p">):</span>
+            <span class="c1"># first trim the curves to the same range (smallest)</span>
+            <span class="c1"># and resample these to the most points we can get</span>
+            <span class="n">left</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="n">_right</span><span class="o">.</span><span class="n">y</span>
+        <span class="k">elif</span> <span class="n">instance</span><span class="p">(</span><span class="n">_right</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="n">left</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="n">_right</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_right</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">left</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="nb">float</span><span class="p">(</span><span class="n">_right</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+            <span class="n">left</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="k">return</span> <span class="n">left</span></div>
+
     <span class="k">def</span> <span class="nf">integrate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x_min</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">x_max</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">quad</span><span class="o">=</span><span class="s1">&#39;lin&#39;</span><span class="p">):</span>
         <span class="c1"># for now, we&#39;ll just do simpsons rule until I write</span>
         <span class="c1"># more sophisticated</span>

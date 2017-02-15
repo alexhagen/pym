@@ -275,7 +275,7 @@ class curve(object):
         return y
 
     def u_y_at(self, x):
-        """ ``u_y_at(x)`` finds a the uncertainty of a value at x.
+        r""" ``u_y_at(x)`` finds a the uncertainty of a value at x.
 
         ``u_y_at(x)`` uses interpolation or extrapolation to determine the
         uncertainty of the value of the curve at a given point, :math:`x`.  The
@@ -284,6 +284,26 @@ class curve(object):
         :py:func:`propogate_error` to find the uncertainty of the point.  If it
         is not in the range, the function calls :py:func:`extrapolate` and
         :py:func:`propogate_error` to determine the value.
+
+        We use the following equation to perform the interpolation:
+
+        .. math::
+
+            y = y\left(x\right)=\left(x-x_{\downarrow}\right)
+                \frac{\left(y_{\uparrow}-y_{\downarrow}\right)}
+                     {\left(x_{\uparrow}-x_{\downarrow}\right)}
+
+        And using the *error propagation formula* from (Knoll, 1999), which is
+
+        .. math::
+
+            \sigma_{\zeta}^{2} =
+                \left(\frac{\partial\zeta}{\partial x}\right)^{2}\sigma_{x}^{2}
+                +
+                \left(\frac{\partial\zeta}{\partial y}\right)^{2}\sigma_{y}^{2}
+
+        for a derived value :math:`\zeta`, we can apply this to interpolation
+        and get:
 
         :param float x: The coordinate of which the value is desired.
         :returns: the uncertainty of the value of the curve at point :math:`x`

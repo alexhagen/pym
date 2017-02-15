@@ -330,7 +330,7 @@
 
 <span class="sd">        .. math::</span>
 
-<span class="sd">            y = y\left(x\right)=\left(x-x_{\downarrow}\right)</span>
+<span class="sd">            y\left(x\right) = \left(x-x_{\downarrow}\right)</span>
 <span class="sd">                \frac{\left(y_{\uparrow}-y_{\downarrow}\right)}</span>
 <span class="sd">                     {\left(x_{\uparrow}-x_{\downarrow}\right)}</span>
 
@@ -345,6 +345,48 @@
 
 <span class="sd">        for a derived value :math:`\zeta`, we can apply this to interpolation</span>
 <span class="sd">        and get:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \sigma_{y}^{2} =</span>
+<span class="sd">                \left(\frac{\partial y}{\partial x}\right)^{2}\sigma_{x}^{2}</span>
+<span class="sd">                +</span>
+<span class="sd">                \left(\frac{\partial y}{\partial x_{\downarrow}}\right)^{2}</span>
+<span class="sd">                \sigma_{x_{\downarrow}}^{2}</span>
+<span class="sd">                +</span>
+<span class="sd">                \left(\frac{\partial y}{\partial x_{\uparrow}}\right)^{2}</span>
+<span class="sd">                \sigma_{x_{\uparrow}}^{2}</span>
+<span class="sd">                +</span>
+<span class="sd">                \left(\frac{\partial y}{\partial y_{\downarrow}}\right)^{2}</span>
+<span class="sd">                \sigma_{y_{\downarrow}}^{2}</span>
+<span class="sd">                +</span>
+<span class="sd">                \left(\frac{\partial y}{\partial y_{\uparrow}}\right)^{2}</span>
+<span class="sd">                \sigma_{y_{\uparrow}}^{2}</span>
+
+<span class="sd">        and, performing the derivatives, we can get:</span>
+
+<span class="sd">            \sigma_{y}^{2} =</span>
+<span class="sd">                \left(\frac{\left(y_{\uparrow}-y_{\downarrow}\right)}</span>
+<span class="sd">                           {\left(x_{\uparrow}-x_{\downarrow}\right)}\right)^{2}</span>
+<span class="sd">                \sigma_{x}^{2}</span>
+<span class="sd">                +</span>
+<span class="sd">                \left(-\left(x-x_{\uparrow}\right)</span>
+<span class="sd">                \frac{\left(y_{\uparrow}-y_{\downarrow}\right)}</span>
+<span class="sd">                {\left(x_{\uparrow}-x_{\downarrow}\right)^{2}}\right)^{2}</span>
+<span class="sd">                \sigma_{x_{\downarrow}}^{2}</span>
+<span class="sd">                +</span>
+<span class="sd">                \left(\left(x-x_{\downarrow}\right)</span>
+<span class="sd">                \frac{\left(y_{\uparrow}-y_{\downarrow}\right)}</span>
+<span class="sd">                {\left(x_{\uparrow}-x_{\downarrow}\right)^{2}}\right)^{2}</span>
+<span class="sd">                \sigma_{x_{\uparrow}}^{2}</span>
+<span class="sd">                +</span>
+<span class="sd">                \left(-\frac{\left(x-x_{\downarrow}\right)}</span>
+<span class="sd">                {\left(x_{\uparrow}-x_{\downarrow}\right)}\right)^{2}</span>
+<span class="sd">                \sigma_{y_{\downarrow}}^{2}</span>
+<span class="sd">                +</span>
+<span class="sd">                \left(\frac{\left(x-x_{\downarrow}\right)}</span>
+<span class="sd">                {\left(x_{\uparrow}-x_{\downarrow}\right)}\right)^{2}</span>
+<span class="sd">                \sigma_{y_{\uparrow}}^{2}</span>
 
 <span class="sd">        :param float x: The coordinate of which the value is desired.</span>
 <span class="sd">        :returns: the uncertainty of the value of the curve at point :math:`x`</span>

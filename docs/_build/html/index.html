@@ -535,7 +535,7 @@ is not in the range, the function calls <code class="xref py py-func docutils li
 <code class="xref py py-func docutils literal"><span class="pre">propogate_error()</span></code> to determine the value.</p>
 <p>We use the following equation to perform the interpolation:</p>
 <div class="math">
-\[y = y\left(x\right)=\left(x-x_{\downarrow}\right)
+\[y\left(x\right) = \left(x-x_{\downarrow}\right)
     \frac{\left(y_{\uparrow}-y_{\downarrow}\right)}
          {\left(x_{\uparrow}-x_{\downarrow}\right)}\]</div>
 <p>And using the <em>error propagation formula</em> from (Knoll, 1999), which is</p>
@@ -546,6 +546,51 @@ is not in the range, the function calls <code class="xref py py-func docutils li
     \left(\frac{\partial\zeta}{\partial y}\right)^{2}\sigma_{y}^{2}\]</div>
 <p>for a derived value <span class="math">\(\zeta\)</span>, we can apply this to interpolation
 and get:</p>
+<div class="math">
+\[\sigma_{y}^{2} =
+    \left(\frac{\partial y}{\partial x}\right)^{2}\sigma_{x}^{2}
+    +
+    \left(\frac{\partial y}{\partial x_{\downarrow}}\right)^{2}
+    \sigma_{x_{\downarrow}}^{2}
+    +
+    \left(\frac{\partial y}{\partial x_{\uparrow}}\right)^{2}
+    \sigma_{x_{\uparrow}}^{2}
+    +
+    \left(\frac{\partial y}{\partial y_{\downarrow}}\right)^{2}
+    \sigma_{y_{\downarrow}}^{2}
+    +
+    \left(\frac{\partial y}{\partial y_{\uparrow}}\right)^{2}
+    \sigma_{y_{\uparrow}}^{2}\]</div>
+<p>and, performing the derivatives, we can get:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>sigma_{y}^{2} =</dt>
+<dd><dl class="first docutils">
+<dt>left(frac{left(y_{uparrow}-y_{downarrow}right)}</dt>
+<dd>{left(x_{uparrow}-x_{downarrow}right)}right)^{2}</dd>
+</dl>
+<p class="last">sigma_{x}^{2}
++
+left(-left(x-x_{uparrow}right)
+frac{left(y_{uparrow}-y_{downarrow}right)}
+{left(x_{uparrow}-x_{downarrow}right)^{2}}right)^{2}
+sigma_{x_{downarrow}}^{2}
++
+left(left(x-x_{downarrow}right)
+frac{left(y_{uparrow}-y_{downarrow}right)}
+{left(x_{uparrow}-x_{downarrow}right)^{2}}right)^{2}
+sigma_{x_{uparrow}}^{2}
++
+left(-frac{left(x-x_{downarrow}right)}
+{left(x_{uparrow}-x_{downarrow}right)}right)^{2}
+sigma_{y_{downarrow}}^{2}
++
+left(frac{left(x-x_{downarrow}right)}
+{left(x_{uparrow}-x_{downarrow}right)}right)^{2}
+sigma_{y_{uparrow}}^{2}</p>
+</dd>
+</dl>
+</div></blockquote>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

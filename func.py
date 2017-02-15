@@ -324,6 +324,8 @@ class curve(object):
 
         and, performing the derivatives, we can get:
 
+        .. math::
+
             \sigma_{y}^{2} =
                 \left(\frac{\left(y_{\uparrow}-y_{\downarrow}\right)}
                            {\left(x_{\uparrow}-x_{\downarrow}\right)}\right)^{2}
@@ -346,6 +348,26 @@ class curve(object):
                 \left(\frac{\left(x-x_{\downarrow}\right)}
                 {\left(x_{\uparrow}-x_{\downarrow}\right)}\right)^{2}
                 \sigma_{y_{\uparrow}}^{2}
+
+        Finally, if we take :math:`m=frac{\left(y_{\uparrow}-y_{\downarrow}
+        \right)}{\left(x_{\uparrow}-x_{\downarrow}\right)}`, and
+        :math:`\Delta\xi=\frac{\left(x-x_{\downarrow}\right)}{\left(x_{
+        \uparrow}-x_{\downarrow}\right)}`, we can get:
+
+        .. math::
+
+            \sigma_{y}^{2}=m^{2}\left[\sigma_{x}^{2}+
+            \sigma_{y_{\downarrow}}^{2}+\sigma_{y_{\uparrow}}^{2}+
+            \Delta\xi^{2}\left(\sigma_{x_{\downarrow}}^{2}+
+            \sigma_{x_{\uparrow}}^{2}\right)\right]
+
+        and the square root of that is the uncertainty.
+
+        .. math::
+
+            \sigma_{y}=m\sqrt{\sigma_{x}^{2}+\sigma_{y_{\downarrow}}^{2}+
+            \sigma_{y_{\uparrow}}^{2}+\Delta\xi^{2}\left(
+            \sigma_{x_{\downarrow}}^{2}+\sigma_{x_{\uparrow}}^{2}\right)}
 
         :param float x: The coordinate of which the value is desired.
         :returns: the uncertainty of the value of the curve at point :math:`x`

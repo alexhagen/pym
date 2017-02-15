@@ -365,6 +365,8 @@
 
 <span class="sd">        and, performing the derivatives, we can get:</span>
 
+<span class="sd">        .. math::</span>
+
 <span class="sd">            \sigma_{y}^{2} =</span>
 <span class="sd">                \left(\frac{\left(y_{\uparrow}-y_{\downarrow}\right)}</span>
 <span class="sd">                           {\left(x_{\uparrow}-x_{\downarrow}\right)}\right)^{2}</span>
@@ -387,6 +389,26 @@
 <span class="sd">                \left(\frac{\left(x-x_{\downarrow}\right)}</span>
 <span class="sd">                {\left(x_{\uparrow}-x_{\downarrow}\right)}\right)^{2}</span>
 <span class="sd">                \sigma_{y_{\uparrow}}^{2}</span>
+
+<span class="sd">        Finally, if we take :math:`m=frac{\left(y_{\uparrow}-y_{\downarrow}</span>
+<span class="sd">        \right)}{\left(x_{\uparrow}-x_{\downarrow}\right)}`, and</span>
+<span class="sd">        :math:`\Delta\xi=\frac{\left(x-x_{\downarrow}\right)}{\left(x_{</span>
+<span class="sd">        \uparrow}-x_{\downarrow}\right)}`, we can get:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \sigma_{y}^{2}=m^{2}\left[\sigma_{x}^{2}+</span>
+<span class="sd">            \sigma_{y_{\downarrow}}^{2}+\sigma_{y_{\uparrow}}^{2}+</span>
+<span class="sd">            \Delta\xi^{2}\left(\sigma_{x_{\downarrow}}^{2}+</span>
+<span class="sd">            \sigma_{x_{\uparrow}}^{2}\right)\right]</span>
+
+<span class="sd">        and the square root of that is the uncertainty.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \sigma_{y}=m\sqrt{\sigma_{x}^{2}+\sigma_{y_{\downarrow}}^{2}+</span>
+<span class="sd">            \sigma_{y_{\uparrow}}^{2}+\Delta\xi^{2}\left(</span>
+<span class="sd">            \sigma_{x_{\downarrow}}^{2}+\sigma_{x_{\uparrow}}^{2}\right)}</span>
 
 <span class="sd">        :param float x: The coordinate of which the value is desired.</span>
 <span class="sd">        :returns: the uncertainty of the value of the curve at point :math:`x`</span>

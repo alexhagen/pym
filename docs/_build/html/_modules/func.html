@@ -316,7 +316,7 @@
         <span class="k">return</span> <span class="n">y</span>
 </div>
 <div class="viewcode-block" id="curve.u_y_at"><a class="viewcode-back" href="../index.html#func.curve.u_y_at">[docs]</a>    <span class="k">def</span> <span class="nf">u_y_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ``u_y_at(x)`` finds a the uncertainty of a value at x.</span>
+        <span class="sd">r&quot;&quot;&quot; ``u_y_at(x)`` finds a the uncertainty of a value at x.</span>
 
 <span class="sd">        ``u_y_at(x)`` uses interpolation or extrapolation to determine the</span>
 <span class="sd">        uncertainty of the value of the curve at a given point, :math:`x`.  The</span>
@@ -325,6 +325,26 @@
 <span class="sd">        :py:func:`propogate_error` to find the uncertainty of the point.  If it</span>
 <span class="sd">        is not in the range, the function calls :py:func:`extrapolate` and</span>
 <span class="sd">        :py:func:`propogate_error` to determine the value.</span>
+
+<span class="sd">        We use the following equation to perform the interpolation:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            y = y\left(x\right)=\left(x-x_{\downarrow}\right)</span>
+<span class="sd">                \frac{\left(y_{\uparrow}-y_{\downarrow}\right)}</span>
+<span class="sd">                     {\left(x_{\uparrow}-x_{\downarrow}\right)}</span>
+
+<span class="sd">        And using the *error propagation formula* from (Knoll, 1999), which is</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \sigma_{\zeta}^{2} =</span>
+<span class="sd">                \left(\frac{\partial\zeta}{\partial x}\right)^{2}\sigma_{x}^{2}</span>
+<span class="sd">                +</span>
+<span class="sd">                \left(\frac{\partial\zeta}{\partial y}\right)^{2}\sigma_{y}^{2}</span>
+
+<span class="sd">        for a derived value :math:`\zeta`, we can apply this to interpolation</span>
+<span class="sd">        and get:</span>
 
 <span class="sd">        :param float x: The coordinate of which the value is desired.</span>
 <span class="sd">        :returns: the uncertainty of the value of the curve at point :math:`x`</span>

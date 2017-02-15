@@ -533,6 +533,19 @@ is in the range, the function calls <code class="xref py py-func docutils litera
 <code class="xref py py-func docutils literal"><span class="pre">propogate_error()</span></code> to find the uncertainty of the point.  If it
 is not in the range, the function calls <code class="xref py py-func docutils literal"><span class="pre">extrapolate()</span></code> and
 <code class="xref py py-func docutils literal"><span class="pre">propogate_error()</span></code> to determine the value.</p>
+<p>We use the following equation to perform the interpolation:</p>
+<div class="math">
+\[y = y\left(x\right)=\left(x-x_{\downarrow}\right)
+    \frac{\left(y_{\uparrow}-y_{\downarrow}\right)}
+         {\left(x_{\uparrow}-x_{\downarrow}\right)}\]</div>
+<p>And using the <em>error propagation formula</em> from (Knoll, 1999), which is</p>
+<div class="math">
+\[\sigma_{\zeta}^{2} =
+    \left(\frac{\partial\zeta}{\partial x}\right)^{2}\sigma_{x}^{2}
+    +
+    \left(\frac{\partial\zeta}{\partial y}\right)^{2}\sigma_{y}^{2}\]</div>
+<p>for a derived value <span class="math">\(\zeta\)</span>, we can apply this to interpolation
+and get:</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

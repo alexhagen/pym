@@ -92,15 +92,14 @@ binned data, constant interpolation is used.</li>
 <dt id="func.curve.add">
 <code class="descname">add</code><span class="sig-paren">(</span><em>right</em>, <em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.add" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">add(value)</span></code> adds a value to the curve.</p>
-<p>The <code class="docutils literal"><span class="pre">add</span></code> function will add the provided value to the curve and
-return a copy of the curve with the added value</p>
+<p>The <code class="docutils literal"><span class="pre">add</span></code> function will add the provided value to the curve in place.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>right</strong> (<em>number</em>) &#8211; the number or curve to be added to the curve</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">copy of self + right</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">curve</span></code> with added <span class="math">\(y\)</span> values</td>
 </tr>
 </tbody>
 </table>
@@ -243,6 +242,48 @@ rectangle with.  Default <code class="docutils literal"><span class="pre">None</
 </dd></dl>
 
 <dl class="method">
+<dt id="func.curve.curve_div">
+<code class="descname">curve_div</code><span class="sig-paren">(</span><em>right</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.curve_div"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.curve_div" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">curve_div(curve)</span></code> divides one curve by another.</p>
+<p>This is a helper class, usually only called through <code class="docutils literal"><span class="pre">curve.divide</span></code>,
+or using the <code class="docutils literal"><span class="pre">/</span></code> operator. The class first takes a unique set of
+<code class="docutils literal"><span class="pre">x</span></code> points that are within the range of both curves. Then, it
+divides the <code class="docutils literal"><span class="pre">y</span></code> values by the other.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>right</strong> (<em>number</em>) &#8211; the curve to divide by.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the left <code class="docutils literal"><span class="pre">curve</span></code> object, with the values divided in
+place.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.curve_mult">
+<code class="descname">curve_mult</code><span class="sig-paren">(</span><em>mult</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.curve_mult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.curve_mult" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">curve_mult(curve)</span></code> multiplies two curves together.</p>
+<p>This is a helper class, usually only called through <code class="docutils literal"><span class="pre">curve.multiply</span></code>,
+or using the <code class="docutils literal"><span class="pre">*</span></code> operator. The class first takes a unique set of
+<code class="docutils literal"><span class="pre">x</span></code> points that are within the range of both curves. Then, it
+multiplies those two together.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mult</strong> (<em>number</em>) &#8211; the curve to multiply by</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the left <code class="docutils literal"><span class="pre">curve</span></code> object, with the values multipled in
+place.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="func.curve.decimate">
 <code class="descname">decimate</code><span class="sig-paren">(</span><em>R=None</em>, <em>length=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.decimate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.decimate" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">decimate(R)</span></code> will remove all but every <code class="docutils literal"><span class="pre">R</span></code> th point in the
@@ -268,7 +309,7 @@ want the final array.</li>
 <dl class="method">
 <dt id="func.curve.divide">
 <code class="descname">divide</code><span class="sig-paren">(</span><em>numerator</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.divide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.divide" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="docutils literal"><span class="pre">divides(mult)</span></code> divides a value by the curve.</p>
+<dd><p><code class="docutils literal"><span class="pre">divide(numerator)</span></code> divides a value by the curve.</p>
 <p>The <code class="docutils literal"><span class="pre">divide</span></code> function will divide the value provided in <code class="docutils literal"><span class="pre">numerator</span></code>
 by the values in the curve.  This value can be an array with the same
 size or a scalar of type integer or float.  Note that this will only
@@ -445,7 +486,7 @@ value (<code class="docutils literal"><span class="pre">y</span></code>) of the 
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mult</strong> (<em>number</em>) &#8211; the number to multiply the curve by</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">none</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the curve after multiplication</td>
 </tr>
 </tbody>
 </table>

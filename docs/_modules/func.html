@@ -800,24 +800,53 @@
     <span class="c">###########################################################################</span>
     <span class="c"># Curve Arithmetic - tests in tests/test_curve_arithmetic.py</span>
     <span class="c">###########################################################################</span></div>
-    <span class="k">def</span> <span class="nf">curve_mult</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mult</span><span class="p">):</span>
-        <span class="c"># first, trim the curves to have only common data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">trim</span><span class="p">(</span><span class="n">mult</span><span class="p">)</span>
-        <span class="n">curve2</span> <span class="o">=</span> <span class="n">mult</span>
-        <span class="n">xs</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">ys</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">u_ys</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">u_xs</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">newx</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">50</span><span class="p">):</span>
-            <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">newx</span><span class="p">)</span> <span class="o">*</span> <span class="n">curve2</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">newx</span><span class="p">)</span>
-            <span class="n">xs</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">newx</span><span class="p">])</span>
-            <span class="n">ys</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">r</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<div class="viewcode-block" id="curve.add"><a class="viewcode-back" href="../index.html#func.curve.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot; ``add(value)`` adds a value to the curve.</span>
+
+<span class="sd">        The ``add`` function will add the provided value to the curve in place.</span>
+
+<span class="sd">        :param number right: the number or curve to be added to the curve</span>
+<span class="sd">        :returns: ``curve`` with added :math:`y` values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_right</span> <span class="o">=</span> <span class="n">right</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_right</span><span class="p">,</span> <span class="n">curve</span><span class="p">):</span>
+            <span class="c"># first trim the curves to the same range (smallest)</span>
+            <span class="c"># and resample these to the most points we can get</span>
+            <span class="n">_right</span> <span class="o">=</span> <span class="n">right</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="n">_right</span><span class="o">.</span><span class="n">y</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_right</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="n">_right</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_right</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="nb">float</span><span class="p">(</span><span class="n">_right</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="k">return</span> <span class="bp">self</span>
+</div>
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+        <span class="n">_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="n">curve</span><span class="p">):</span>
+            <span class="n">_right</span> <span class="o">=</span> <span class="n">right</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_right</span> <span class="o">=</span> <span class="n">right</span>
+        <span class="n">_left</span> <span class="o">=</span> <span class="n">_left</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">_right</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_left</span>
+
+    <span class="k">def</span> <span class="nf">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+        <span class="n">_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="n">curve</span><span class="p">):</span>
+            <span class="n">_right</span> <span class="o">=</span> <span class="n">right</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">_right</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="n">_right</span><span class="o">.</span><span class="n">y</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_right</span> <span class="o">=</span> <span class="o">-</span><span class="n">right</span>
+        <span class="n">_left</span> <span class="o">=</span> <span class="n">_left</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">_right</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_left</span>
+
+    <span class="k">def</span> <span class="nf">__rsub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left</span><span class="p">):</span>
+        <span class="n">_left</span> <span class="o">=</span> <span class="n">left</span>
+        <span class="n">_right</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">_right</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="n">_right</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">_right</span> <span class="o">=</span> <span class="n">_right</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">_left</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_right</span>
 
 <div class="viewcode-block" id="curve.multiply"><a class="viewcode-back" href="../index.html#func.curve.multiply">[docs]</a>    <span class="k">def</span> <span class="nf">multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mult</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot; ``multiply(mult)`` multiplies the curve by a value.</span>
@@ -828,7 +857,7 @@
 <span class="sd">        value (``y``) of the function, not the abscissa (``x``).</span>
 
 <span class="sd">        :param number mult: the number to multiply the curve by</span>
-<span class="sd">        :returns: none</span>
+<span class="sd">        :returns: the curve after multiplication</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mult</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mult</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)):</span>
@@ -837,43 +866,57 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mult</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mult</span><span class="p">,</span> <span class="n">curve</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">curve_mult</span><span class="p">(</span><span class="n">mult</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
 </div>
-    <span class="k">def</span> <span class="nf">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mult</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">mult</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span>
+<div class="viewcode-block" id="curve.curve_mult"><a class="viewcode-back" href="../index.html#func.curve.curve_mult">[docs]</a>    <span class="k">def</span> <span class="nf">curve_mult</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mult</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot; ``curve_mult(curve)`` multiplies two curves together.</span>
 
-    <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mult</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">mult</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span>
+<span class="sd">        This is a helper class, usually only called through ``curve.multiply``,</span>
+<span class="sd">        or using the ``*`` operator. The class first takes a unique set of</span>
+<span class="sd">        ``x`` points that are within the range of both curves. Then, it</span>
+<span class="sd">        multiplies those two together.</span>
 
-    <span class="k">def</span> <span class="nf">curve_div</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
-        <span class="c"># copy each so we&#39;re not making changes in place</span>
-        <span class="n">_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">_right</span> <span class="o">=</span> <span class="n">right</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="c"># we want to find an abscissa that has the most points with at least</span>
-        <span class="c"># one true data point and that doesn&#39;t require any extrapolation</span>
-
-        <span class="c"># first, trim the curves to have only common data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">trim</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
-        <span class="n">curve2</span> <span class="o">=</span> <span class="n">num</span>
-        <span class="n">xs</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">ys</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">u_ys</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">u_xs</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">newx</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">50</span><span class="p">):</span>
-            <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">newx</span><span class="p">)</span> <span class="o">/</span> <span class="n">curve2</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">newx</span><span class="p">)</span>
-            <span class="n">xs</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">newx</span><span class="p">])</span>
-            <span class="n">ys</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">r</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">xs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">ys</span>
+<span class="sd">        :param number mult: the curve to multiply by</span>
+<span class="sd">        :returns: the left ``curve`` object, with the values multipled in</span>
+<span class="sd">            place.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x1min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x2min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">mult</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x1max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x2max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">mult</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">xmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">x1min</span><span class="p">,</span> <span class="n">x2min</span><span class="p">])</span>
+        <span class="n">xmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">x1max</span><span class="p">,</span> <span class="n">x2max</span><span class="p">])</span>
+        <span class="n">allxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">mult</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">allxs</span> <span class="o">=</span> <span class="n">allxs</span><span class="p">[</span><span class="n">allxs</span> <span class="o">&gt;=</span> <span class="n">xmin</span><span class="p">]</span>
+        <span class="n">allxs</span> <span class="o">=</span> <span class="n">allxs</span><span class="p">[</span><span class="n">allxs</span> <span class="o">&lt;=</span> <span class="n">xmax</span><span class="p">]</span>
+        <span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">allxs</span><span class="p">)</span>
+        <span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">]</span>
+        <span class="n">zs</span> <span class="o">=</span> <span class="p">[</span><span class="n">mult</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">]</span>
+        <span class="n">product</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span> <span class="o">*</span> <span class="n">z</span> <span class="k">for</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span> <span class="n">zs</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">product</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span>
+</div>
+    <span class="k">def</span> <span class="nf">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mult</span><span class="p">):</span>
+        <span class="n">_left</span> <span class="o">=</span> <span class="n">mult</span>
+        <span class="n">_right</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">_right</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">_left</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_right</span>
+
+    <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mult</span><span class="p">):</span>
+        <span class="n">_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mult</span><span class="p">,</span> <span class="n">curve</span><span class="p">):</span>
+            <span class="n">_right</span> <span class="o">=</span> <span class="n">mult</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_right</span> <span class="o">=</span> <span class="n">mult</span>
+        <span class="n">_left</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">_right</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_left</span>
 
 <div class="viewcode-block" id="curve.divide"><a class="viewcode-back" href="../index.html#func.curve.divide">[docs]</a>    <span class="k">def</span> <span class="nf">divide</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numerator</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot; ``divides(mult)`` divides a value by the curve.</span>
+        <span class="sd">r&quot;&quot;&quot; ``divide(numerator)`` divides a value by the curve.</span>
 
 <span class="sd">        The ``divide`` function will divide the value provided in ``numerator``</span>
 <span class="sd">        by the values in the curve.  This value can be an array with the same</span>
@@ -883,7 +926,7 @@
 <span class="sd">        :param number numerator: the number to be divided by the curve</span>
 <span class="sd">        :returns: none</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">oldy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">oldy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">numerator</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">numerator</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
             <span class="n">numerator</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">numerator</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)):</span>
@@ -892,7 +935,58 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">oldy</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">numerator</span><span class="p">,</span> <span class="n">curve</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">curve_div</span><span class="p">(</span><span class="n">numerator</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
 </div>
+<div class="viewcode-block" id="curve.curve_div"><a class="viewcode-back" href="../index.html#func.curve.curve_div">[docs]</a>    <span class="k">def</span> <span class="nf">curve_div</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot; ``curve_div(curve)`` divides one curve by another.</span>
+
+<span class="sd">        This is a helper class, usually only called through ``curve.divide``,</span>
+<span class="sd">        or using the ``/`` operator. The class first takes a unique set of</span>
+<span class="sd">        ``x`` points that are within the range of both curves. Then, it</span>
+<span class="sd">        divides the ``y`` values by the other.</span>
+
+<span class="sd">        :param number right: the curve to divide by.</span>
+<span class="sd">        :returns: the left ``curve`` object, with the values divided in</span>
+<span class="sd">            place.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x1min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x2min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">mult</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x1max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x2max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">mult</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">xmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">x1min</span><span class="p">,</span> <span class="n">x2min</span><span class="p">])</span>
+        <span class="n">xmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">x1max</span><span class="p">,</span> <span class="n">x2max</span><span class="p">])</span>
+        <span class="n">allxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">mult</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">allxs</span> <span class="o">=</span> <span class="n">allxs</span><span class="p">[</span><span class="n">allxs</span> <span class="o">&gt;=</span> <span class="n">xmin</span><span class="p">]</span>
+        <span class="n">allxs</span> <span class="o">=</span> <span class="n">allxs</span><span class="p">[</span><span class="n">allxs</span> <span class="o">&lt;=</span> <span class="n">xmax</span><span class="p">]</span>
+        <span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">allxs</span><span class="p">)</span>
+        <span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">]</span>
+        <span class="n">zs</span> <span class="o">=</span> <span class="p">[</span><span class="n">mult</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">]</span>
+        <span class="n">quotient</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span> <span class="o">/</span> <span class="n">z</span> <span class="k">for</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span> <span class="n">zs</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">quotient</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+    <span class="k">def</span> <span class="nf">__rdiv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left</span><span class="p">):</span>
+        <span class="n">_right</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">curve</span><span class="p">):</span>
+            <span class="n">_left</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_left</span> <span class="o">=</span> <span class="n">left</span>
+        <span class="n">_right</span><span class="o">.</span><span class="n">divide_by</span><span class="p">(</span><span class="n">_left</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_right</span>
+
+    <span class="k">def</span> <span class="nf">__div__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+        <span class="n">_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="n">curve</span><span class="p">):</span>
+            <span class="n">_right</span> <span class="o">=</span> <span class="n">right</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_right</span> <span class="o">=</span> <span class="n">right</span>
+        <span class="n">_left</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">_right</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_left</span>
+
     <span class="k">def</span> <span class="nf">__or__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; a convienience class to add data to the already populated x and y.</span>
 
@@ -903,53 +997,13 @@
 <span class="sd">        :return: A curve object with the added data, fully sorted.</span>
 <span class="sd">        :rtype: curve</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span>
-
-    <span class="k">def</span> <span class="nf">__rdiv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">curve</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">curve_div</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span>
-
-    <span class="k">def</span> <span class="nf">__div__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">denom</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">denom</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span>
-
-    <span class="k">def</span> <span class="nf">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
         <span class="n">left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">_right</span> <span class="o">=</span> <span class="n">right</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">_right</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="n">_right</span><span class="o">.</span><span class="n">y</span>
-        <span class="n">left</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">_right</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">left</span>
-
-<div class="viewcode-block" id="curve.add"><a class="viewcode-back" href="../index.html#func.curve.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot; ``add(value)`` adds a value to the curve.</span>
-
-<span class="sd">        The ``add`` function will add the provided value to the curve and</span>
-<span class="sd">        return a copy of the curve with the added value</span>
-
-<span class="sd">        :param number right: the number or curve to be added to the curve</span>
-<span class="sd">        :returns: copy of self + right</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">_right</span> <span class="o">=</span> <span class="n">right</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_right</span><span class="p">,</span> <span class="n">curve</span><span class="p">):</span>
-            <span class="c"># first trim the curves to the same range (smallest)</span>
-            <span class="c"># and resample these to the most points we can get</span>
-            <span class="n">left</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="n">_right</span><span class="o">.</span><span class="n">y</span>
-        <span class="k">elif</span> <span class="n">instance</span><span class="p">(</span><span class="n">_right</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
-            <span class="n">left</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="n">_right</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_right</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-            <span class="n">left</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="nb">float</span><span class="p">(</span><span class="n">_right</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">left</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">left</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">left</span>
 
     <span class="c">###########################################################################</span>
     <span class="c"># Curve Fitting - tests in tests/test_curve_fitting.py</span>
-    <span class="c">###########################################################################</span></div>
+    <span class="c">###########################################################################</span>
     <span class="k">def</span> <span class="nf">fit_exp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">def</span> <span class="nf">exp_func</span><span class="p">(</span><span class="n">coeffs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>

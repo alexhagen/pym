@@ -308,17 +308,35 @@ want the final array.</li>
 
 <dl class="method">
 <dt id="func.curve.divide">
-<code class="descname">divide</code><span class="sig-paren">(</span><em>numerator</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.divide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.divide" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="docutils literal"><span class="pre">divide(numerator)</span></code> divides a value by the curve.</p>
-<p>The <code class="docutils literal"><span class="pre">divide</span></code> function will divide the value provided in <code class="docutils literal"><span class="pre">numerator</span></code>
-by the values in the curve.  This value can be an array with the same
-size or a scalar of type integer or float.  Note that this will only
-change the value (<code class="docutils literal"><span class="pre">y</span></code>) of the function, not the abscissa (<code class="docutils literal"><span class="pre">x</span></code>).</p>
+<code class="descname">divide</code><span class="sig-paren">(</span><em>denominator</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.divide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.divide" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">divide(denominator)</span></code> divides a curve by a value.</p>
+<p>The <code class="docutils literal"><span class="pre">divide</span></code> function will divide the curve by the value provided in
+<code class="docutils literal"><span class="pre">numerator</span></code>.  Note that this will only change the value (<code class="docutils literal"><span class="pre">y</span></code>) of
+the function, not the abscissa (<code class="docutils literal"><span class="pre">x</span></code>).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>numerator</strong> (<em>number</em>) &#8211; the number to be divided by the curve</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>denominator</strong> (<em>number</em>) &#8211; the number to divide the curve by.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">none</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.divide_by">
+<code class="descname">divide_by</code><span class="sig-paren">(</span><em>numerator</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.divide_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.divide_by" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">divide_by(numerator)</span></code> divides a value by the curve.</p>
+<p>The <code class="docutils literal"><span class="pre">divide</span></code> function will divide the value provided in <code class="docutils literal"><span class="pre">numerator</span></code>
+by the values in the curve.  Note that this will only change the value
+(<code class="docutils literal"><span class="pre">y</span></code>) of the function, not the abscissa (<code class="docutils literal"><span class="pre">x</span></code>).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>numerator</strong> (<em>number</em>) &#8211; the number to be divided by the curve.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">none</td>
 </tr>

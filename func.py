@@ -187,26 +187,6 @@ class curve(object):
                 self.u_y = np.delete(self.u_y, np.where(remove))
         return self
 
-    def trim(self, trimcurv):
-        print "trimming the curve"
-        minx = np.min(self.x)
-        maxx = np.max(self.x)
-        if np.min(trimcurv.x) > minx:
-            minx = np.min(trimcurv.x)
-        if np.max(trimcurv.x) < maxx:
-            maxx = np.max(trimcurv.x)
-        xs = []
-        ys = []
-        for newx in np.linspace(minx, maxx, 50):
-            xs.extend([newx])
-            ys.extend([self.at(newx)])
-        self.x = np.array(xs)
-        self.y = np.array(ys)
-        self.u_x = None
-        self.u_y = None
-        self.sort()
-        return self
-
     def decimate(self, R=None, length=None):
         r""" ``decimate(R)`` will remove all but every ``R`` th point in the
         curve.
@@ -387,8 +367,12 @@ class curve(object):
             else:
                 if xi > self.x.min() and xi < self.x.max():
                     # if it is in the data range, interpolate
-                    u_y[index] = self.interpolate(xi)
-                    # find the uncertainty interpolated
+                    xi1, y1, uxi1, uy1 = self.find_nearest_down(xi, error=True)
+                    xi2, y2, uxi2, uy2 = self.find_nearest_up(xi, error=True)
+                    m = (y2 - y1) / (xi2 - xi1)
+                    dxi = (xi - xi1) / (xi2 - xi1)
+                    u_y[index] = m * np.sqrt(dx**2. + uy1**2. + uy2**2. +
+                                             dxi**2. * (uxi1**2. + uxi2**2.))
                 else:
                     # if it is not in the data range, extrapolate
                     u_y[index] = self.extrapolate(xi)
@@ -501,37 +485,60 @@ class curve(object):
         # find the new point
         return self.at(x1) + dy
 
-    def find_nearest_down(self, x):
+    def find_nearest_down(self, x, error=False):
         r""" ``find_nearest_down(x)`` will find the actual data point that is
-        closest in negative ``x``-distance to the data point ``x`` passed to the
-        function
+        closest in negative ``x``-distance to the data point ``x`` passed to
+        the function.
 
         :param float x: The data point ``x`` which to find the closest value
             below.
+        :param bool error: If true, the u_x and u_y will be returned at that
+            point, even if they are ``None``.
         :return: a tuple containing the ``x`` and ``y`` value of the data point
-            immediately below in ``x`` value to the value passed to the function
-        :rtype: tuple
+            immediately below in ``x`` value to the value passed to the
+            function, optionally containing the ``u_x`` and ``u_y`` value.
         """
         dx = x - self.x
         dx[dx < 0.] = np.inf
         idx = np.abs(dx).argmin()
-        return (self.x[idx], self.y[idx])
+        if error:
+            ux = None
+            uy = None
+            if self.u_x is not None:
+                ux = self.u_x[idx]
+            if self.u_y is not None:
+                uy = self.u_y[idx]
+            return (self.x[idx], self.y[idx], ux, uy)
+        else:
+            return (self.x[idx], self.y[idx])
 
-    def find_nearest_up(self, x):
-        r""" ``find_nearest_up(x)`` will find the actual data point that is
-        closest in positive ``x``-distance to the data point ``x`` passed to the
-        function
+    def find_nearest_up(self, x, error=False):
+        r""" ``find_nearest_up(x, error=False)`` will find the actual data
+        point that is closest in positive ``x``-distance to the data point
+        ``x`` passed to the function.
 
         :param float x: The data point ``x`` which to find the closest value
             above.
+        :param bool error: If true, the u_x and u_y will be returned at that
+            point, even if they are ``None``.
         :return: a tuple containing the ``x`` and ``y`` value of the data point
-            immediately above in ``x`` value to the value passed to the function
+            immediately above in ``x`` value to the value passed to the
+            function, optionally containing the ``u_x`` and ``u_y`` value.
         :rtype: tuple
         """
         dx = x - self.x
         dx[dx > 0.] = np.inf
         idx = np.abs(dx).argmin()
-        return (self.x[idx], self.y[idx])
+        if error:
+            ux = None
+            uy = None
+            if self.u_x is not None:
+                ux = self.u_x[idx]
+            if self.u_y is not None:
+                uy = self.u_y[idx]
+            return (self.x[idx], self.y[idx], ux, uy)
+        else:
+            return (self.x[idx], self.y[idx])
 
     def average(self, xmin=None, xmax=None):
         r""" ``average()`` will find the average ``y``-value across the entire

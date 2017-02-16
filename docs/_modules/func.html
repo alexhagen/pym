@@ -413,9 +413,9 @@
 <span class="sd">            \sigma_{x_{\downarrow}}^{2}+\sigma_{x_{\uparrow}}^{2}\right)}</span>
 
 <span class="sd">        :param float x: The coordinate of which the value is desired.</span>
-<span class="sd">        :param float dx: The uncertainty in the x coordinate requested, given in</span>
-<span class="sd">            the above equations with :math:`sigma_{x}`.</span>
-<span class="sd">        :returns: :math:`sigma_{y}`, the uncertainty of the value of the curve</span>
+<span class="sd">        :param float dx: *Optional* The uncertainty in the x coordinate</span>
+<span class="sd">            requested, given in the above equations as :math:`\sigma_{x}`.</span>
+<span class="sd">        :returns: :math:`\sigma_{y}`, the uncertainty of the value of the curve</span>
 <span class="sd">            at point :math:`x`</span>
 <span class="sd">        :rtype: float</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -450,8 +450,9 @@
 
 <span class="sd">        .. math::</span>
 
-<span class="sd">            x=\left(y-y_{0}\right)\frac{\left(x_{1}-x_{0}\right)}</span>
-<span class="sd">            {\left(y_{1}-y_{0}\right)}+x_{0}</span>
+<span class="sd">            x=\left(y-y_{\downarrow}\right)\frac{\left(x_{\uparrow}</span>
+<span class="sd">            -x_{\downarrow}\right)}{\left(y_{\uparrow}-y_{\downarrow}\right)}</span>
+<span class="sd">            +x_{\downarrow}</span>
 
 <span class="sd">        :param float y: the value which ordinate values are desired</span>
 <span class="sd">        :return: a list of :math:`x` that have value :math:`y`</span>
@@ -551,8 +552,10 @@
 <span class="sd">            immediately below in ``x`` value to the value passed to the function</span>
 <span class="sd">        :rtype: tuple</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">dx</span><span class="p">[</span><span class="n">dx</span> <span class="o">&lt;</span> <span class="mf">0.</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dx</span><span class="p">)</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
 </div>
 <div class="viewcode-block" id="curve.find_nearest_up"><a class="viewcode-back" href="../index.html#func.curve.find_nearest_up">[docs]</a>    <span class="k">def</span> <span class="nf">find_nearest_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot; ``find_nearest_up(x)`` will find the actual data point that is</span>
@@ -565,7 +568,9 @@
 <span class="sd">            immediately above in ``x`` value to the value passed to the function</span>
 <span class="sd">        :rtype: tuple</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">dx</span><span class="p">[</span><span class="n">dx</span> <span class="o">&gt;</span> <span class="mf">0.</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dx</span><span class="p">)</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
 </div>
 <div class="viewcode-block" id="curve.average"><a class="viewcode-back" href="../index.html#func.curve.average">[docs]</a>    <span class="k">def</span> <span class="nf">average</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -594,19 +599,76 @@
             <span class="o">/</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">mean</span>
 </div>
-    <span class="k">def</span> <span class="nf">round_to_amt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">amt</span><span class="p">):</span>
-        <span class="n">recip</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">amt</span>
-        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">num</span> <span class="o">*</span> <span class="n">amt</span><span class="p">)</span> <span class="o">/</span> <span class="n">amt</span>
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="curve.round_to_amt"><a class="viewcode-back" href="../index.html#func.curve.round_to_amt">[docs]</a>    <span class="k">def</span> <span class="nf">round_to_amt</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">amt</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot; ``round_to_amt`` is a static method that round a number to an</span>
+<span class="sd">            arbitrary interval</span>
 
+<span class="sd">        Given a number ``num`` such as :math:`1.2` and an amount ``amt`` such</span>
+<span class="sd">        as :math:`0.25`, ``round_to_amt`` would return :math:`1.20` because</span>
+<span class="sd">        that is the closest value downward on a :math:`0.25` wide grid.</span>
+
+<span class="sd">        :param float num: the number to be rounded.</span>
+<span class="sd">        :param float amt: the amount to round the number to.</span>
+<span class="sd">        :returns: the number after it has been rounded.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">num</span> <span class="o">/</span> <span class="n">amt</span><span class="p">))</span> <span class="o">*</span> <span class="n">amt</span>
+</div>
 <div class="viewcode-block" id="curve.rolling_avg"><a class="viewcode-back" href="../index.html#func.curve.rolling_avg">[docs]</a>    <span class="k">def</span> <span class="nf">rolling_avg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bin_width</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot; ``rolling_avg(bin_width)`` redistributes the data on a certain bin</span>
 <span class="sd">        width, propogating the error needed.</span>
 
+<span class="sd">        If we have data in an array such as</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \left[\begin{array}{c}</span>
+<span class="sd">                \vec{x}\\</span>
+<span class="sd">                \vec{y}</span>
+<span class="sd">                \end{array}\right]=\left[\begin{array}{cccc}</span>
+<span class="sd">                0.1 &amp; 0.75 &amp; 1.75 &amp; 1.9\\</span>
+<span class="sd">                1.0 &amp; 2.0 &amp; 3.0 &amp; 4.0</span>
+<span class="sd">                \end{array}\right]</span>
+
+<span class="sd">        and we want to see the data only on integer bins, we will return</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \left[\begin{array}{c}</span>
+<span class="sd">                \vec{x}\\</span>
+<span class="sd">                \vec{y}</span>
+<span class="sd">                \end{array}\right]=\left[\begin{array}{cc}</span>
+<span class="sd">                0.0 &amp; 2.0\\</span>
+<span class="sd">                1.5 &amp; 3.5</span>
+<span class="sd">                \end{array}\right]</span>
+
+<span class="sd">        This function will also return the uncertainty in each bin, taking into</span>
+<span class="sd">        account both the uncertainty of each value in the bin, as well as the</span>
+<span class="sd">        uncertainty caused by standard deviation within the bin itself.  This</span>
+<span class="sd">        can be expressed by</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \left[\begin{array}{c}</span>
+<span class="sd">                \vec{x}\\</span>
+<span class="sd">                \vec{y}\\</span>
+<span class="sd">                \vec{u}_{x}\\</span>
+<span class="sd">                \vec{u}_{y}</span>
+<span class="sd">                \end{array}\right]=\left[\begin{array}{c}</span>
+<span class="sd">                \frac{\sum_{x\text{ in bin}}x}{N_{x}}\\</span>
+<span class="sd">                \frac{\sum_{x\text{ in bin}}y}{N_{y}}\\</span>
+<span class="sd">                \frac{\sum_{x\text{ in bin}}\sqrt{</span>
+<span class="sd">                    \left(\frac{\text{bin width}}{2}\right)^{2}</span>
+<span class="sd">                    +\text{mean}\left(\sigma_{x}\right)^{2}}}{N_{x}}\\</span>
+<span class="sd">                \frac{\sum_{x\text{ in bin}}\sqrt{\sigma_{y}^{2}</span>
+<span class="sd">                    +stdev_{y}^{2}}}{N_{x}}</span>
+<span class="sd">                \end{array}\right]</span>
 
 <span class="sd">        :param float bin_width: The width in which the redistribution will</span>
 <span class="sd">            happen.</span>
-<span class="sd">        :rtype: None</span>
+<span class="sd">        :rtype: The redistributed curve.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">new_x</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">new_y</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">new_u_x</span> <span class="o">=</span> <span class="p">[]</span>
@@ -614,7 +676,8 @@
         <span class="c"># find the start bin (round the minimum value to the next lowest bin)</span>
         <span class="n">bin_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">round_to_amt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">bin_width</span><span class="p">)</span>
         <span class="c"># then, for everything in a certain bin:</span>
-        <span class="k">for</span> <span class="n">left</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">bin_start</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">bin_width</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">left</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">bin_start</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">bin_width</span><span class="p">,</span>
+                              <span class="n">bin_width</span><span class="p">):</span>
             <span class="c"># average to find the mean</span>
             <span class="n">sample</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
                       <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="n">left</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">left</span> <span class="o">+</span> <span class="n">bin_width</span><span class="p">]</span>
@@ -633,21 +696,21 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">u_y_sample</span> <span class="o">=</span> <span class="n">std</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-                    <span class="n">u_x_sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">bin_width</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> \
-                        <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">u_left</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                    <span class="n">u_x_sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">bin_width</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
+                                         <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">u_left</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">u_x_sample</span> <span class="o">=</span> <span class="n">bin_width</span><span class="o">/</span><span class="mf">2.</span>
+                    <span class="n">u_x_sample</span> <span class="o">=</span> <span class="n">bin_width</span> <span class="o">/</span> <span class="mf">2.</span>
                 <span class="c"># add to new distribution</span>
                 <span class="n">new_x</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">left</span> <span class="o">+</span> <span class="n">bin_width</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">])</span>
                 <span class="n">new_y</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sample</span><span class="p">)])</span>
                 <span class="n">new_u_y</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">u_y_sample</span><span class="p">])</span>
                 <span class="n">new_u_x</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">u_x_sample</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">new_x</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">new_y</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">new_u_y</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">new_u_x</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
-        <span class="k">return</span> <span class="bp">self</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">new_x</span><span class="p">)</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">new_y</span><span class="p">)</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">u_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">new_u_y</span><span class="p">)</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">u_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">new_u_x</span><span class="p">)</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">new</span>
 
     <span class="c">###########################################################################</span>
     <span class="c"># Data Integration and Normalization - tests in tests/test_data_integ.py</span>

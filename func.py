@@ -874,26 +874,47 @@ class curve(object):
         _left.multiply(_right)
         return _left
 
-    def divide(self, numerator):
-        r""" ``divide(numerator)`` divides a value by the curve.
+    def divide(self, denominator):
+        r""" ``divide(denominator)`` divides a curve by a value.
+
+        The ``divide`` function will divide the curve by the value provided in
+        ``numerator``.  Note that this will only change the value (``y``) of
+        the function, not the abscissa (``x``).
+
+        :param number denominator: the number to divide the curve by.
+        :returns: none
+        """
+        oldy = np.copy(self.y)
+        if isinstance(denominator, int) or isinstance(denominator, float):
+            denominator = float(denominator)
+            for i in range(len(self.y)):
+                self.y[i] = self.y[i] / denominator
+                if self.u_y is not None:
+                    self.u_y[i] = self.y[i] * self.u_y[i] / oldy[i]
+        if isinstance(denominator, curve):
+            self.curve_div(denominator)
+        return self
+
+    def divide_by(self, numerator):
+        r""" ``divide_by(numerator)`` divides a value by the curve.
 
         The ``divide`` function will divide the value provided in ``numerator``
-        by the values in the curve.  This value can be an array with the same
-        size or a scalar of type integer or float.  Note that this will only
-        change the value (``y``) of the function, not the abscissa (``x``).
+        by the values in the curve.  Note that this will only change the value
+        (``y``) of the function, not the abscissa (``x``).
 
-        :param number numerator: the number to be divided by the curve
+        :param number numerator: the number to be divided by the curve.
         :returns: none
         """
         oldy = np.copy(self.y)
         if isinstance(numerator, int) or isinstance(numerator, float):
             numerator = float(numerator)
             for i in range(len(self.y)):
-                self.y[i] = numerator / self.y[i]
+                self.y[i] = self.y[i] / numerator
                 if self.u_y is not None:
                     self.u_y[i] = self.y[i] * self.u_y[i] / oldy[i]
         if isinstance(numerator, curve):
-            self.curve_div(numerator)
+            numerator.curve_div(self)
+            self = numerator.copy()
         return self
 
     def curve_div(self, right):
@@ -909,18 +930,19 @@ class curve(object):
             place.
         """
         x1min = np.min(self.x)
-        x2min = np.min(mult.x)
+        x2min = np.min(right.x)
         x1max = np.max(self.x)
-        x2max = np.max(mult.x)
+        x2max = np.max(right.x)
         xmin = np.max([x1min, x2min])
         xmax = np.min([x1max, x2max])
-        allxs = np.append(self.x, mult.x)
+        allxs = np.append(self.x, right.x)
         allxs = allxs[allxs >= xmin]
         allxs = allxs[allxs <= xmax]
         xs = np.unique(allxs)
         ys = [self.at(x) for x in xs]
-        zs = [mult.at(x) for x in xs]
-        quotient = [y / z for y, z in zip(ys, zs)]
+        zs = [right.at(x) for x in xs]
+        with np.errstate(divide='ignore', invalid='ignore'):
+            quotient = np.divide(ys, zs)
         self.x = np.array(xs)
         self.y = np.array(quotient)
         self.u_y = None

@@ -124,6 +124,12 @@ class CurveTestCase(unittest.TestCase):
         self.assertEqual(A.y[1], 1., 'division occured in place')
         self.assertEqual(B.y[1], 0.2, 'incorrect float division')
 
+    def test_curve_operator_rdivide_float(self):
+        A = self.A.copy()
+        B = 5. / A
+        self.assertEqual(A.y[1], 1., 'division occured in place')
+        self.assertEqual(B.y[1], 0.2, 'incorrect float division')
+
     def test_curve_operator_divide_curve_same_x(self):
         A = self.A.copy()
         B = A / A

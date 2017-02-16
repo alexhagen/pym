@@ -403,21 +403,26 @@ interpolation to find those <span class="math">\(x\)</span> values according to<
 
 <dl class="method">
 <dt id="func.curve.find_nearest_down">
-<code class="descname">find_nearest_down</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.find_nearest_down"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.find_nearest_down" title="Permalink to this definition">¶</a></dt>
+<code class="descname">find_nearest_down</code><span class="sig-paren">(</span><em>x</em>, <em>error=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.find_nearest_down"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.find_nearest_down" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">find_nearest_down(x)</span></code> will find the actual data point that is
-closest in negative <code class="docutils literal"><span class="pre">x</span></code>-distance to the data point <code class="docutils literal"><span class="pre">x</span></code> passed to the
-function</p>
+closest in negative <code class="docutils literal"><span class="pre">x</span></code>-distance to the data point <code class="docutils literal"><span class="pre">x</span></code> passed to
+the function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The data point <code class="docutils literal"><span class="pre">x</span></code> which to find the closest value
-below.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The data point <code class="docutils literal"><span class="pre">x</span></code> which to find the closest value
+below.</li>
+<li><strong>error</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If true, the u_x and u_y will be returned at that
+point, even if they are <code class="docutils literal"><span class="pre">None</span></code>.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a tuple containing the <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> value of the data point
-immediately below in <code class="docutils literal"><span class="pre">x</span></code> value to the value passed to the function</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)">tuple</a></td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a tuple containing the <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> value of the data point
+immediately below in <code class="docutils literal"><span class="pre">x</span></code> value to the value passed to the
+function, optionally containing the <code class="docutils literal"><span class="pre">u_x</span></code> and <code class="docutils literal"><span class="pre">u_y</span></code> value.</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -425,21 +430,29 @@ immediately below in <code class="docutils literal"><span class="pre">x</span></
 
 <dl class="method">
 <dt id="func.curve.find_nearest_up">
-<code class="descname">find_nearest_up</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.find_nearest_up"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.find_nearest_up" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="docutils literal"><span class="pre">find_nearest_up(x)</span></code> will find the actual data point that is
-closest in positive <code class="docutils literal"><span class="pre">x</span></code>-distance to the data point <code class="docutils literal"><span class="pre">x</span></code> passed to the
-function</p>
+<code class="descname">find_nearest_up</code><span class="sig-paren">(</span><em>x</em>, <em>error=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.find_nearest_up"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.find_nearest_up" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">find_nearest_up(x,</span> <span class="pre">error=False)</span></code> will find the actual data
+point that is closest in positive <code class="docutils literal"><span class="pre">x</span></code>-distance to the data point
+<code class="docutils literal"><span class="pre">x</span></code> passed to the function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The data point <code class="docutils literal"><span class="pre">x</span></code> which to find the closest value
-above.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The data point <code class="docutils literal"><span class="pre">x</span></code> which to find the closest value
+above.</li>
+<li><strong>error</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If true, the u_x and u_y will be returned at that
+point, even if they are <code class="docutils literal"><span class="pre">None</span></code>.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a tuple containing the <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> value of the data point
-immediately above in <code class="docutils literal"><span class="pre">x</span></code> value to the value passed to the function</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a tuple containing the <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> value of the data point
+immediately above in <code class="docutils literal"><span class="pre">x</span></code> value to the value passed to the
+function, optionally containing the <code class="docutils literal"><span class="pre">u_x</span></code> and <code class="docutils literal"><span class="pre">u_y</span></code> value.</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)">tuple</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)">tuple</a></p>
+</td>
 </tr>
 </tbody>
 </table>

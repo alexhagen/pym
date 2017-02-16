@@ -17,12 +17,15 @@ those methods can be found in that book. This documentation will give cursory
 explanations of the numerical methods used, but is written to be more
 of a practical guide for coders. Good luck and happy coding!
 
-.. include:: doc_coverage.rst
+
+func.curve
+==========
 
 .. autoclass:: func.curve
   :members:
   :show-inheritance:
 
+.. include:: doc_coverage.rst
 
 Indices and tables
 ==================

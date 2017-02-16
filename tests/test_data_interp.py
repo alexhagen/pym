@@ -2,6 +2,7 @@ import unittest
 from pym import func as pym
 import numpy as np
 
+
 class dataInterpTestCase(unittest.TestCase):
     def setUp(self):
         # set up a couple curves:

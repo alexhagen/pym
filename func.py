@@ -474,13 +474,14 @@ class curve(object):
         whether the requested point is above or below the existing data. Then,
         it uses :py:func:`find_nearest_down` or :py:func:`find_nearest_up` to
         find the nearest point.  Then it uses :py:func:`find_nearest_down` or
-        :py:func:`find_nearest_up` to find the seconds nearest point.  Finally,
+        :py:func:`find_nearest_up` to find the second nearest point.  Finally,
         it solves the following equation to determine the value
 
         .. math::
 
-            y=\frac{\left(y_{1}-y_{0}\right)}{\left(x_{1}-x_{0}\right)}
-            \left(x-x_{0}\right)+y_{0}
+            y=\frac{\left(y_{\downarrow}-y_{\downarrow \downarrow}
+            \right)}{\left(x_{\downarrow}-x_{\downarrow \downarrow}\right)}
+            \left(x-x_{\downarrow}\right)+y_{\downarrow}
 
         :param float x: the ordinate of the value requested
         :returns: the value of the curve at point :math:`x`

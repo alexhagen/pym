@@ -101,6 +101,8 @@ plot.ylabel('$y$')
 plot.export('../../images/curve_plotting', formats=['websvg'], sizes=['2'])
 ```
 
+{% include_relative ../docs/examples/data_interp_examples.md %}
+
 ### Integration and normalization
 
 <figure>

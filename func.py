@@ -365,6 +365,7 @@ class curve(object):
 
         .. math::
 
+            \require{cancel}
             \sigma_{y}=m\sqrt{\cancel{\sigma_{x}^{2}}
             +\sigma_{y_{\downarrow}}^{2}+
             \sigma_{y_{\uparrow}}^{2}+\Delta\xi^{2}\left(

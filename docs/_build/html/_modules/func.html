@@ -315,7 +315,7 @@
             <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">y</span>
 </div>
-<div class="viewcode-block" id="curve.u_y_at"><a class="viewcode-back" href="../index.html#func.curve.u_y_at">[docs]</a>    <span class="k">def</span> <span class="nf">u_y_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="curve.u_y_at"><a class="viewcode-back" href="../index.html#func.curve.u_y_at">[docs]</a>    <span class="k">def</span> <span class="nf">u_y_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot; ``u_y_at(x)`` finds a the uncertainty of a value at x.</span>
 
 <span class="sd">        ``u_y_at(x)`` uses interpolation or extrapolation to determine the</span>
@@ -381,7 +381,7 @@
 <span class="sd">            \left(x-x_{\downarrow}\right)}{\left(x_{\uparrow}-x_{\downarrow}</span>
 <span class="sd">            \right)}\right)^{2}\sigma_{y_{\uparrow}}^{2}</span>
 
-<span class="sd">        Finally, if we take :math:`m=frac{\left(y_{\uparrow}-y_{\downarrow}</span>
+<span class="sd">        Finally, if we take :math:`m=\frac{\left(y_{\uparrow}-y_{\downarrow}</span>
 <span class="sd">        \right)}{\left(x_{\uparrow}-x_{\downarrow}\right)}`, and</span>
 <span class="sd">        :math:`\Delta\xi=\frac{\left(x-x_{\downarrow}\right)}{\left(x_{</span>
 <span class="sd">        \uparrow}-x_{\downarrow}\right)}`, we can get:</span>
@@ -401,8 +401,21 @@
 <span class="sd">            \sigma_{y_{\uparrow}}^{2}+\Delta\xi^{2}\left(</span>
 <span class="sd">            \sigma_{x_{\downarrow}}^{2}+\sigma_{x_{\uparrow}}^{2}\right)}</span>
 
+<span class="sd">        Note that if an uncertainty in x is not supplied, that the first term</span>
+<span class="sd">        will go to zero, giving</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \sigma_{y}=m\sqrt{\cancel{\sigma_{x}^{2}}</span>
+<span class="sd">            +\sigma_{y_{\downarrow}}^{2}+</span>
+<span class="sd">            \sigma_{y_{\uparrow}}^{2}+\Delta\xi^{2}\left(</span>
+<span class="sd">            \sigma_{x_{\downarrow}}^{2}+\sigma_{x_{\uparrow}}^{2}\right)}</span>
+
 <span class="sd">        :param float x: The coordinate of which the value is desired.</span>
-<span class="sd">        :returns: the uncertainty of the value of the curve at point :math:`x`</span>
+<span class="sd">        :param float dx: The uncertainty in the x coordinate requested, given in</span>
+<span class="sd">            the above equations with :math:`sigma_{x}`.</span>
+<span class="sd">        :returns: :math:`sigma_{y}`, the uncertainty of the value of the curve</span>
+<span class="sd">            at point :math:`x`</span>
 <span class="sd">        :rtype: float</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>

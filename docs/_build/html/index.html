@@ -294,11 +294,12 @@ without the range of the already existing curve.  First, it determines
 whether the requested point is above or below the existing data. Then,
 it uses <code class="xref py py-func docutils literal"><span class="pre">find_nearest_down()</span></code> or <code class="xref py py-func docutils literal"><span class="pre">find_nearest_up()</span></code> to
 find the nearest point.  Then it uses <code class="xref py py-func docutils literal"><span class="pre">find_nearest_down()</span></code> or
-<code class="xref py py-func docutils literal"><span class="pre">find_nearest_up()</span></code> to find the seconds nearest point.  Finally,
+<code class="xref py py-func docutils literal"><span class="pre">find_nearest_up()</span></code> to find the second nearest point.  Finally,
 it solves the following equation to determine the value</p>
 <div class="math">
-\[y=\frac{\left(y_{1}-y_{0}\right)}{\left(x_{1}-x_{0}\right)}
-\left(x-x_{0}\right)+y_{0}\]</div>
+\[y=\frac{\left(y_{\downarrow}-y_{\downarrow \downarrow}
+\right)}{\left(x_{\downarrow}-x_{\downarrow \downarrow}\right)}
+\left(x-x_{\downarrow}\right)+y_{\downarrow}\]</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

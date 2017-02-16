@@ -759,24 +759,53 @@ class curve(object):
     ###########################################################################
     # Curve Arithmetic - tests in tests/test_curve_arithmetic.py
     ###########################################################################
-    def curve_mult(self, mult):
-        # first, trim the curves to have only common data
-        self.trim(mult)
-        curve2 = mult
-        xs = []
-        ys = []
-        u_ys = []
-        u_xs = []
-        for newx in np.linspace(self.x[0], self.x[-1], 50):
-            r = self.at(newx) * curve2.at(newx)
-            xs.extend([newx])
-            ys.extend([r])
-        self.x = np.array(xs)
-        self.y = np.array(ys)
-        self.u_y = None
-        self.u_x = None
-        self.sort()
+    def add(self, right, name=None):
+        r""" ``add(value)`` adds a value to the curve.
+
+        The ``add`` function will add the provided value to the curve in place.
+
+        :param number right: the number or curve to be added to the curve
+        :returns: ``curve`` with added :math:`y` values
+        """
+        _right = right
+        if isinstance(_right, curve):
+            # first trim the curves to the same range (smallest)
+            # and resample these to the most points we can get
+            _right = right.copy()
+            self.y += _right.y
+        elif isinstance(_right, float):
+            self.y += _right
+        elif isinstance(_right, int):
+            self.y += float(_right)
+        if name is not None:
+            self.name = name
         return self
+
+    def __add__(self, right):
+        _left = self.copy()
+        if isinstance(right, curve):
+            _right = right.copy()
+        else:
+            _right = right
+        _left = _left.add(_right)
+        return _left
+
+    def __sub__(self, right):
+        _left = self.copy()
+        if isinstance(right, curve):
+            _right = right.copy()
+            _right.y = -_right.y
+        else:
+            _right = -right
+        _left = _left.add(_right)
+        return _left
+
+    def __rsub__(self, left):
+        _left = left
+        _right = self.copy()
+        _right.y = -_right.y
+        _right = _right.add(_left)
+        return _right
 
     def multiply(self, mult):
         r""" ``multiply(mult)`` multiplies the curve by a value.
@@ -787,7 +816,7 @@ class curve(object):
         value (``y``) of the function, not the abscissa (``x``).
 
         :param number mult: the number to multiply the curve by
-        :returns: none
+        :returns: the curve after multiplication
         """
         if isinstance(mult, int) or isinstance(mult, float):
             for i in range(len(self.y)):
@@ -796,43 +825,57 @@ class curve(object):
                     self.u_y[i] = mult * self.u_y[i]
         if isinstance(mult, curve):
             self.curve_mult(mult)
-
-    def __rmul__(self, mult):
-        self.multiply(mult)
         return self
 
-    def __mul__(self, mult):
-        self.multiply(mult)
-        return self
+    def curve_mult(self, mult):
+        r""" ``curve_mult(curve)`` multiplies two curves together.
 
-    def curve_div(self, right):
-        # copy each so we're not making changes in place
-        _left = self.copy()
-        _right = right.copy()
-        # we want to find an abscissa that has the most points with at least
-        # one true data point and that doesn't require any extrapolation
+        This is a helper class, usually only called through ``curve.multiply``,
+        or using the ``*`` operator. The class first takes a unique set of
+        ``x`` points that are within the range of both curves. Then, it
+        multiplies those two together.
 
-        # first, trim the curves to have only common data
-        self.trim(num)
-        self.sort()
-        curve2 = num
-        xs = []
-        ys = []
-        u_ys = []
-        u_xs = []
-        for newx in np.linspace(self.x[0], self.x[-1], 50):
-            r = self.at(newx) / curve2.at(newx)
-            xs.extend([newx])
-            ys.extend([r])
-        self.x = xs
-        self.y = ys
+        :param number mult: the curve to multiply by
+        :returns: the left ``curve`` object, with the values multipled in
+            place.
+        """
+        x1min = np.min(self.x)
+        x2min = np.min(mult.x)
+        x1max = np.max(self.x)
+        x2max = np.max(mult.x)
+        xmin = np.max([x1min, x2min])
+        xmax = np.min([x1max, x2max])
+        allxs = np.append(self.x, mult.x)
+        allxs = allxs[allxs >= xmin]
+        allxs = allxs[allxs <= xmax]
+        xs = np.unique(allxs)
+        ys = [self.at(x) for x in xs]
+        zs = [mult.at(x) for x in xs]
+        product = [y * z for y, z in zip(ys, zs)]
+        self.x = np.array(xs)
+        self.y = np.array(product)
         self.u_y = None
         self.u_x = None
         self.sort()
         return self
 
+    def __rmul__(self, mult):
+        _left = mult
+        _right = self.copy()
+        _right.multiply(_left)
+        return _right
+
+    def __mul__(self, mult):
+        _left = self.copy()
+        if isinstance(mult, curve):
+            _right = mult.copy()
+        else:
+            _right = mult
+        _left.multiply(_right)
+        return _left
+
     def divide(self, numerator):
-        r""" ``divides(mult)`` divides a value by the curve.
+        r""" ``divide(numerator)`` divides a value by the curve.
 
         The ``divide`` function will divide the value provided in ``numerator``
         by the values in the curve.  This value can be an array with the same
@@ -842,7 +885,7 @@ class curve(object):
         :param number numerator: the number to be divided by the curve
         :returns: none
         """
-        oldy = self.y.copy()
+        oldy = np.copy(self.y)
         if isinstance(numerator, int) or isinstance(numerator, float):
             numerator = float(numerator)
             for i in range(len(self.y)):
@@ -851,6 +894,57 @@ class curve(object):
                     self.u_y[i] = self.y[i] * self.u_y[i] / oldy[i]
         if isinstance(numerator, curve):
             self.curve_div(numerator)
+        return self
+
+    def curve_div(self, right):
+        r""" ``curve_div(curve)`` divides one curve by another.
+
+        This is a helper class, usually only called through ``curve.divide``,
+        or using the ``/`` operator. The class first takes a unique set of
+        ``x`` points that are within the range of both curves. Then, it
+        divides the ``y`` values by the other.
+
+        :param number right: the curve to divide by.
+        :returns: the left ``curve`` object, with the values divided in
+            place.
+        """
+        x1min = np.min(self.x)
+        x2min = np.min(mult.x)
+        x1max = np.max(self.x)
+        x2max = np.max(mult.x)
+        xmin = np.max([x1min, x2min])
+        xmax = np.min([x1max, x2max])
+        allxs = np.append(self.x, mult.x)
+        allxs = allxs[allxs >= xmin]
+        allxs = allxs[allxs <= xmax]
+        xs = np.unique(allxs)
+        ys = [self.at(x) for x in xs]
+        zs = [mult.at(x) for x in xs]
+        quotient = [y / z for y, z in zip(ys, zs)]
+        self.x = np.array(xs)
+        self.y = np.array(quotient)
+        self.u_y = None
+        self.u_x = None
+        self.sort()
+        return self
+
+    def __rdiv__(self, left):
+        _right = self.copy()
+        if isinstance(left, curve):
+            _left = left.copy()
+        else:
+            _left = left
+        _right.divide_by(_left)
+        return _right
+
+    def __div__(self, right):
+        _left = self.copy()
+        if isinstance(right, curve):
+            _right = right.copy()
+        else:
+            _right = right
+        _left.divide(_right)
+        return _left
 
     def __or__(self, other):
         """ a convienience class to add data to the already populated x and y.
@@ -862,48 +956,8 @@ class curve(object):
         :return: A curve object with the added data, fully sorted.
         :rtype: curve
         """
-        self.add_data(other.x, other.y)
-        return self
-
-    def __rdiv__(self, num):
-        if not isinstance(num, curve):
-            self.divide(num)
-        else:
-            self.curve_div(num)
-        return self
-
-    def __div__(self, denom):
-        self.multiply(1.0 / denom)
-        return self
-
-    def __sub__(self, right):
         left = self.copy()
-        _right = right.copy()
-        _right.y = -_right.y
-        left = left.add(_right)
-        return left
-
-    def add(self, right, name=None):
-        r""" ``add(value)`` adds a value to the curve.
-
-        The ``add`` function will add the provided value to the curve and
-        return a copy of the curve with the added value
-
-        :param number right: the number or curve to be added to the curve
-        :returns: copy of self + right
-        """
-        left = self.copy()
-        _right = right.copy()
-        if isinstance(_right, curve):
-            # first trim the curves to the same range (smallest)
-            # and resample these to the most points we can get
-            left.y += _right.y
-        elif instance(_right, float):
-            left.y += _right
-        elif isinstance(_right, int):
-            left.y += float(_right)
-        if name is not None:
-            left.name = name
+        left.add_data(other.x, other.y)
         return left
 
     ###########################################################################

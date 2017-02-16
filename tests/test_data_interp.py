@@ -49,9 +49,19 @@ class dataInterpTestCase(unittest.TestCase):
     def test_uncertainty_interpolation(self):
         # any value should have correctly calculated uncertainty even when
         # interpolated
-        A = pym.curve(x=[1., 3., 4.], y=[0., 1., 2.], u_x=[0.1, 0.1, 0.1],
+        A = pym.curve(x=[0., 1., 2.], y=[0., 1., 2.], u_x=[0.1, 0.1, 0.1],
                       u_y=[0.1, 0.2, 0.3])
-        self.assertEqual(A.u_y_at(2.0, 2.0), 5.0,
+        m = 1.0
+        xi = 0.5
+        dxi = 0.5
+        ux1 = 0.1
+        ux2 = 0.1
+        uy1 = 0.1
+        uy2 = 0.2
+        dx = 0.1
+        uy = m * np.sqrt(dx**2. + uy1**2. + uy2**2. +
+                         dxi**2. * (ux1**2. + ux2**2.))
+        self.assertEqual(A.u_y_at(xi, dx), uy,
                          'incorrect abscissa error')
 
     def test_find(self):

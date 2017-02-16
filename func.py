@@ -372,9 +372,9 @@ class curve(object):
             \sigma_{x_{\downarrow}}^{2}+\sigma_{x_{\uparrow}}^{2}\right)}
 
         :param float x: The coordinate of which the value is desired.
-        :param float dx: The uncertainty in the x coordinate requested, given in
-            the above equations with :math:`sigma_{x}`.
-        :returns: :math:`sigma_{y}`, the uncertainty of the value of the curve
+        :param float dx: *Optional* The uncertainty in the x coordinate
+            requested, given in the above equations as :math:`\sigma_{x}`.
+        :returns: :math:`\sigma_{y}`, the uncertainty of the value of the curve
             at point :math:`x`
         :rtype: float
         """
@@ -409,8 +409,9 @@ class curve(object):
 
         .. math::
 
-            x=\left(y-y_{0}\right)\frac{\left(x_{1}-x_{0}\right)}
-            {\left(y_{1}-y_{0}\right)}+x_{0}
+            x=\left(y-y_{\downarrow}\right)\frac{\left(x_{\uparrow}
+            -x_{\downarrow}\right)}{\left(y_{\uparrow}-y_{\downarrow}\right)}
+            +x_{\downarrow}
 
         :param float y: the value which ordinate values are desired
         :return: a list of :math:`x` that have value :math:`y`

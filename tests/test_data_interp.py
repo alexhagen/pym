@@ -45,6 +45,20 @@ class dataInterpTestCase(unittest.TestCase):
         self.assertEqual(self.A.at(1.75), 1.75,
                          'incorrect central point interpolation')
 
+    def test_uncertainty_interpolation(self):
+        # any value should have correctly calculated uncertainty even when
+        # interpolated
+        A = pym.curve(x=[1., 3., 4.], y=[0., 1., 2.], u_x=[0.1, 0.1, 0.1],
+                      u_y=[0.1, 0.2, 0.3])
+        self.assertEqual(A.u_y_at(2.0, 2.0), 5.0,
+                         'incorrect abscissa error')
+
+    def test_find(self):
+        # any value should be able to find its abscissa point
+        A = self.A.copy()
+        self.assertEqual(A.find(1.5), 1.5,
+                         'incorrect find point')
+
     def tearDown(self):
         del self.A
         del self.B

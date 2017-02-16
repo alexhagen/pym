@@ -12,7 +12,7 @@ docs: FORCE
 	cd ~/code/pym/docs/; \
 	make coverage; \
 	make html; \
-	cp _build/coverage/python.txt _build/html/_static/doc_coverage.rst; \
+	cp _build/coverage/python.txt _build/html/doc_coverage.rst; \
 	cp -r _build/html/* ~/pages/pym/docs/; \
 	cd ~/pages/pym/docs; \
 	git add *; \

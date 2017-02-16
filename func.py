@@ -274,7 +274,7 @@ class curve(object):
             y = y[0]
         return y
 
-    def u_y_at(self, x):
+    def u_y_at(self, x, dx=0.0):
         r""" ``u_y_at(x)`` finds a the uncertainty of a value at x.
 
         ``u_y_at(x)`` uses interpolation or extrapolation to determine the
@@ -326,30 +326,21 @@ class curve(object):
 
         .. math::
 
-            \sigma_{y}^{2} =
-                \left(\frac{\left(y_{\uparrow}-y_{\downarrow}\right)}
-                           {\left(x_{\uparrow}-x_{\downarrow}\right)}\right)^{2}
-                \sigma_{x}^{2}
-                +
-                \left(-\left(x-x_{\uparrow}\right)
-                \frac{\left(y_{\uparrow}-y_{\downarrow}\right)}
-                {\left(x_{\uparrow}-x_{\downarrow}\right)^{2}}\right)^{2}
-                \sigma_{x_{\downarrow}}^{2}
-                +
-                \left(\left(x-x_{\downarrow}\right)
-                \frac{\left(y_{\uparrow}-y_{\downarrow}\right)}
-                {\left(x_{\uparrow}-x_{\downarrow}\right)^{2}}\right)^{2}
-                \sigma_{x_{\uparrow}}^{2}
-                +
-                \left(-\frac{\left(x-x_{\downarrow}\right)}
-                {\left(x_{\uparrow}-x_{\downarrow}\right)}\right)^{2}
-                \sigma_{y_{\downarrow}}^{2}
-                +
-                \left(\frac{\left(x-x_{\downarrow}\right)}
-                {\left(x_{\uparrow}-x_{\downarrow}\right)}\right)^{2}
-                \sigma_{y_{\uparrow}}^{2}
+            \sigma_{y}^{2}=\left(\frac{\left(y_{\uparrow}-y_{\downarrow}\right)}
+            {\left(x_{\uparrow}-x_{\downarrow}\right)}\right)^{2}
+            \sigma_{x}^{2}+\left(-\left(x-x_{\uparrow}\right)
+            \frac{\left(y_{\uparrow}-y_{\downarrow}\right)}
+            {\left(x_{\uparrow}-x_{\downarrow}\right)^{2}}\right)^{2}
+            \sigma_{x_{\downarrow}}^{2}+\left(\left(x-x_{\downarrow}\right)
+            \frac{\left(y_{\uparrow}-y_{\downarrow}\right)}{
+            \left(x_{\uparrow}-x_{\downarrow}\right)^{2}}\right)^{2}
+            \sigma_{x_{\uparrow}}^{2}\\+\left(-\frac{\left(x-x_{\downarrow}
+            \right)}{\left(x_{\uparrow}-x_{\downarrow}\right)}\right)^{2}
+            \sigma_{y_{\downarrow}}^{2}+\left(\frac{
+            \left(x-x_{\downarrow}\right)}{\left(x_{\uparrow}-x_{\downarrow}
+            \right)}\right)^{2}\sigma_{y_{\uparrow}}^{2}
 
-        Finally, if we take :math:`m=frac{\left(y_{\uparrow}-y_{\downarrow}
+        Finally, if we take :math:`m=\frac{\left(y_{\uparrow}-y_{\downarrow}
         \right)}{\left(x_{\uparrow}-x_{\downarrow}\right)}`, and
         :math:`\Delta\xi=\frac{\left(x-x_{\downarrow}\right)}{\left(x_{
         \uparrow}-x_{\downarrow}\right)}`, we can get:
@@ -369,8 +360,21 @@ class curve(object):
             \sigma_{y_{\uparrow}}^{2}+\Delta\xi^{2}\left(
             \sigma_{x_{\downarrow}}^{2}+\sigma_{x_{\uparrow}}^{2}\right)}
 
+        Note that if an uncertainty in x is not supplied, that the first term
+        will go to zero, giving
+
+        .. math::
+
+            \sigma_{y}=m\sqrt{\cancel{\sigma_{x}^{2}}
+            +\sigma_{y_{\downarrow}}^{2}+
+            \sigma_{y_{\uparrow}}^{2}+\Delta\xi^{2}\left(
+            \sigma_{x_{\downarrow}}^{2}+\sigma_{x_{\uparrow}}^{2}\right)}
+
         :param float x: The coordinate of which the value is desired.
-        :returns: the uncertainty of the value of the curve at point :math:`x`
+        :param float dx: The uncertainty in the x coordinate requested, given in
+            the above equations with :math:`sigma_{x}`.
+        :returns: :math:`sigma_{y}`, the uncertainty of the value of the curve
+            at point :math:`x`
         :rtype: float
         """
         if isinstance(x, float):

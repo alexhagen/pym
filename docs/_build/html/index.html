@@ -562,35 +562,34 @@ and get:</p>
     \left(\frac{\partial y}{\partial y_{\uparrow}}\right)^{2}
     \sigma_{y_{\uparrow}}^{2}\]</div>
 <p>and, performing the derivatives, we can get:</p>
-<blockquote>
-<div><dl class="docutils">
-<dt>sigma_{y}^{2} =</dt>
-<dd><dl class="first docutils">
-<dt>left(frac{left(y_{uparrow}-y_{downarrow}right)}</dt>
-<dd>{left(x_{uparrow}-x_{downarrow}right)}right)^{2}</dd>
-</dl>
-<p class="last">sigma_{x}^{2}
-+
-left(-left(x-x_{uparrow}right)
-frac{left(y_{uparrow}-y_{downarrow}right)}
-{left(x_{uparrow}-x_{downarrow}right)^{2}}right)^{2}
-sigma_{x_{downarrow}}^{2}
-+
-left(left(x-x_{downarrow}right)
-frac{left(y_{uparrow}-y_{downarrow}right)}
-{left(x_{uparrow}-x_{downarrow}right)^{2}}right)^{2}
-sigma_{x_{uparrow}}^{2}
-+
-left(-frac{left(x-x_{downarrow}right)}
-{left(x_{uparrow}-x_{downarrow}right)}right)^{2}
-sigma_{y_{downarrow}}^{2}
-+
-left(frac{left(x-x_{downarrow}right)}
-{left(x_{uparrow}-x_{downarrow}right)}right)^{2}
-sigma_{y_{uparrow}}^{2}</p>
-</dd>
-</dl>
-</div></blockquote>
+<div class="math">
+\[\begin{split}\sigma_{y}^{2}=\left(\frac{\left(y_{\uparrow}-y_{\downarrow}\right)}
+{\left(x_{\uparrow}-x_{\downarrow}\right)}\right)^{2}
+\sigma_{x}^{2}+\left(-\left(x-x_{\uparrow}\right)
+\frac{\left(y_{\uparrow}-y_{\downarrow}\right)}
+{\left(x_{\uparrow}-x_{\downarrow}\right)^{2}}\right)^{2}
+\sigma_{x_{\downarrow}}^{2}+\left(\left(x-x_{\downarrow}\right)
+\frac{\left(y_{\uparrow}-y_{\downarrow}\right)}{
+\left(x_{\uparrow}-x_{\downarrow}\right)^{2}}\right)^{2}
+\sigma_{x_{\uparrow}}^{2}\\+\left(-\frac{\left(x-x_{\downarrow}
+\right)}{\left(x_{\uparrow}-x_{\downarrow}\right)}\right)^{2}
+\sigma_{y_{\downarrow}}^{2}+\left(\frac{
+\left(x-x_{\downarrow}\right)}{\left(x_{\uparrow}-x_{\downarrow}
+\right)}\right)^{2}\sigma_{y_{\uparrow}}^{2}\end{split}\]</div>
+<p>Finally, if we take <span class="math">\(m=frac{\left(y_{\uparrow}-y_{\downarrow}
+\right)}{\left(x_{\uparrow}-x_{\downarrow}\right)}\)</span>, and
+<span class="math">\(\Delta\xi=\frac{\left(x-x_{\downarrow}\right)}{\left(x_{
+\uparrow}-x_{\downarrow}\right)}\)</span>, we can get:</p>
+<div class="math">
+\[\sigma_{y}^{2}=m^{2}\left[\sigma_{x}^{2}+
+\sigma_{y_{\downarrow}}^{2}+\sigma_{y_{\uparrow}}^{2}+
+\Delta\xi^{2}\left(\sigma_{x_{\downarrow}}^{2}+
+\sigma_{x_{\uparrow}}^{2}\right)\right]\]</div>
+<p>and the square root of that is the uncertainty.</p>
+<div class="math">
+\[\sigma_{y}=m\sqrt{\sigma_{x}^{2}+\sigma_{y_{\downarrow}}^{2}+
+\sigma_{y_{\uparrow}}^{2}+\Delta\xi^{2}\left(
+\sigma_{x_{\downarrow}}^{2}+\sigma_{x_{\uparrow}}^{2}\right)}\]</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

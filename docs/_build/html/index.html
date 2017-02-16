@@ -321,8 +321,9 @@ root-finding is trivial.  The function first finds all intervals in
 the dataset that include the value <span class="math">\(y\)</span>, and then solves the
 interpolation to find those <span class="math">\(x\)</span> values according to</p>
 <div class="math">
-\[x=\left(y-y_{0}\right)\frac{\left(x_{1}-x_{0}\right)}
-{\left(y_{1}-y_{0}\right)}+x_{0}\]</div>
+\[x=\left(y-y_{\downarrow}\right)\frac{\left(x_{\uparrow}
+-x_{\downarrow}\right)}{\left(y_{\uparrow}-y_{\downarrow}\right)}
++x_{\downarrow}\]</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -491,6 +492,43 @@ defines which of the two types of normalization to perform</li>
 <code class="descname">rolling_avg</code><span class="sig-paren">(</span><em>bin_width=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.rolling_avg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.rolling_avg" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">rolling_avg(bin_width)</span></code> redistributes the data on a certain bin
 width, propogating the error needed.</p>
+<p>If we have data in an array such as</p>
+<div class="math">
+\[\begin{split}\left[\begin{array}{c}
+    \vec{x}\\
+    \vec{y}
+    \end{array}\right]=\left[\begin{array}{cccc}
+    0.1 &amp; 0.75 &amp; 1.75 &amp; 1.9\\
+    1.0 &amp; 2.0 &amp; 3.0 &amp; 4.0
+    \end{array}\right]\end{split}\]</div>
+<p>and we want to see the data only on integer bins, we will return</p>
+<div class="math">
+\[\begin{split}\left[\begin{array}{c}
+    \vec{x}\\
+    \vec{y}
+    \end{array}\right]=\left[\begin{array}{cc}
+    0.0 &amp; 2.0\\
+    1.5 &amp; 3.5
+    \end{array}\right]\end{split}\]</div>
+<p>This function will also return the uncertainty in each bin, taking into
+account both the uncertainty of each value in the bin, as well as the
+uncertainty caused by standard deviation within the bin itself.  This
+can be expressed by</p>
+<div class="math">
+\[\begin{split}\left[\begin{array}{c}
+    \vec{x}\\
+    \vec{y}\\
+    \vec{u}_{x}\\
+    \vec{u}_{y}
+    \end{array}\right]=\left[\begin{array}{c}
+    \frac{\sum_{x\text{ in bin}}x}{N_{x}}\\
+    \frac{\sum_{x\text{ in bin}}y}{N_{y}}\\
+    \frac{\sum_{x\text{ in bin}}\sqrt{
+        \left(\frac{\text{bin width}}{2}\right)^{2}
+        +\text{mean}\left(\sigma_{x}\right)^{2}}}{N_{x}}\\
+    \frac{\sum_{x\text{ in bin}}\sqrt{\sigma_{y}^{2}
+        +stdev_{y}^{2}}}{N_{x}}
+    \end{array}\right]\end{split}\]</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -498,7 +536,34 @@ width, propogating the error needed.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bin_width</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The width in which the redistribution will
 happen.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/library/constants.html#None" title="(in Python v2.7)">None</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">The redistributed curve.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="func.curve.round_to_amt">
+<em class="property">static </em><code class="descname">round_to_amt</code><span class="sig-paren">(</span><em>num</em>, <em>amt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.round_to_amt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.round_to_amt" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">round_to_amt</span></code> is a static method that round a number to an</dt>
+<dd>arbitrary interval</dd>
+</dl>
+<p>Given a number <code class="docutils literal"><span class="pre">num</span></code> such as <span class="math">\(1.2\)</span> and an amount <code class="docutils literal"><span class="pre">amt</span></code> such
+as <span class="math">\(0.25\)</span>, <code class="docutils literal"><span class="pre">round_to_amt</span></code> would return <span class="math">\(1.20\)</span> because
+that is the closest value downward on a <span class="math">\(0.25\)</span> wide grid.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>num</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; the number to be rounded.</li>
+<li><strong>amt</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; the amount to round the number to.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the number after it has been rounded.</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -604,12 +669,12 @@ will go to zero, giving</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>x</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The coordinate of which the value is desired.</li>
-<li><strong>dx</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The uncertainty in the x coordinate requested, given in
-the above equations with <span class="math">\(sigma_{x}\)</span>.</li>
+<li><strong>dx</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; <em>Optional</em> The uncertainty in the x coordinate
+requested, given in the above equations as <span class="math">\(\sigma_{x}\)</span>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><span class="math">\(sigma_{y}\)</span>, the uncertainty of the value of the curve
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><span class="math">\(\sigma_{y}\)</span>, the uncertainty of the value of the curve
 at point <span class="math">\(x\)</span></p>
 </td>
 </tr>

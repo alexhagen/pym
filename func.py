@@ -511,8 +511,10 @@ class curve(object):
             immediately below in ``x`` value to the value passed to the function
         :rtype: tuple
         """
-        idx = (np.abs(x - self.x)).argmin()
-        return (self.x[idx - 1], self.y[idx - 1])
+        dx = x - self.x
+        dx[dx < 0.] = np.inf
+        idx = np.abs(dx).argmin()
+        return (self.x[idx], self.y[idx])
 
     def find_nearest_up(self, x):
         r""" ``find_nearest_up(x)`` will find the actual data point that is
@@ -525,7 +527,9 @@ class curve(object):
             immediately above in ``x`` value to the value passed to the function
         :rtype: tuple
         """
-        idx = (np.abs(x - self.x)).argmin()
+        dx = x - self.x
+        dx[dx > 0.] = np.inf
+        idx = np.abs(dx).argmin()
         return (self.x[idx], self.y[idx])
 
     def average(self, xmin=None, xmax=None):
@@ -554,19 +558,76 @@ class curve(object):
             / (xmax - xmin)
         return mean
 
-    def round_to_amt(self, num, amt):
-        recip = 1.0 / amt
-        return round(num * amt) / amt
+    @staticmethod
+    def round_to_amt(num, amt):
+        r""" ``round_to_amt`` is a static method that round a number to an
+            arbitrary interval
+
+        Given a number ``num`` such as :math:`1.2` and an amount ``amt`` such
+        as :math:`0.25`, ``round_to_amt`` would return :math:`1.20` because
+        that is the closest value downward on a :math:`0.25` wide grid.
+
+        :param float num: the number to be rounded.
+        :param float amt: the amount to round the number to.
+        :returns: the number after it has been rounded.
+        """
+        return float(np.floor(num / amt)) * amt
 
     def rolling_avg(self, bin_width=0.1):
         r""" ``rolling_avg(bin_width)`` redistributes the data on a certain bin
         width, propogating the error needed.
 
+        If we have data in an array such as
+
+        .. math::
+
+            \left[\begin{array}{c}
+                \vec{x}\\
+                \vec{y}
+                \end{array}\right]=\left[\begin{array}{cccc}
+                0.1 & 0.75 & 1.75 & 1.9\\
+                1.0 & 2.0 & 3.0 & 4.0
+                \end{array}\right]
+
+        and we want to see the data only on integer bins, we will return
+
+        .. math::
+
+            \left[\begin{array}{c}
+                \vec{x}\\
+                \vec{y}
+                \end{array}\right]=\left[\begin{array}{cc}
+                0.0 & 2.0\\
+                1.5 & 3.5
+                \end{array}\right]
+
+        This function will also return the uncertainty in each bin, taking into
+        account both the uncertainty of each value in the bin, as well as the
+        uncertainty caused by standard deviation within the bin itself.  This
+        can be expressed by
+
+        .. math::
+
+            \left[\begin{array}{c}
+                \vec{x}\\
+                \vec{y}\\
+                \vec{u}_{x}\\
+                \vec{u}_{y}
+                \end{array}\right]=\left[\begin{array}{c}
+                \frac{\sum_{x\text{ in bin}}x}{N_{x}}\\
+                \frac{\sum_{x\text{ in bin}}y}{N_{y}}\\
+                \frac{\sum_{x\text{ in bin}}\sqrt{
+                    \left(\frac{\text{bin width}}{2}\right)^{2}
+                    +\text{mean}\left(\sigma_{x}\right)^{2}}}{N_{x}}\\
+                \frac{\sum_{x\text{ in bin}}\sqrt{\sigma_{y}^{2}
+                    +stdev_{y}^{2}}}{N_{x}}
+                \end{array}\right]
 
         :param float bin_width: The width in which the redistribution will
             happen.
-        :rtype: None
+        :rtype: The redistributed curve.
         """
+        new = self.copy()
         new_x = []
         new_y = []
         new_u_x = []
@@ -574,7 +635,8 @@ class curve(object):
         # find the start bin (round the minimum value to the next lowest bin)
         bin_start = self.round_to_amt(np.min(self.x), bin_width)
         # then, for everything in a certain bin:
-        for left in np.arange(bin_start, np.max(self.x), bin_width):
+        for left in np.arange(bin_start, np.max(self.x) + bin_width,
+                              bin_width):
             # average to find the mean
             sample = [y for x, y in zip(self.x, self.y)
                       if x >= left and x < left + bin_width]
@@ -593,21 +655,21 @@ class curve(object):
                 else:
                     u_y_sample = std
                 if self.u_x is not None:
-                    u_x_sample = np.sqrt((bin_width/2.)**2 + \
-                        (np.mean(u_left))**2)
+                    u_x_sample = np.sqrt((bin_width / 2.)**2 +
+                                         (np.mean(u_left))**2)
                 else:
-                    u_x_sample = bin_width/2.
+                    u_x_sample = bin_width / 2.
                 # add to new distribution
                 new_x.extend([left + bin_width / 2.])
                 new_y.extend([np.mean(sample)])
                 new_u_y.extend([u_y_sample])
                 new_u_x.extend([u_x_sample])
-        self.x = np.array(new_x)
-        self.y = np.array(new_y)
-        self.u_y = np.array(new_u_y)
-        self.u_x = np.array(new_u_x)
-        self.sort()
-        return self
+        new.x = np.array(new_x)
+        new.y = np.array(new_y)
+        new.u_y = np.array(new_u_y)
+        new.u_x = np.array(new_u_x)
+        new.sort()
+        return new
 
     ###########################################################################
     # Data Integration and Normalization - tests in tests/test_data_integ.py

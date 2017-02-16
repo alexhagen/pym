@@ -2,6 +2,7 @@ all: tests
 
 tests: FORCE
 	nosetests --with-coverage --cover-html --cover-package=pym --cover-html-dir=docs/_build/html/coverage
+	nosetests --with-coverage --cover-package=pym
 
 docs: FORCE
 	mkdir -p ~/pages/pym/docs; \
@@ -9,6 +10,7 @@ docs: FORCE
 	git rm -r *; \
 	mkdir -p ~/pages/pym/docs; \
 	cd ~/code/pym/docs/; \
+	make coverage; \
 	make html; \
 	cp -r _build/html/* ~/pages/pym/docs/; \
 	cd ~/pages/pym/docs; \

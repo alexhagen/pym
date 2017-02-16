@@ -59,6 +59,87 @@ class dataInterpTestCase(unittest.TestCase):
         self.assertEqual(A.find(1.5), 1.5,
                          'incorrect find point')
 
+    def test_extrapolation_right(self):
+        # values to the right of the curve should be extrapolated sort of well
+        A = self.A.copy()
+        self.assertEqual(A.extrapolate(5.0), 5.0,
+                         'incorrect extrapolated value to the right')
+
+    def test_extrapolation_left(self):
+        # values to the right of the curve should be extrapolated sort of well
+        A = self.A.copy()
+        self.assertEqual(A.extrapolate(-1.0), -1.0,
+                         'incorrect extrapolated value to the left')
+
+    def test_find_nearest_up_left(self):
+        # values should be able to find nearest up and down
+        A = self.A.copy()
+        x, y = A.find_nearest_up(0.5)
+        self.assertEqual(x, 1.0, 'incorrect nearest up left')
+
+    def test_find_nearest_down_left(self):
+        # values should be able to find nearest up and down
+        A = self.A.copy()
+        x, y = A.find_nearest_down(0.5)
+        self.assertEqual(x, 0.0, 'incorrect nearest down left')
+
+    def test_find_nearest_up_central(self):
+        # values should be able to find nearest up and down
+        A = self.A.copy()
+        x, y = A.find_nearest_up(1.5)
+        self.assertEqual(x, 2.0, 'incorrect nearest up central')
+
+    def test_find_nearest_down_central(self):
+        # values should be able to find nearest up and down
+        A = self.A.copy()
+        x, y = A.find_nearest_down(1.5)
+        self.assertEqual(x, 1.0, 'incorrect nearest down central')
+
+    def test_find_nearest_up_right(self):
+        # values should be able to find nearest up and down
+        A = self.A.copy()
+        x, y = A.find_nearest_up(3.5)
+        self.assertEqual(x, 4.0, 'incorrect nearest up right')
+
+    def test_find_nearest_down_right(self):
+        # values should be able to find nearest up and down
+        A = self.A.copy()
+        x, y = A.find_nearest_down(3.5)
+        self.assertEqual(x, 3.0, 'incorrect nearest down right')
+
+    def test_average_full_range(self):
+        # values should be easily averageable ccross the whole range
+        A = self.A.copy()
+        self.assertEqual(A.average(), 2.0, 'incorrect full range average')
+
+    def test_average_small_range(self):
+        # values should be averageable across small ranges
+        A = self.A.copy()
+        self.assertEqual(A.average(1., 4.), 2.5,
+                         'incorrect small range average')
+
+    def test_round_to_amt(self):
+        # a static method should round to a certain amount
+        A = self.A.copy()
+        x = A.round_to_amt(1.20, 0.25)
+        self.assertEqual(x, 1.00,
+                         'incorrect round to amount')
+
+    def test_floating_avg(self):
+        # values should rolling average well
+        A = self.A.copy()
+        B = A.rolling_avg(2.0)
+        self.assertEqual(np.array_equal(B.y, [0.5, 2.5, 4.0]), True,
+                         'incorrect rolling average')
+
+    def test_floating_avg_uncertainty(self):
+        # values when floating averaged should give proper uncertainty
+        A = self.A.copy()
+        B = A.rolling_avg(2.0)
+        stdev_arr = [np.std([0., 1.]), np.std([2., 3.]), np.std([4.])]
+        self.assertEqual(np.array_equal(B.u_y, stdev_arr), True,
+                         'incorrect rolling average uncertainty')
+
     def tearDown(self):
         del self.A
         del self.B

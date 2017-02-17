@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Pym - a Python Math library &mdash; pym 0.1a1 documentation</title>
+    <title>Pym - a Python Math library &#8212; pym 0.1a1 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,20 +17,25 @@
         VERSION:     '0.1a1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="pym 0.1a1 documentation" href="#" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
    
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -55,7 +60,7 @@ of a practical guide for coders. Good luck and happy coding!</p>
 <dl class="class">
 <dt id="func.curve">
 <em class="property">class </em><code class="descclassname">func.</code><code class="descname">curve</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>name=''</em>, <em>u_x=None</em>, <em>u_y=None</em>, <em>data='smooth'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <p>An object to expose some numerical methods and plotting tools.</p>
 <p>A <code class="docutils literal"><span class="pre">curve</span></code> object takes any two dimensional dataset and its uncertainty
 (both in the <span class="math">\(x\)</span> and <span class="math">\(y\)</span> direction).  Each data set includes
@@ -71,8 +76,8 @@ binned).</p>
 <li><strong>u_x</strong> (<em>list-like</em>) &#8211; The uncertainty in the ordinate data of the curve</li>
 <li><strong>y</strong> (<em>list-like</em>) &#8211; The abscissa data of the curve</li>
 <li><strong>u_y</strong> (<em>list-like</em>) &#8211; The uncertainty in the abscissa data of the curve</li>
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of the data set, used for plotting, etc.</li>
-<li><strong>data</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The type of data, whether &#8216;smooth&#8217; or &#8216;binned&#8217;. This
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of the data set, used for plotting, etc.</li>
+<li><strong>data</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The type of data, whether &#8216;smooth&#8217; or &#8216;binned&#8217;. This
 parameter affects the interpolation (and in turn, many other functions)
 by determining what the value is between data points.  For smooth data,
 linear interpolation is enacted to find values between points, for
@@ -147,11 +152,11 @@ determine the value.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The coordinate of which the value is desired.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The coordinate of which the value is desired.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the value of the curve at point <span class="math">\(x\)</span></td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)">float</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)">float</a></td>
 </tr>
 </tbody>
 </table>
@@ -167,9 +172,9 @@ range.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>xmin</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The lower bound of <code class="docutils literal"><span class="pre">x</span></code>-value to include in the
+<li><strong>xmin</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The lower bound of <code class="docutils literal"><span class="pre">x</span></code>-value to include in the
 average.  Default:  <code class="docutils literal"><span class="pre">x.min()</span></code></li>
-<li><strong>xmax</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The upper bound of <code class="docutils literal"><span class="pre">x</span></code>-value to include in the
+<li><strong>xmax</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The upper bound of <code class="docutils literal"><span class="pre">x</span></code>-value to include in the
 average.  Default: <code class="docutils literal"><span class="pre">x.max()</span></code></li>
 </ul>
 </td>
@@ -186,7 +191,38 @@ average.  Default: <code class="docutils literal"><span class="pre">x.max()</spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)">float</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)">float</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.bin_int">
+<code class="descname">bin_int</code><span class="sig-paren">(</span><em>x_min=None</em>, <em>x_max=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.bin_int"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.bin_int" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">bin_int</span></code> integrates a bar chart.</p>
+<p><code class="docutils literal"><span class="pre">bin_int</span></code> is a convenience function used through the class when
+calling <code class="docutils literal"><span class="pre">integrate</span></code>.  It integrates for curves that have the
+<code class="docutils literal"><span class="pre">.data</span></code> property set to <code class="docutils literal"><span class="pre">'binned'</span></code>.  It does this simply by summing
+the bin width and bin heights, such that</p>
+<div class="math">
+\[\int_{x_{min}}^{x_{max}} \approx \sum_{i=1,\dots}^{N} \Delta x
+\cdot y\]</div>
+<p>Note that this function assumes that the last bin has the same bin
+width as the penultimate bin width.  This could be remedied in certain
+ways, but I&#8217;m not sure which to choose yet.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x_min</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; <em>Optional</em> the bottom of the range to be integrated.</li>
+<li><strong>x_max</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; <em>Optional</em> the top of the range to be integrated.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the result of the integration.</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -221,15 +257,15 @@ specified as <code class="docutils literal"><span class="pre">return</span></cod
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x_min</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; A value for which any values with <span class="math">\(x&lt;x_{min}\)</span>
+<li><strong>x_min</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; A value for which any values with <span class="math">\(x&lt;x_{min}\)</span>
 will be replaced with the value <code class="docutils literal"><span class="pre">replace</span></code>.</li>
-<li><strong>x_max</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; A value for which any values with <span class="math">\(x&gt;x_{max}\)</span>
+<li><strong>x_max</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; A value for which any values with <span class="math">\(x&gt;x_{max}\)</span>
 will be replaced with the value <code class="docutils literal"><span class="pre">replace</span></code>.</li>
-<li><strong>y_min</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; A value for which any values with <span class="math">\(y&lt;y_{min}\)</span>
+<li><strong>y_min</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; A value for which any values with <span class="math">\(y&lt;y_{min}\)</span>
 will be replaced with the value <code class="docutils literal"><span class="pre">replace</span></code>.</li>
-<li><strong>y_max</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; A value for which any values with <span class="math">\(y&gt;y_{max}\)</span>
+<li><strong>y_max</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; A value for which any values with <span class="math">\(y&gt;y_{max}\)</span>
 will be replaced with the value <code class="docutils literal"><span class="pre">replace</span></code>.</li>
-<li><strong>replace</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The value to replace any value outside of the
+<li><strong>replace</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The value to replace any value outside of the
 rectangle with.  Default <code class="docutils literal"><span class="pre">None</span></code>.</li>
 </ul>
 </td>
@@ -293,8 +329,8 @@ curve.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>R</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; An integer value telling how often to save a point.</li>
-<li><strong>length</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; <em>Alternate</em>, an integer telling how big you
+<li><strong>R</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; An integer value telling how often to save a point.</li>
+<li><strong>length</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; <em>Alternate</em>, an integer telling how big you
 want the final array.</li>
 </ul>
 </td>
@@ -363,11 +399,11 @@ it solves the following equation to determine the value</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; the ordinate of the value requested</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; the ordinate of the value requested</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the value of the curve at point <span class="math">\(x\)</span></td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)">float</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)">float</a></td>
 </tr>
 </tbody>
 </table>
@@ -391,11 +427,11 @@ interpolation to find those <span class="math">\(x\)</span> values according to<
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>y</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; the value which ordinate values are desired</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>y</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; the value which ordinate values are desired</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a list of <span class="math">\(x\)</span> that have value <span class="math">\(y\)</span></td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/library/functions.html#list" title="(in Python v2.7)">list</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)">list</a></td>
 </tr>
 </tbody>
 </table>
@@ -412,9 +448,9 @@ the function.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The data point <code class="docutils literal"><span class="pre">x</span></code> which to find the closest value
+<li><strong>x</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The data point <code class="docutils literal"><span class="pre">x</span></code> which to find the closest value
 below.</li>
-<li><strong>error</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If true, the u_x and u_y will be returned at that
+<li><strong>error</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If true, the u_x and u_y will be returned at that
 point, even if they are <code class="docutils literal"><span class="pre">None</span></code>.</li>
 </ul>
 </td>
@@ -439,9 +475,9 @@ point that is closest in positive <code class="docutils literal"><span class="pr
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The data point <code class="docutils literal"><span class="pre">x</span></code> which to find the closest value
+<li><strong>x</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The data point <code class="docutils literal"><span class="pre">x</span></code> which to find the closest value
 above.</li>
-<li><strong>error</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If true, the u_x and u_y will be returned at that
+<li><strong>error</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If true, the u_x and u_y will be returned at that
 point, even if they are <code class="docutils literal"><span class="pre">None</span></code>.</li>
 </ul>
 </td>
@@ -451,7 +487,7 @@ immediately above in <code class="docutils literal"><span class="pre">x</span></
 function, optionally containing the <code class="docutils literal"><span class="pre">u_x</span></code> and <code class="docutils literal"><span class="pre">u_y</span></code> value.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)">tuple</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)">tuple</a></p>
 </td>
 </tr>
 </tbody>
@@ -466,12 +502,41 @@ function, optionally containing the <code class="docutils literal"><span class="
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The data point to check if it is in the range of the
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The data point to check if it is in the range of the
 existing curve data.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Whether or not the data is in the range of the curve data.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/library/functions.html#bool" title="(in Python v2.7)">bool</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.integrate">
+<code class="descname">integrate</code><span class="sig-paren">(</span><em>x_min=None</em>, <em>x_max=None</em>, <em>quad='lin'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.integrate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.integrate" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">integrate</span></code> integrates under the curve.</p>
+<p><code class="docutils literal"><span class="pre">integrate</span></code> will integrate under the given curve, providing the
+result to <span class="math">\(\int_{x_{min}}^{x_{max}}\)</span>.  <code class="docutils literal"><span class="pre">x_min</span></code> and <code class="docutils literal"><span class="pre">x_max</span></code>
+can be provided to change the range of integration.  <code class="docutils literal"><span class="pre">quad</span></code> can also
+be provided to change the quadrature, but the only quadrature currently
+supported is <code class="docutils literal"><span class="pre">'lin'</span></code> which uses trapezoidal rule to integrate the
+curve.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x_min</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; <em>Optional</em> the bottom of the range to be integrated.</li>
+<li><strong>x_max</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; <em>Optional</em> the top of the range to be integrated.</li>
+<li><strong>quad</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; <em>Optional</em> the &#8220;quadrature&#8221; to be used for numerical
+integration.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the result of the integration.</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -493,11 +558,11 @@ casts the linear interpolation as a line in point slope form and solves</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The coordinate of the desired value.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The coordinate of the desired value.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the value of the curve at <span class="math">\(x\)</span></td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)">float</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)">float</a></td>
 </tr>
 </tbody>
 </table>
@@ -545,13 +610,13 @@ according to</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>xmin</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; optional argument giving the lower bound of the
+<li><strong>xmin</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; optional argument giving the lower bound of the
 integral in an integral normalization or the lower bound in which
 to find the max in a max normalization</li>
-<li><strong>xmax</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; optional argument giving the upper bound of the
+<li><strong>xmax</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; optional argument giving the upper bound of the
 integral in an integral normalization or the upper bound in which
 to find the max in a max normalization</li>
-<li><strong>norm</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; a string of &#8216;max&#8217; or &#8216;int&#8217; (default &#8216;max&#8217;) which
+<li><strong>norm</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; a string of &#8216;max&#8217; or &#8216;int&#8217; (default &#8216;max&#8217;) which
 defines which of the two types of normalization to perform</li>
 </ul>
 </td>
@@ -609,7 +674,7 @@ can be expressed by</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bin_width</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The width in which the redistribution will
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bin_width</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The width in which the redistribution will
 happen.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">The redistributed curve.</td>
@@ -633,8 +698,8 @@ that is the closest value downward on a <span class="math">\(0.25\)</span> wide 
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>num</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; the number to be rounded.</li>
-<li><strong>amt</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; the amount to round the number to.</li>
+<li><strong>num</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; the number to be rounded.</li>
+<li><strong>amt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; the amount to round the number to.</li>
 </ul>
 </td>
 </tr>
@@ -744,8 +809,8 @@ will go to zero, giving</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The coordinate of which the value is desired.</li>
-<li><strong>dx</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; <em>Optional</em> The uncertainty in the x coordinate
+<li><strong>x</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The coordinate of which the value is desired.</li>
+<li><strong>dx</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; <em>Optional</em> The uncertainty in the x coordinate
 requested, given in the above equations as <span class="math">\(\sigma_{x}\)</span>.</li>
 </ul>
 </td>
@@ -754,7 +819,7 @@ requested, given in the above equations as <span class="math">\(\sigma_{x}\)</sp
 at point <span class="math">\(x\)</span></p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)">float</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)">float</a></p>
 </td>
 </tr>
 </tbody>
@@ -771,13 +836,11 @@ at point <span class="math">\(x\)</span></p>
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
-<ul class="simple">
-</ul>
 </div>
 <ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
 </ul>
 </div>
 
@@ -807,21 +870,18 @@ at point <span class="math">\(x\)</span></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/index.txt"
+      <li><a href="_sources/index.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -832,11 +892,11 @@ at point <span class="math">\(x\)</span></p>
       &copy;2015, Alex Hagen.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
-      <a href="_sources/index.txt"
+      <a href="_sources/index.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

@@ -703,7 +703,7 @@ class curve(object):
         if x_max is None:
             x_max = np.max(self.x)
         if self.data != 'binned':
-            return self.trapezoidal(x_min,x_max,quad)
+            return self.trapezoidal(x_min=x_min, x_max=x_max, quad=quad)
         else:
             return self.bin_int(x_min, x_max)
 
@@ -774,8 +774,9 @@ class curve(object):
         Right now, it uses :math:`10 \times N_{x}` points to integrate between
         values, but that is completely arbitrary and I'll be looking into
         changing this. There is also the ability to pass ``quad`` to the
-        function as ``'log'`` and it will calculate the trapezoids in
-        logarithmic space, giving exact integrals for exponential functions.
+        function as ``'log'`` **CURRENTLY FAILING** and it will calculate the
+        trapezoids in logarithmic space, giving exact integrals for exponential
+        functions.
 
         :param float x_min: the left bound of integration.
         :param float x_max: the right bound of integration.
@@ -785,10 +786,11 @@ class curve(object):
         """
         numpoints = len(self.x) * 10
         if quad is 'lin':
-            x_sub = np.linspace(x_min,x_max,numpoints)
+            x_sub = np.linspace(x_min, x_max, numpoints)
         elif quad is 'log':
-            x_sub = np.logspace(np.log10(x_min), np.log10(x_max),
+            x_sub = np.linspace(np.log(x_min), np.log(x_max),
                                 num=numpoints)
+            x_sub = np.power(np.exp(1.), x_sub)
         # then, between each x, we find the value there
         y_sub = [self.at(x_i) for x_i in x_sub]
         # then, we do the trapezoidal rule

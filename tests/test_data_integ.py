@@ -24,6 +24,14 @@ class dataIntegTestCase(unittest.TestCase):
         self.assertEqual(A.integrate(), 16. / 2.,
                          'incorrect full range integral')
 
+    def test_integrate_exp(self):
+        A = pym.curve(np.arange(1., 5.), np.exp(2.0 * np.arange(1., 5.)))
+        print A.integrate(quad='log')
+        print 2.0 * (np.exp(4.) - np.exp(1.))
+        self.assertEqual(A.integrate(quad='log'),
+                         2.0 * (np.exp(4.) - np.exp(1.)),
+                         'incorrect exponential integration')
+
     def test_integrate_small_range(self):
         A = self.A.copy()
         self.assertEqual(A.integrate(x_min=1.0, x_max=3.0), (9. - 1.) / 2.,

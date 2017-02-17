@@ -739,25 +739,62 @@ class curve(object):
         return np.sum([bin_height * bin_width for bin_height, bin_width
                        in zip(bin_heights, bin_widths)])
 
-    def derivative(self, _x, epsilon=None):
-        if epsilon is None:
-            epsilon = (self.x.max() - self.x.min())/1.E-5
-        return (self.at(_x + epsilon) - self.at(_x - epsilon)) / (2. * epsilon)
+    def derivative(self, x, epsilon=None):
+        r""" ``derivative(x)`` takes the derivative at point :math:`x`.
 
-    def trapezoidal(self,x_min,x_max,quad='lin'):
-        # first we assert that all values are in the region
-        # then, we find a bunch of x's between these values
-        numpoints = 61;
+        ``derivative(x)`` takes the derivative at point provided ``x``, using a
+        surrounding increment of :math:`\varepsilon`, provided by ``epsilon``.
+        ``epsilon`` has a default value of :math:`\min \frac{\Delta x}{100}`,
+        but you can specify this smaller if your points are closer.  Because
+        we're currently only using linear integration, this won't change a thing
+        as long as its smaller than the change in your ordinate variable.
+
+        :param float x: The ordinate to take the derivative at.
+        :param float epsilon: The :math:`\Delta x` around the point at
+            :math:`x` used to calculate the derivative.
+        :returns: the derivative at point ``x``
+        """
+        if epsilon is None:
+            xs = self.x[1:] - self.x[:-1]
+            epsilon = np.min(np.abs(xs)) / 100.
+        return (self.at(x + epsilon) - self.at(x - epsilon)) / (2. * epsilon)
+
+    def trapezoidal(self, x_min, x_max, quad='lin'):
+        r""" ``trapezoidal()`` uses the trapezoidal rule to integrate the curve.
+
+        ``trapezoidal(x_min, x_max)`` integrates the curve using the
+        trapezoidal rule, i.e.
+
+        .. math::
+
+            \int_{x_{min}}^{x_{max}}y dx \approx
+            \sum_{i=1,\dots}^{N} \left(x_{\uparrow} - x_{\downarrow}\right)
+            \cdot \left( \frac{y_{\downarrow} + y_{uparrow}}{2}\right)
+
+        Right now, it uses :math:`10 \times N_{x}` points to integrate between
+        values, but that is completely arbitrary and I'll be looking into
+        changing this. There is also the ability to pass ``quad`` to the
+        function as ``'log'`` and it will calculate the trapezoids in
+        logarithmic space, giving exact integrals for exponential functions.
+
+        :param float x_min: the left bound of integration.
+        :param float x_max: the right bound of integration.
+        :param str quad: the type of quadrature to use, currently only ``'lin'``
+            or ``'log'``
+        :returns: the integral of the curve from trapezoidal rule.
+        """
+        numpoints = len(self.x) * 10
         if quad is 'lin':
-            x_sub = np.linspace(x_min,x_max,numpoints);
+            x_sub = np.linspace(x_min,x_max,numpoints)
         elif quad is 'log':
-            x_sub = np.logspace(np.log10(x_min),np.log10(x_max),num=numpoints);
+            x_sub = np.logspace(np.log10(x_min), np.log10(x_max),
+                                num=numpoints)
         # then, between each x, we find the value there
-        y_sub = [ self.at(x_i) for x_i in x_sub ];
+        y_sub = [self.at(x_i) for x_i in x_sub]
         # then, we do the trapezoidal rule
-        return np.sum([ ((x_sub[i+1]-x_sub[i])*y_sub[i]) + \
-            ((x_sub[i+1]-x_sub[i])*(y_sub[i+1]-y_sub[i]))/2 \
-            for i in np.arange(0,len(x_sub)-1) ]);
+        return np.sum([((x_sub[i+1] - x_sub[i]) * y_sub[i]) +
+                       ((x_sub[i+1] - x_sub[i]) * (y_sub[i+1] - y_sub[i])) / 2.
+                       for i in np.arange(0, len(x_sub) - 1)])
 
     def normalize(self, xmin=None, xmax=None, norm='int'):
         r""" ``normalize()`` normalizes the entire curve to be normalized.
@@ -795,8 +832,8 @@ class curve(object):
         if norm is 'max':
             self.y = self.y / self.y.max()
         elif norm is 'int':
-            self.y = self.y / \
-                self.integrate()
+            self.y = self.y / self.integrate()
+        return self
 
     ###########################################################################
     # Curve Arithmetic - tests in tests/test_curve_arithmetic.py

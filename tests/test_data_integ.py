@@ -31,8 +31,29 @@ class dataIntegTestCase(unittest.TestCase):
 
     def test_integral_binned(self):
         A = pym.curve([0., 1., 2.], [5., 4., 5.], data='binned')
-        print A.integrate()
         self.assertEqual(A.integrate(), 14., 'incorrect binned integral')
+
+    def test_derivative_at_point(self):
+        A = pym.curve([0., 1., 2.], [5., 4., 5.])
+        self.assertEqual(A.derivative(1.), 0., 'incorrect derivative at point')
+
+    def test_derivative_between_points(self):
+        A = pym.curve([0., 1., 2.], [5., 4., 5.])
+        epsilon = (A.derivative(0.5) - (-1.) < 1.0E-5)
+        # note that A.derivative(0.5) is off by ~ 2.0E-14....could use some
+        # better derivation, I guess.  Lagrange?
+        self.assertEqual(epsilon, True,
+                         'incorrect derivative in between points')
+
+    def test_normalize_int(self):
+        A = self.A.copy()
+        A.normalize()
+        self.assertEqual(A.y[1], 1. / 8., 'incorrect normalized by integral')
+
+    def test_normalize_max(self):
+        A = self.A.copy()
+        A.normalize(norm='max')
+        self.assertEqual(A.y[1], 1. / 4., 'incorrect normalized by max')
 
     def tearDown(self):
         del self.A

@@ -682,9 +682,22 @@ class curve(object):
     ###########################################################################
     # Data Integration and Normalization - tests in tests/test_data_integ.py
     ###########################################################################
-    def integrate(self,x_min=None, x_max=None, quad='lin'):
-        # for now, we'll just do simpsons rule until I write
-        # more sophisticated
+    def integrate(self, x_min=None, x_max=None, quad='lin'):
+        r""" ``integrate`` integrates under the curve.
+
+        ``integrate`` will integrate under the given curve, providing the
+        result to :math:`\int_{x_{min}}^{x_{max}}`.  ``x_min`` and ``x_max``
+        can be provided to change the range of integration.  ``quad`` can also
+        be provided to change the quadrature, but the only quadrature currently
+        supported is ``'lin'`` which uses trapezoidal rule to integrate the
+        curve.
+
+        :param float x_min: *Optional* the bottom of the range to be integrated.
+        :param float x_max: *Optional* the top of the range to be integrated.
+        :param str quad: *Optional* the "quadrature" to be used for numerical
+            integration.
+        :returns: the result of the integration.
+        """
         if x_min is None:
             x_min = np.min(self.x)
         if x_max is None:
@@ -694,15 +707,37 @@ class curve(object):
         else:
             return self.bin_int(x_min, x_max)
 
-    def bin_int(self,x_min=None, x_max=None):
+    def bin_int(self, x_min=None, x_max=None):
+        r""" ``bin_int`` integrates a bar chart.
+
+        ``bin_int`` is a convenience function used through the class when
+        calling ``integrate``.  It integrates for curves that have the
+        ``.data`` property set to ``'binned'``.  It does this simply by summing
+        the bin width and bin heights, such that
+
+        .. math::
+
+            \int_{x_{min}}^{x_{max}} \approx \sum_{i=1,\dots}^{N} \Delta x
+            \cdot y
+
+        Note that this function assumes that the last bin has the same bin
+        width as the penultimate bin width.  This could be remedied in certain
+        ways, but I'm not sure which to choose yet.
+
+        :param float x_min: *Optional* the bottom of the range to be integrated.
+        :param float x_max: *Optional* the top of the range to be integrated.
+        :returns: the result of the integration.
+        """
         if x_min is None:
             x_min = np.min(self.x)
         if x_max is None:
             x_max = np.max(self.x)
-        return np.sum([bin_height * bin_width
-                       for bin_height, bin_width
-                       in zip(self.y, np.array([0.] + self.x)
-                       - np.array(self.x + self.x[-1]))])
+        bin_widths = [x2 - x1 for x1, x2 in zip(self.x[:-1], self.x[1:])]
+        # assume the last bin has the same width
+        bin_widths = bin_widths + [bin_widths[-1]]
+        bin_heights = self.y
+        return np.sum([bin_height * bin_width for bin_height, bin_width
+                       in zip(bin_heights, bin_widths)])
 
     def derivative(self, _x, epsilon=None):
         if epsilon is None:

@@ -1067,6 +1067,14 @@ class curve(object):
     # Curve Fitting - tests in tests/test_curve_fitting.py
     ###########################################################################
     def fit_exp(self):
+        r""" ``fit_exp`` fits an exponential to the function.
+
+        ``fit_exp`` fits an exponential of form :math:`y=B\cdot \exp \left(
+        \alpha\cdot x\right)` to the curve, returning the parameters
+        :math:`\left(\alpha, B\right)` as a tuple.
+
+        :returns: the tuple :math:`\left(\alpha, B\right)`
+        """
         def exp_func(coeffs=None, x=None):
             return np.exp(np.polyval(coeffs, x))
         polyx = np.array([x1 for x1 in self.x], dtype=float)
@@ -1075,49 +1083,100 @@ class curve(object):
         self.fun = exp_func
         self.coeffs = coeffs
         self.fit_exp_bool = True
+        return self
 
     def fit_lin(self):
+        r""" ``fit_lin`` fits a linear function to the curve.
+
+        ``fit_lin`` fits a linear function of form :math:`y=m\cdot x + b` to the
+        curve, returning the parameters :math:`\left(m, b\right)` as a tuple.
+
+        :returns: the tuple :math:`\left(m, b\right)`
+        """
         def lin_func(coeffs=None, x=None):
             return np.polyval(coeffs, x)
         coeffs = np.polyfit(self.x, self.y, 1)
         self.fun = lin_func;
         self.coeffs = coeffs;
         self.fit_exp_bool = True
+        return self
 
     def fit_gen(self, fun, guess=None, u_y=None):
+        r""" ``fit_gen`` fits a general function to the curve.
+
+        ``fit_gen`` fits a general function to the curve.  The general function
+        is a python function that takes a parameters and an ordinate variable,
+        ``x`` and returns the value of the function at that point, ``y``.  The
+        function must have the prototype ``def func(x, alpha, beta, ...):``.
+        Then, the coefficients are returned as a tuple.
+
+        :returns: the coefficients to the general function
+        """
         self.fun = fun
         fit = curve_fit(fun, self.x, self.y, p0=guess,
                         sigma=u_y, absolute_sigma=True)
         self.coeffs = fit[0]
         self.fit_exp_bool = False
+        return self
 
     def fit_gauss(self, guess=None):
+        r""" ``fit_gauss`` fits a gaussian function to the curve.
+
+        ``fit_gauss`` fits a gaussian function of form :math:`y=\alpha \exp
+        \left[ -\frac{\left(x - \mu\right)^{2}}{2 \sigma^{2}}\right]` to the
+        curve, returning the parameters :math:`\left(\alpha, \mu, \sigma\right)`
+        as a tuple.
+
+        :returns: the tuple :math:`\left(\alpha, \mu, \sigma\right)`
+        """
         def gauss_fun(x, a, mu, sig):
             return a * np.exp(-np.power(x - mu, 2.) / (2. * np.power(sig, 2.)))
         self.fit_gen(gauss_fun, guess=guess)
         return self
 
     def fit_at(self,x):
+        r""" ``fit_at`` returns the point at coordinate :math:`x` from a previously fitted curve.
+
+        :param float x: the ordinate variable for which the fit value is needed.
+        """
         if self.fit_exp_bool:
-            return self.fun(self.coeffs,x);
+            return self.fun(self.coeffs,x)
         else:
-            return self.fun(x,*self.coeffs);
+            return self.fun(x,*self.coeffs)
 
     def fit_square(self):
+        r""" ``fit_square`` fits a function of order 2 to the curve.
+
+        ``fit_square`` fits a quadratic function of form :math:`y=a x^{2} + b x
+        + c` to the curve, returning the parameters :math:`\left(a, b,
+        c\right)` as a tuple.
+
+        :returns: the tuple :math:`\left(a, b, c\right)`
+        """
         def square_func(coeffs,x):
-            return np.polyval(coeffs,x);
-        coeffs = np.polyfit(self.x,self.y,2);
-        self.fun = square_func;
+            return np.polyval(coeffs,x)
+        coeffs = np.polyfit(self.x,self.y,2)
+        self.fun = square_func
         self.coeffs = coeffs
         self.fit_exp_bool = True
+        return self
 
     def fit_cube(self):
+        r""" ``fit_cube`` fits a function of order 3 to the curve.
+
+        ``fit_cube`` fits a cubic function of form :math:`y=a x^{3} + b x^{2} +
+        c x + d` to the curve, returning the parameters :math:`\left(a, b,
+        c, d\right)` as a tuple.
+
+        :returns: the tuple :math:`\left(a, b, c, d\right)`
+        """
         def cube_func(coeffs,x):
             return np.polyval(coeffs,x);
         coeffs = np.polyfit(self.x,self.y,3);
         self.fun = cube_func;
         self.coeffs = coeffs
         self.fit_exp_bool = True
+        return self
 
     ###########################################################################
     # Curve Plotting - no tests currently

@@ -126,7 +126,7 @@ class dataInterpTestCase(unittest.TestCase):
     def test_average_small_range(self):
         # values should be averageable across small ranges
         A = self.A.copy()
-        self.assertEqual(A.average(1., 4.), 2.5,
+        self.assertEqual(np.abs(A.average(1., 4.) - 2.5) < 1.0E-6, True,
                          'incorrect small range average')
 
     def test_round_to_amt(self):

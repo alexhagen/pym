@@ -784,25 +784,62 @@
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">bin_height</span> <span class="o">*</span> <span class="n">bin_width</span> <span class="k">for</span> <span class="n">bin_height</span><span class="p">,</span> <span class="n">bin_width</span>
                        <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bin_heights</span><span class="p">,</span> <span class="n">bin_widths</span><span class="p">)])</span></div>
 
-    <span class="k">def</span> <span class="nf">derivative</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_x</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">epsilon</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">epsilon</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mf">1.E-5</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">_x</span> <span class="o">+</span> <span class="n">epsilon</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">_x</span> <span class="o">-</span> <span class="n">epsilon</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">epsilon</span><span class="p">)</span>
+<div class="viewcode-block" id="curve.derivative"><a class="viewcode-back" href="../index.html#func.curve.derivative">[docs]</a>    <span class="k">def</span> <span class="nf">derivative</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``derivative(x)`` takes the derivative at point :math:`x`.</span>
 
-    <span class="k">def</span> <span class="nf">trapezoidal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x_min</span><span class="p">,</span><span class="n">x_max</span><span class="p">,</span><span class="n">quad</span><span class="o">=</span><span class="s1">&#39;lin&#39;</span><span class="p">):</span>
-        <span class="c1"># first we assert that all values are in the region</span>
-        <span class="c1"># then, we find a bunch of x&#39;s between these values</span>
-        <span class="n">numpoints</span> <span class="o">=</span> <span class="mi">61</span><span class="p">;</span>
+<span class="sd">        ``derivative(x)`` takes the derivative at point provided ``x``, using a</span>
+<span class="sd">        surrounding increment of :math:`\varepsilon`, provided by ``epsilon``.</span>
+<span class="sd">        ``epsilon`` has a default value of :math:`\min \frac{\Delta x}{100}`,</span>
+<span class="sd">        but you can specify this smaller if your points are closer.  Because</span>
+<span class="sd">        we&#39;re currently only using linear integration, this won&#39;t change a thing</span>
+<span class="sd">        as long as its smaller than the change in your ordinate variable.</span>
+
+<span class="sd">        :param float x: The ordinate to take the derivative at.</span>
+<span class="sd">        :param float epsilon: The :math:`\Delta x` around the point at</span>
+<span class="sd">            :math:`x` used to calculate the derivative.</span>
+<span class="sd">        :returns: the derivative at point ``x``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">epsilon</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">xs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">epsilon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">xs</span><span class="p">))</span> <span class="o">/</span> <span class="mf">100.</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">epsilon</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">epsilon</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">epsilon</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="curve.trapezoidal"><a class="viewcode-back" href="../index.html#func.curve.trapezoidal">[docs]</a>    <span class="k">def</span> <span class="nf">trapezoidal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">quad</span><span class="o">=</span><span class="s1">&#39;lin&#39;</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``trapezoidal()`` uses the trapezoidal rule to integrate the curve.</span>
+
+<span class="sd">        ``trapezoidal(x_min, x_max)`` integrates the curve using the</span>
+<span class="sd">        trapezoidal rule, i.e.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \int_{x_{min}}^{x_{max}}y dx \approx</span>
+<span class="sd">            \sum_{i=1,\dots}^{N} \left(x_{\uparrow} - x_{\downarrow}\right)</span>
+<span class="sd">            \cdot \left( \frac{y_{\downarrow} + y_{uparrow}}{2}\right)</span>
+
+<span class="sd">        Right now, it uses :math:`10 \times N_{x}` points to integrate between</span>
+<span class="sd">        values, but that is completely arbitrary and I&#39;ll be looking into</span>
+<span class="sd">        changing this. There is also the ability to pass ``quad`` to the</span>
+<span class="sd">        function as ``&#39;log&#39;`` and it will calculate the trapezoids in</span>
+<span class="sd">        logarithmic space, giving exact integrals for exponential functions.</span>
+
+<span class="sd">        :param float x_min: the left bound of integration.</span>
+<span class="sd">        :param float x_max: the right bound of integration.</span>
+<span class="sd">        :param str quad: the type of quadrature to use, currently only ``&#39;lin&#39;``</span>
+<span class="sd">            or ``&#39;log&#39;``</span>
+<span class="sd">        :returns: the integral of the curve from trapezoidal rule.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">numpoints</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span>
         <span class="k">if</span> <span class="n">quad</span> <span class="ow">is</span> <span class="s1">&#39;lin&#39;</span><span class="p">:</span>
-            <span class="n">x_sub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span><span class="n">x_max</span><span class="p">,</span><span class="n">numpoints</span><span class="p">);</span>
+            <span class="n">x_sub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span><span class="n">x_max</span><span class="p">,</span><span class="n">numpoints</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">quad</span> <span class="ow">is</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
-            <span class="n">x_sub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x_min</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x_max</span><span class="p">),</span><span class="n">num</span><span class="o">=</span><span class="n">numpoints</span><span class="p">);</span>
+            <span class="n">x_sub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x_min</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x_max</span><span class="p">),</span>
+                                <span class="n">num</span><span class="o">=</span><span class="n">numpoints</span><span class="p">)</span>
         <span class="c1"># then, between each x, we find the value there</span>
-        <span class="n">y_sub</span> <span class="o">=</span> <span class="p">[</span> <span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">x_i</span><span class="p">)</span> <span class="k">for</span> <span class="n">x_i</span> <span class="ow">in</span> <span class="n">x_sub</span> <span class="p">];</span>
+        <span class="n">y_sub</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">x_i</span><span class="p">)</span> <span class="k">for</span> <span class="n">x_i</span> <span class="ow">in</span> <span class="n">x_sub</span><span class="p">]</span>
         <span class="c1"># then, we do the trapezoidal rule</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span> <span class="p">((</span><span class="n">x_sub</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x_sub</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">*</span><span class="n">y_sub</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> \
-            <span class="p">((</span><span class="n">x_sub</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x_sub</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="n">y_sub</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">y_sub</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span><span class="o">/</span><span class="mi">2</span> \
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">x_sub</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">]);</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([((</span><span class="n">x_sub</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x_sub</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">y_sub</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span>
+                       <span class="p">((</span><span class="n">x_sub</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x_sub</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_sub</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y_sub</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="o">/</span> <span class="mf">2.</span>
+                       <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_sub</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)])</span></div>
 
 <div class="viewcode-block" id="curve.normalize"><a class="viewcode-back" href="../index.html#func.curve.normalize">[docs]</a>    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``normalize()`` normalizes the entire curve to be normalized.</span>
@@ -840,8 +877,8 @@
         <span class="k">if</span> <span class="n">norm</span> <span class="ow">is</span> <span class="s1">&#39;max&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="k">elif</span> <span class="n">norm</span> <span class="ow">is</span> <span class="s1">&#39;int&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">integrate</span><span class="p">()</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">integrate</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
     <span class="c1">###########################################################################</span>
     <span class="c1"># Curve Arithmetic - tests in tests/test_curve_arithmetic.py</span>

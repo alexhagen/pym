@@ -343,6 +343,34 @@ want the final array.</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="func.curve.derivative">
+<code class="descname">derivative</code><span class="sig-paren">(</span><em>x</em>, <em>epsilon=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.derivative"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.derivative" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">derivative(x)</span></code> takes the derivative at point <span class="math">\(x\)</span>.</p>
+<p><code class="docutils literal"><span class="pre">derivative(x)</span></code> takes the derivative at point provided <code class="docutils literal"><span class="pre">x</span></code>, using a
+surrounding increment of <span class="math">\(\varepsilon\)</span>, provided by <code class="docutils literal"><span class="pre">epsilon</span></code>.
+<code class="docutils literal"><span class="pre">epsilon</span></code> has a default value of <span class="math">\(\min \frac{\Delta x}{100}\)</span>,
+but you can specify this smaller if your points are closer.  Because
+we&#8217;re currently only using linear integration, this won&#8217;t change a thing
+as long as its smaller than the change in your ordinate variable.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The ordinate to take the derivative at.</li>
+<li><strong>epsilon</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The <span class="math">\(\Delta x\)</span> around the point at
+<span class="math">\(x\)</span> used to calculate the derivative.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the derivative at point <code class="docutils literal"><span class="pre">x</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="func.curve.divide">
 <code class="descname">divide</code><span class="sig-paren">(</span><em>denominator</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.divide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.divide" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">divide(denominator)</span></code> divides a curve by a value.</p>
@@ -723,6 +751,40 @@ ordered from decreasing <span class="math">\(x\)</span> to increasing <span clas
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the <code class="docutils literal"><span class="pre">curve</span></code> object, but it has been sorted in-place.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#func.curve" title="func.curve">curve</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.trapezoidal">
+<code class="descname">trapezoidal</code><span class="sig-paren">(</span><em>x_min</em>, <em>x_max</em>, <em>quad='lin'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.trapezoidal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.trapezoidal" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">trapezoidal()</span></code> uses the trapezoidal rule to integrate the curve.</p>
+<p><code class="docutils literal"><span class="pre">trapezoidal(x_min,</span> <span class="pre">x_max)</span></code> integrates the curve using the
+trapezoidal rule, i.e.</p>
+<div class="math">
+\[\int_{x_{min}}^{x_{max}}y dx \approx
+\sum_{i=1,\dots}^{N} \left(x_{\uparrow} - x_{\downarrow}\right)
+\cdot \left( \frac{y_{\downarrow} + y_{uparrow}}{2}\right)\]</div>
+<p>Right now, it uses <span class="math">\(10 \times N_{x}\)</span> points to integrate between
+values, but that is completely arbitrary and I&#8217;ll be looking into
+changing this. There is also the ability to pass <code class="docutils literal"><span class="pre">quad</span></code> to the
+function as <code class="docutils literal"><span class="pre">'log'</span></code> and it will calculate the trapezoids in
+logarithmic space, giving exact integrals for exponential functions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x_min</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; the left bound of integration.</li>
+<li><strong>x_max</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; the right bound of integration.</li>
+<li><strong>quad</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the type of quadrature to use, currently only <code class="docutils literal"><span class="pre">'lin'</span></code>
+or <code class="docutils literal"><span class="pre">'log'</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the integral of the curve from trapezoidal rule.</p>
+</td>
 </tr>
 </tbody>
 </table>

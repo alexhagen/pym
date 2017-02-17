@@ -748,7 +748,7 @@
         <span class="k">if</span> <span class="n">x_max</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">x_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">!=</span> <span class="s1">&#39;binned&#39;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trapezoidal</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span><span class="n">x_max</span><span class="p">,</span><span class="n">quad</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trapezoidal</span><span class="p">(</span><span class="n">x_min</span><span class="o">=</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="o">=</span><span class="n">x_max</span><span class="p">,</span> <span class="n">quad</span><span class="o">=</span><span class="n">quad</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bin_int</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">)</span></div>
 
@@ -819,8 +819,9 @@
 <span class="sd">        Right now, it uses :math:`10 \times N_{x}` points to integrate between</span>
 <span class="sd">        values, but that is completely arbitrary and I&#39;ll be looking into</span>
 <span class="sd">        changing this. There is also the ability to pass ``quad`` to the</span>
-<span class="sd">        function as ``&#39;log&#39;`` and it will calculate the trapezoids in</span>
-<span class="sd">        logarithmic space, giving exact integrals for exponential functions.</span>
+<span class="sd">        function as ``&#39;log&#39;`` **CURRENTLY FAILING** and it will calculate the</span>
+<span class="sd">        trapezoids in logarithmic space, giving exact integrals for exponential</span>
+<span class="sd">        functions.</span>
 
 <span class="sd">        :param float x_min: the left bound of integration.</span>
 <span class="sd">        :param float x_max: the right bound of integration.</span>
@@ -830,10 +831,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">numpoints</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span>
         <span class="k">if</span> <span class="n">quad</span> <span class="ow">is</span> <span class="s1">&#39;lin&#39;</span><span class="p">:</span>
-            <span class="n">x_sub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span><span class="n">x_max</span><span class="p">,</span><span class="n">numpoints</span><span class="p">)</span>
+            <span class="n">x_sub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">numpoints</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">quad</span> <span class="ow">is</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
-            <span class="n">x_sub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x_min</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x_max</span><span class="p">),</span>
+            <span class="n">x_sub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x_min</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x_max</span><span class="p">),</span>
                                 <span class="n">num</span><span class="o">=</span><span class="n">numpoints</span><span class="p">)</span>
+            <span class="n">x_sub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">1.</span><span class="p">),</span> <span class="n">x_sub</span><span class="p">)</span>
         <span class="c1"># then, between each x, we find the value there</span>
         <span class="n">y_sub</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">x_i</span><span class="p">)</span> <span class="k">for</span> <span class="n">x_i</span> <span class="ow">in</span> <span class="n">x_sub</span><span class="p">]</span>
         <span class="c1"># then, we do the trapezoidal rule</span>
@@ -1109,7 +1111,15 @@
     <span class="c1">###########################################################################</span>
     <span class="c1"># Curve Fitting - tests in tests/test_curve_fitting.py</span>
     <span class="c1">###########################################################################</span>
-    <span class="k">def</span> <span class="nf">fit_exp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="curve.fit_exp"><a class="viewcode-back" href="../index.html#func.curve.fit_exp">[docs]</a>    <span class="k">def</span> <span class="nf">fit_exp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``fit_exp`` fits an exponential to the function.</span>
+
+<span class="sd">        ``fit_exp`` fits an exponential of form :math:`y=B\cdot \exp \left(</span>
+<span class="sd">        \alpha\cdot x\right)` to the curve, returning the parameters</span>
+<span class="sd">        :math:`\left(\alpha, B\right)` as a tuple.</span>
+
+<span class="sd">        :returns: the tuple :math:`\left(\alpha, B\right)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">def</span> <span class="nf">exp_func</span><span class="p">(</span><span class="n">coeffs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
         <span class="n">polyx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x1</span> <span class="k">for</span> <span class="n">x1</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
@@ -1118,49 +1128,100 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fun</span> <span class="o">=</span> <span class="n">exp_func</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="n">coeffs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fit_exp_bool</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
-    <span class="k">def</span> <span class="nf">fit_lin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="curve.fit_lin"><a class="viewcode-back" href="../index.html#func.curve.fit_lin">[docs]</a>    <span class="k">def</span> <span class="nf">fit_lin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``fit_lin`` fits a linear function to the curve.</span>
+
+<span class="sd">        ``fit_lin`` fits a linear function of form :math:`y=m\cdot x + b` to the</span>
+<span class="sd">        curve, returning the parameters :math:`\left(m, b\right)` as a tuple.</span>
+
+<span class="sd">        :returns: the tuple :math:`\left(m, b\right)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">def</span> <span class="nf">lin_func</span><span class="p">(</span><span class="n">coeffs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
         <span class="n">coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fun</span> <span class="o">=</span> <span class="n">lin_func</span><span class="p">;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="n">coeffs</span><span class="p">;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fit_exp_bool</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
-    <span class="k">def</span> <span class="nf">fit_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fun</span><span class="p">,</span> <span class="n">guess</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="curve.fit_gen"><a class="viewcode-back" href="../index.html#func.curve.fit_gen">[docs]</a>    <span class="k">def</span> <span class="nf">fit_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fun</span><span class="p">,</span> <span class="n">guess</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``fit_gen`` fits a general function to the curve.</span>
+
+<span class="sd">        ``fit_gen`` fits a general function to the curve.  The general function</span>
+<span class="sd">        is a python function that takes a parameters and an ordinate variable,</span>
+<span class="sd">        ``x`` and returns the value of the function at that point, ``y``.  The</span>
+<span class="sd">        function must have the prototype ``def func(x, alpha, beta, ...):``.</span>
+<span class="sd">        Then, the coefficients are returned as a tuple.</span>
+
+<span class="sd">        :returns: the coefficients to the general function</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fun</span> <span class="o">=</span> <span class="n">fun</span>
         <span class="n">fit</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">guess</span><span class="p">,</span>
                         <span class="n">sigma</span><span class="o">=</span><span class="n">u_y</span><span class="p">,</span> <span class="n">absolute_sigma</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="n">fit</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fit_exp_bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
-    <span class="k">def</span> <span class="nf">fit_gauss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guess</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="curve.fit_gauss"><a class="viewcode-back" href="../index.html#func.curve.fit_gauss">[docs]</a>    <span class="k">def</span> <span class="nf">fit_gauss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guess</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``fit_gauss`` fits a gaussian function to the curve.</span>
+
+<span class="sd">        ``fit_gauss`` fits a gaussian function of form :math:`y=\alpha \exp</span>
+<span class="sd">        \left[ -\frac{\left(x - \mu\right)^{2}}{2 \sigma^{2}}\right]` to the</span>
+<span class="sd">        curve, returning the parameters :math:`\left(\alpha, \mu, \sigma\right)`</span>
+<span class="sd">        as a tuple.</span>
+
+<span class="sd">        :returns: the tuple :math:`\left(\alpha, \mu, \sigma\right)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">def</span> <span class="nf">gauss_fun</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sig</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">mu</span><span class="p">,</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="mf">2.</span><span class="p">)))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fit_gen</span><span class="p">(</span><span class="n">gauss_fun</span><span class="p">,</span> <span class="n">guess</span><span class="o">=</span><span class="n">guess</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
-    <span class="k">def</span> <span class="nf">fit_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="curve.fit_at"><a class="viewcode-back" href="../index.html#func.curve.fit_at">[docs]</a>    <span class="k">def</span> <span class="nf">fit_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``fit_at`` returns the point at coordinate :math:`x` from a previously fitted curve.</span>
+
+<span class="sd">        :param float x: the ordinate variable for which the fit value is needed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_exp_bool</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fun</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">,</span><span class="n">x</span><span class="p">);</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fun</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fun</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">);</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fun</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">fit_square</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="curve.fit_square"><a class="viewcode-back" href="../index.html#func.curve.fit_square">[docs]</a>    <span class="k">def</span> <span class="nf">fit_square</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``fit_square`` fits a function of order 2 to the curve.</span>
+
+<span class="sd">        ``fit_square`` fits a quadratic function of form :math:`y=a x^{2} + b x</span>
+<span class="sd">        + c` to the curve, returning the parameters :math:`\left(a, b,</span>
+<span class="sd">        c\right)` as a tuple.</span>
+
+<span class="sd">        :returns: the tuple :math:`\left(a, b, c\right)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">def</span> <span class="nf">square_func</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span><span class="n">x</span><span class="p">);</span>
-        <span class="n">coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fun</span> <span class="o">=</span> <span class="n">square_func</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fun</span> <span class="o">=</span> <span class="n">square_func</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="n">coeffs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fit_exp_bool</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
-    <span class="k">def</span> <span class="nf">fit_cube</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="curve.fit_cube"><a class="viewcode-back" href="../index.html#func.curve.fit_cube">[docs]</a>    <span class="k">def</span> <span class="nf">fit_cube</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``fit_cube`` fits a function of order 3 to the curve.</span>
+
+<span class="sd">        ``fit_cube`` fits a cubic function of form :math:`y=a x^{3} + b x^{2} +</span>
+<span class="sd">        c x + d` to the curve, returning the parameters :math:`\left(a, b,</span>
+<span class="sd">        c, d\right)` as a tuple.</span>
+
+<span class="sd">        :returns: the tuple :math:`\left(a, b, c, d\right)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">def</span> <span class="nf">cube_func</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span><span class="n">x</span><span class="p">);</span>
         <span class="n">coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fun</span> <span class="o">=</span> <span class="n">cube_func</span><span class="p">;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="n">coeffs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fit_exp_bool</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
     <span class="c1">###########################################################################</span>
     <span class="c1"># Curve Plotting - no tests currently</span>

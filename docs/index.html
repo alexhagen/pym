@@ -523,6 +523,124 @@ function, optionally containing the <code class="docutils literal"><span class="
 </dd></dl>
 
 <dl class="method">
+<dt id="func.curve.fit_at">
+<code class="descname">fit_at</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.fit_at"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.fit_at" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">fit_at</span></code> returns the point at coordinate <span class="math">\(x\)</span> from a previously fitted curve.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; the ordinate variable for which the fit value is needed.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.fit_cube">
+<code class="descname">fit_cube</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.fit_cube"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.fit_cube" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">fit_cube</span></code> fits a function of order 3 to the curve.</p>
+<p><code class="docutils literal"><span class="pre">fit_cube</span></code> fits a cubic function of form <span class="math">\(y=a x^{3} + b x^{2} +
+c x + d\)</span> to the curve, returning the parameters <span class="math">\(\left(a, b,
+c, d\right)\)</span> as a tuple.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the tuple <span class="math">\(\left(a, b, c, d\right)\)</span></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.fit_exp">
+<code class="descname">fit_exp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.fit_exp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.fit_exp" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">fit_exp</span></code> fits an exponential to the function.</p>
+<p><code class="docutils literal"><span class="pre">fit_exp</span></code> fits an exponential of form <span class="math">\(y=B\cdot \exp \left(
+\alpha\cdot x\right)\)</span> to the curve, returning the parameters
+<span class="math">\(\left(\alpha, B\right)\)</span> as a tuple.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the tuple <span class="math">\(\left(\alpha, B\right)\)</span></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.fit_gauss">
+<code class="descname">fit_gauss</code><span class="sig-paren">(</span><em>guess=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.fit_gauss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.fit_gauss" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">fit_gauss</span></code> fits a gaussian function to the curve.</p>
+<p><code class="docutils literal"><span class="pre">fit_gauss</span></code> fits a gaussian function of form <span class="math">\(y=\alpha \exp
+\left[ -\frac{\left(x - \mu\right)^{2}}{2 \sigma^{2}}\right]\)</span> to the
+curve, returning the parameters <span class="math">\(\left(\alpha, \mu, \sigma\right)\)</span>
+as a tuple.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the tuple <span class="math">\(\left(\alpha, \mu, \sigma\right)\)</span></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.fit_gen">
+<code class="descname">fit_gen</code><span class="sig-paren">(</span><em>fun</em>, <em>guess=None</em>, <em>u_y=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.fit_gen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.fit_gen" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">fit_gen</span></code> fits a general function to the curve.</p>
+<p><code class="docutils literal"><span class="pre">fit_gen</span></code> fits a general function to the curve.  The general function
+is a python function that takes a parameters and an ordinate variable,
+<code class="docutils literal"><span class="pre">x</span></code> and returns the value of the function at that point, <code class="docutils literal"><span class="pre">y</span></code>.  The
+function must have the prototype <code class="docutils literal"><span class="pre">def</span> <span class="pre">func(x,</span> <span class="pre">alpha,</span> <span class="pre">beta,</span> <span class="pre">...):</span></code>.
+Then, the coefficients are returned as a tuple.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the coefficients to the general function</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.fit_lin">
+<code class="descname">fit_lin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.fit_lin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.fit_lin" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">fit_lin</span></code> fits a linear function to the curve.</p>
+<p><code class="docutils literal"><span class="pre">fit_lin</span></code> fits a linear function of form <span class="math">\(y=m\cdot x + b\)</span> to the
+curve, returning the parameters <span class="math">\(\left(m, b\right)\)</span> as a tuple.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the tuple <span class="math">\(\left(m, b\right)\)</span></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.fit_square">
+<code class="descname">fit_square</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.fit_square"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.fit_square" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">fit_square</span></code> fits a function of order 2 to the curve.</p>
+<p><code class="docutils literal"><span class="pre">fit_square</span></code> fits a quadratic function of form <span class="math">\(y=a x^{2} + b x
++ c\)</span> to the curve, returning the parameters <span class="math">\(\left(a, b,
+c\right)\)</span> as a tuple.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the tuple <span class="math">\(\left(a, b, c\right)\)</span></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="func.curve.inrange">
 <code class="descname">inrange</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.inrange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.inrange" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">inrange(x)</span></code> checks if a point is within the range of data.</p>
@@ -769,8 +887,9 @@ trapezoidal rule, i.e.</p>
 <p>Right now, it uses <span class="math">\(10 \times N_{x}\)</span> points to integrate between
 values, but that is completely arbitrary and I&#8217;ll be looking into
 changing this. There is also the ability to pass <code class="docutils literal"><span class="pre">quad</span></code> to the
-function as <code class="docutils literal"><span class="pre">'log'</span></code> and it will calculate the trapezoids in
-logarithmic space, giving exact integrals for exponential functions.</p>
+function as <code class="docutils literal"><span class="pre">'log'</span></code> <strong>CURRENTLY FAILING</strong> and it will calculate the
+trapezoids in logarithmic space, giving exact integrals for exponential
+functions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

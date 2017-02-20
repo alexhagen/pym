@@ -35,7 +35,7 @@ Test Coverage
 
 .. raw:: html
 
-  <iframe width=100% height=215px
+  <iframe width=100% height=225px
    frameBorder="0" src="coverage/index.html"></iframe>
 
 Contents:

@@ -30,6 +30,19 @@ class dataInputTestCase(unittest.TestCase):
         self.assertEqual(np.array_equal(A.y, [1., 0., 2.]), True,
                          'incorrect repeated x sort')
 
+    def test_data_unbalanced_uncertainty_tuple(self):
+        A = pym.curve([0., 2., 1.], [0., 1., 2.],
+                      u_x=[(0.1, 0.2), (0.2, 0.4), (0.1, 0.2)],
+                      u_y=[(0.2, 0.1), (0.4, 0.2), (0.2, 0.1)])
+        self.assertEqual(A.u_y[1, 1], 0.1,
+                         'incorrect unbalanced tuple uncertainty')
+
+    def tests_data_unbalanced_uncertainty(self):
+        A = pym.curve([0., 2., 1.], [0., 1., 2.],
+                      u_x=[[0.1, 0.4, 0.1], [0.2, 0.4, 0.2]],
+                      u_y=[[0.1, 0.4, 0.1], [0.2, 0.4, 0.2]])
+        self.assertEqual(A.u_y[1, 1], 0.2, 'incorrect unbalanced uncertainty')
+
     def test_data_added(self):
         A = pym.curve([0., 2., 4.], [0., 2., 4.])
         A.add_data([1., 3.], [1., 3.])

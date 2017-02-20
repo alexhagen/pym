@@ -18,6 +18,14 @@ class curve(object):
     as a name and a data shape designation (whether this is smooth data or
     binned).
 
+    There exist three ways to add uncertainty to the measurements.  The first is
+    to define an array or list of values that define the absolute uncertainty at
+    each ``x``.  The second is to define a list of tuples that define the lower
+    and upper absolute uncertainty at each ``x``, respectively. The final way is
+    to define a two dimensional array, where the first row is the lower absolute
+    uncertainty at each ``x``, and the second row is the upper absolute
+    uncertainty at each ``x``.
+
     :param list-like x: The ordinate data of the curve
     :param list-like u_x: The uncertainty in the ordinate data of the curve
     :param list-like y: The abscissa data of the curve
@@ -72,12 +80,18 @@ class curve(object):
         self.y = self.y[idx]
         if self.u_x is not None:
             if len(self.u_x.shape) > 1:
-                self.u_x = self.u_x[:, idx]
+                if self.u_x.shape[1] == len(self.x):
+                    self.u_x = self.u_x[:, idx]
+                else:
+                    self.u_x = self.u_x[idx, :]
             else:
                 self.u_x = self.u_x[idx]
         if self.u_y is not None:
             if len(self.u_y.shape) > 1:
-                self.u_y = self.u_y[:, idx]
+                if self.u_y.shape[1] == len(self.y):
+                    self.u_y = self.u_y[:, idx]
+                else:
+                    self.u_y = self.u_y[idx, :]
             else:
                 self.u_y = self.u_y[idx]
 
@@ -147,6 +161,8 @@ class curve(object):
                         self.y[i] = y_min
                     elif replace is "remove":
                         remove[i] = True
+                    elif isinstance(replace, float):
+                        self.y[i] = replace
                 if self.u_y is not None:
                     if self.y[i] - self.u_y[i] < y_min:
                         self.u_y[i] = self.y[i] - y_min
@@ -158,6 +174,8 @@ class curve(object):
                         self.y[i] = y_max
                     elif replace is "remove":
                         remove[i] = True
+                    elif isinstance(replace, float):
+                        self.y[i] = replace
                 if self.u_y is not None:
                     if self.y[i] + self.u_y[i] > y_max:
                         self.u_y[i] = y_max - self.y[i]
@@ -169,6 +187,8 @@ class curve(object):
                         self.x[i] = x_min
                     elif replace is "remove":
                         remove[i] = True
+                    elif isinstance(replace, float):
+                        self.x[i] = replace
 
         if x_max is not None:
             for i in range(len(self.x)):
@@ -177,6 +197,8 @@ class curve(object):
                         self.x[i] = x_max
                     elif replace is "remove":
                         remove[i] = True
+                    elif isinstance(replace, float):
+                        self.x[i] = replace
 
         if replace is "remove":
             self.x = np.delete(self.x, np.where(remove))

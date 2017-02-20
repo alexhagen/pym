@@ -34,7 +34,7 @@ Test Coverage
 -------------
 
 .. raw:: html
-  :file: coverage/index.html
+  <iframe src="coverage/index.html" />
 
 Contents:
 

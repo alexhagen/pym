@@ -200,7 +200,7 @@ class curve(object):
                     elif isinstance(replace, float):
                         self.x[i] = replace
 
-        if replace is "remove":
+        if replace == "remove":
             self.x = np.delete(self.x, np.where(remove))
             if self.u_x is not None:
                 self.u_x = np.delete(self.u_x, np.where(remove))

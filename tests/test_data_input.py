@@ -8,6 +8,11 @@ class dataInputTestCase(unittest.TestCase):
         self.A = pym.curve([0., 1., 2., 3., 4.],
                            [0., 1., 2., 3., 4.],
                            name="y=x @ dx = 1")
+        self.Au = pym.curve([0., 1., 2., 3., 4.],
+                            [0., 1., 2., 3., 4.],
+                            u_x=[0., 0.1, 0.2, 0.3, 0.4],
+                            u_y=[0., 0.1, 0.2, 0.3, 0.4],
+                            name="y=x w/ 10%% uncertainty @ dx = 1")
         self.B = pym.curve([0., 1., 2., 3., 4.],
                            [4., 3., 2., 1., 0.],
                            name="y=4-x @ dx = 1")
@@ -55,8 +60,15 @@ class dataInputTestCase(unittest.TestCase):
         self.assertEqual(np.array_equal(A.u_y, [0., 0.1, 0.2, 0.3, 0.4]), True,
                          'incorrect sorted add data u_y')
 
+    def test_data_added_u_x(self):
+        A = pym.curve([0., 2., 4.], [0., 2., 4.], u_x=[0., 0.2, 0.4])
+        A.add_data([1., 3.], [1., 3.], u_x=[0.1, 0.3])
+        self.assertEqual(np.array_equal(A.u_x, [0., 0.1, 0.2, 0.3, 0.4]), True,
+                         'incorrect sorted add data u_x')
+
     def test_copy(self):
-        A = pym.curve([0., 2., 4.], [0., 2., 4.], u_y=[0., 0.2, 0.4])
+        A = pym.curve([0., 2., 4.], [0., 2., 4.], u_x=[0.1, 0.2, 0.9],
+                       u_y=[0., 0.2, 0.4])
         B = A.copy()
         self.assertEqual(np.array_equal(B.y, [0., 2., 4.]), True,
                          'incorrect curve copy')
@@ -69,16 +81,28 @@ class dataInputTestCase(unittest.TestCase):
                          'incorrect curve copy with inplace editing')
 
     def test_crop_x_replace(self):
-        A = self.A.copy()
+        A = self.Au.copy()
         A.crop(x_min=1., x_max=3., replace='remove')
         self.assertEqual(np.array_equal(A.y, [1., 2., 3.]), True,
                          'incorrect curve x cropping')
 
+    def test_crop_x_replace_float(self):
+        A = self.Au.copy()
+        A.crop(x_min=1., x_max=3., replace=5.)
+        self.assertEqual(np.array_equal(A.x, [5., 1., 2., 3., 5.]), True,
+                         'incorrect curve x cropping')
+
     def test_crop_y_replace(self):
-        A = self.A.copy()
+        A = self.Au.copy()
         A.crop(y_min=1., y_max=3., replace='remove')
         self.assertEqual(np.array_equal(A.x, [1., 2., 3.]), True,
                          'incorrect curve y cropping')
+
+    def test_crop_replace_none(self):
+        A = self.Au.copy()
+        A.crop(y_min=1., y_max=3.)
+        self.assertEqual(np.array_equal(A.y, [1., 1., 2., 3., 3.]), True,
+                         'incorrect curve cropping with replace')
 
     def test_decimate(self):
         A = self.A.copy()

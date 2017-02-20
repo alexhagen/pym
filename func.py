@@ -1203,9 +1203,11 @@ class curve(object):
     ###########################################################################
     # Curve Plotting - no tests currently
     ###########################################################################
-    def plot(self, x=None, y=None, addto=None, linestyle=None,
-             linecolor='black', yy=False, xerr=None, yerr=None, legend=True,
-             env='plot', axes=None, polar=False):
+    def plot(self, x=None, y=None, addto=None, # pragma: no cover
+             linestyle=None, linecolor='black', # pragma: no cover
+             yy=False, xerr=None, yerr=None, # pragma: no cover
+             legend=True, env='plot', axes=None, # pragma: no cover
+             polar=False): # pragma: no cover
         if addto is None:
             plot = ahp.pyg2d(env=env, polar=polar);
         else:
@@ -1254,8 +1256,9 @@ class curve(object):
                 plot.add_line_yy(x,y,xerr=self.u_x,yerr=self.u_y,name=self.name,linestyle=linestyle,linecolor=linecolor, axes=axes);
         return plot;
 
-    def plot_fit(self, xmin=None, xmax=None, addto=None, linestyle=None,
-                 linecolor=None, name=None, axes=None):
+    def plot_fit(self, xmin=None, xmax=None, addto=None, # pragma: no cover
+                 linestyle=None,  linecolor=None, # pragma: no cover
+                 name=None, axes=None): # pragma: no cover
         if addto is None:
             plot = ahp.pyg2d()
         else:

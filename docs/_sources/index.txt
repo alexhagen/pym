@@ -30,6 +30,12 @@ func.curve
 Indices and tables
 ==================
 
+Test Coverage
+-------------
+
+.. raw:: html
+  :file: coverage/index.html
+
 Contents:
 
 .. toctree::

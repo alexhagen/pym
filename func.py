@@ -282,8 +282,11 @@ class curve(object):
                 y[index] = self.y[list(self.x).index(xi)]
             else:
                 if xi > self.x.min() and xi < self.x.max():
-                    # if it is in the data range, interpolate
-                    y[index] = self.interpolate(xi)
+                    if self.data == 'binned':
+                        _, y[index] = self.find_nearest_down(xi)
+                    else:
+                        # if it is in the data range, interpolate
+                        y[index] = self.interpolate(xi)
                 else:
                     # if it is not in the data range, extrapolate
                     y[index] = self.extrapolate(xi)

@@ -209,6 +209,21 @@ class curve(object):
                 self.u_y = np.delete(self.u_y, np.where(remove))
         return self
 
+    def find_first_above(self, y_min):
+        r""" ``find_first_above(y)`` finds the first ``(x, y)`` tuple with y
+            value above the given value y
+
+        :param float y_min: the comparitor value
+        :returns: the tuple (x, y) which is the first in ``x`` space where
+            ``y`` is above the given y_min
+        """
+        i = 0
+        while i < len(self.x):
+            if self.y[i] > y_min:
+                return self.x[i], self.y[i]
+            i += 1
+        return (np.nan, np.nan)
+
     def decimate(self, R=None, length=None):
         r""" ``decimate(R)`` will remove all but every ``R`` th point in the
         curve.

@@ -1,6 +1,7 @@
 import unittest
 from pym import func as pym
 import numpy as np
+import math
 
 class dataInputTestCase(unittest.TestCase):
     def setUp(self):
@@ -47,6 +48,16 @@ class dataInputTestCase(unittest.TestCase):
                       u_x=[[0.1, 0.4, 0.1], [0.2, 0.4, 0.2]],
                       u_y=[[0.1, 0.4, 0.1], [0.2, 0.4, 0.2]])
         self.assertEqual(A.u_y[1, 1], 0.2, 'incorrect unbalanced uncertainty')
+
+    def test_first_above(self):
+        A = self.A.copy()
+        x, y = A.find_first_above(2.0)
+        self.assertEqual(x, 3.0, 'incorrect first above')
+
+    def test_first_above_nan(self):
+        A = self.A.copy()
+        x, y = A.find_first_above(100.0)
+        self.assertEqual(math.isnan(x), True, 'incorrect nan above')
 
     def test_data_added(self):
         A = pym.curve([0., 2., 4.], [0., 2., 4.])

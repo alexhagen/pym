@@ -9,6 +9,11 @@ class dataInterpTestCase(unittest.TestCase):
         self.A = pym.curve([0., 1., 2., 3., 4.],
                            [0., 1., 2., 3., 4.],
                            name="y=x @ dx = 1")
+        self.Au = pym.curve([0., 1., 2., 3., 4.],
+                            [0., 1., 2., 3., 4.],
+                            u_x=[0., 0.1, 0.2, 0.3, 0.4],
+                            u_y=[0., 0.1, 0.2, 0.3, 0.4],
+                            name="y=x w/ 10%% uncertainty @ dx = 1")
         self.B = pym.curve([0., 1., 2., 3., 4.],
                            [4., 3., 2., 1., 0.],
                            name="y=4-x @ dx = 1")
@@ -73,13 +78,13 @@ class dataInterpTestCase(unittest.TestCase):
     def test_extrapolation_right(self):
         # values to the right of the curve should be extrapolated sort of well
         A = self.A.copy()
-        self.assertEqual(A.extrapolate(5.0), 5.0,
+        self.assertEqual(A.at(5.0), 5.0,
                          'incorrect extrapolated value to the right')
 
     def test_extrapolation_left(self):
         # values to the right of the curve should be extrapolated sort of well
         A = self.A.copy()
-        self.assertEqual(A.extrapolate(-1.0), -1.0,
+        self.assertEqual(A.at(-1.0), -1.0,
                          'incorrect extrapolated value to the left')
 
     def test_find_nearest_up_left(self):
@@ -150,6 +155,16 @@ class dataInterpTestCase(unittest.TestCase):
         stdev_arr = [np.std([0., 1.]), np.std([2., 3.]), np.std([4.])]
         self.assertEqual(np.array_equal(B.u_y, stdev_arr), True,
                          'incorrect rolling average uncertainty')
+
+    def tests_floating_avg_uncertainty_both(self):
+        # values when floating averaged should give proper uncertainty
+        A = self.Au.copy()
+        B = A.rolling_avg(2.0)
+        stdev_arr = [np.std([0., 1.]), np.std([2., 3.]), np.std([4.])]
+        u_arr = [np.mean([0.0, 0.1]), np.mean([0.2, 0.3]), np.mean([0.4])]
+        u_arr = np.sqrt(np.power(u_arr, 2) + np.power(stdev_arr, 2))
+        self.assertEqual(np.array_equal(B.u_y, u_arr), True,
+                         'incorrect rolling average with uncertainty array')
 
     def tearDown(self):
         del self.A

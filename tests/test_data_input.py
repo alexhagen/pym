@@ -115,6 +115,16 @@ class dataInputTestCase(unittest.TestCase):
         self.assertEqual(np.array_equal(A.y, [1., 1., 2., 3., 3.]), True,
                          'incorrect curve cropping with replace')
 
+    def test_rebin_smooth(self):
+        A = self.A.copy()
+        A.rebin(x=[0.5, 1.5, 2.5, 3.5])
+        self.assertEqual(A.at(1.0), 1.0, 'incorrect smooth rebin value')
+
+    def test_rebin_binned(self):
+        A = pym.curve([0., 1., 2., 3.], [1., 2., 1., 2.], data='binned')
+        A.rebin(x=[0.5, 1.5, 2.5])
+        self.assertEqual(A.at(1.0), 1.5, 'incorrect binned rebin value')
+
     def test_decimate(self):
         A = self.A.copy()
         A.decimate(2)

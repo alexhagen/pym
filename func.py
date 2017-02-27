@@ -224,6 +224,33 @@ class curve(object):
             i += 1
         return (np.nan, np.nan)
 
+    def rebin(self, x=None):
+        r""" ``rebin`` redistributes the curve along a new set of x values
+
+        ``rebin(x)`` takes a list-like input of new points on the ordinate and
+        redistributes the abscissa so that the x values are only on those
+        points.  For continuous/smooth data, this simply interpolates the
+        previous curve to the new points.  For binned data, this integrates
+        between left bin points and redistributes the fraction of data between
+        those points.
+
+        :param list x: the new x values to redistribute the curve. If binned,
+            this indicates the left edge
+        :returns: the curve object with redistributed values
+        """
+        if self.data == 'smooth':
+            newy = [self.at(_x) for _x in x]
+        elif self.data == 'binned':
+            bin_widths = [x2 - x1 for x1, x2 in zip(self.x[:-1], self.x[1:])]
+            # assume the last bin has the same width
+            bin_widths = bin_widths + [bin_widths[-1]]
+            newy = [self.integrate(x_min=_x, x_max=_x + bw)
+                    for _x, bw in zip(x, bin_widths)]
+        self.x = np.array(x)
+        self.y = np.array(newy)
+        self.sort()
+        return self
+
     def decimate(self, R=None, length=None):
         r""" ``decimate(R)`` will remove all but every ``R`` th point in the
         curve.
@@ -699,7 +726,7 @@ class curve(object):
                 std = np.std(sample)
                 # propagate the uncertainty and add the standard deviation
                 if self.u_y is not None:
-                    u_y_sample = np.sqrt(np.std(u_sample)**2 + std**2)
+                    u_y_sample = np.sqrt(np.mean(u_sample)**2 + std**2)
                 else:
                     u_y_sample = std
                 if self.u_x is not None:
@@ -738,11 +765,11 @@ class curve(object):
             integration.
         :returns: the result of the integration.
         """
-        if x_min is None:
-            x_min = np.min(self.x)
-        if x_max is None:
-            x_max = np.max(self.x)
         if self.data != 'binned':
+            if x_min is None:
+                x_min = np.min(self.x)
+            if x_max is None:
+                x_max = np.max(self.x)
             return self.trapezoidal(x_min=x_min, x_max=x_max, quad=quad)
         else:
             return self.bin_int(x_min, x_max)
@@ -768,16 +795,24 @@ class curve(object):
         :param float x_max: *Optional* the top of the range to be integrated.
         :returns: the result of the integration.
         """
-        if x_min is None:
-            x_min = np.min(self.x)
-        if x_max is None:
-            x_max = np.max(self.x)
         bin_widths = [x2 - x1 for x1, x2 in zip(self.x[:-1], self.x[1:])]
         # assume the last bin has the same width
         bin_widths = bin_widths + [bin_widths[-1]]
+        print bin_widths
         bin_heights = self.y
-        return np.sum([bin_height * bin_width for bin_height, bin_width
-                       in zip(bin_heights, bin_widths)])
+        if x_min is None:
+            x_min = np.min(self.x)
+        if x_max is None:
+            x_max = np.max(self.x) + bin_widths[-1]
+        integral = 0.0
+        # for each bin, find what fraction is within the range
+        for _x, bw, bh in zip(self.x, bin_widths, bin_heights):
+            fractional_bin_width = (np.min([_x + bw, x_max])
+                                    - np.max([_x, x_min])) / bw
+            if fractional_bin_width < 0:
+                fractional_bin_width = 0.0
+            integral += fractional_bin_width * bh
+        return integral
 
     def derivative(self, x, epsilon=None):
         r""" ``derivative(x)`` takes the derivative at point :math:`x`.
@@ -827,16 +862,13 @@ class curve(object):
         numpoints = len(self.x) * 10
         if quad is 'lin':
             x_sub = np.linspace(x_min, x_max, numpoints)
-        elif quad is 'log':
-            x_sub = np.linspace(np.log(x_min), np.log(x_max),
-                                num=numpoints)
-            x_sub = np.power(np.exp(1.), x_sub)
-        # then, between each x, we find the value there
-        y_sub = [self.at(x_i) for x_i in x_sub]
+            # then, between each x, we find the value there
+            y_sub = [self.at(x_i) for x_i in x_sub]
+            integral = np.sum([((x_sub[i+1] - x_sub[i]) * y_sub[i]) +
+                               ((x_sub[i+1] - x_sub[i]) * (y_sub[i+1] - y_sub[i])) / 2.
+                               for i in np.arange(0, len(x_sub) - 1)])
         # then, we do the trapezoidal rule
-        return np.sum([((x_sub[i+1] - x_sub[i]) * y_sub[i]) +
-                       ((x_sub[i+1] - x_sub[i]) * (y_sub[i+1] - y_sub[i])) / 2.
-                       for i in np.arange(0, len(x_sub) - 1)])
+        return integral
 
     def normalize(self, xmin=None, xmax=None, norm='int'):
         r""" ``normalize()`` normalizes the entire curve to be normalized.

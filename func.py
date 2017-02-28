@@ -287,7 +287,7 @@ class curve(object):
         else:
             return False
 
-    def at(self, x):
+    def at(self, x, extrapolation=True):
         """ ``at(x)`` finds a value at x.
 
         ``at(x)`` uses interpolation or extrapolation to determine the value
@@ -315,8 +315,11 @@ class curve(object):
                         # if it is in the data range, interpolate
                         y[index] = self.interpolate(xi)
                 else:
+                    if extrapolation:
                     # if it is not in the data range, extrapolate
-                    y[index] = self.extrapolate(xi)
+                        y[index] = self.extrapolate(xi)
+                    else:
+                        y[index] = np.nan
         if len(y) == 1:
             y = y[0]
         return y
@@ -798,7 +801,6 @@ class curve(object):
         bin_widths = [x2 - x1 for x1, x2 in zip(self.x[:-1], self.x[1:])]
         # assume the last bin has the same width
         bin_widths = bin_widths + [bin_widths[-1]]
-        print bin_widths
         bin_heights = self.y
         if x_min is None:
             x_min = np.min(self.x)
@@ -807,8 +809,11 @@ class curve(object):
         integral = 0.0
         # for each bin, find what fraction is within the range
         for _x, bw, bh in zip(self.x, bin_widths, bin_heights):
-            fractional_bin_width = (np.min([_x + bw, x_max])
-                                    - np.max([_x, x_min])) / bw
+            if bw > 0:
+                fractional_bin_width = np.nansum([np.nanmin([_x + bw, x_max]),
+                                        - np.nanmax([_x, x_min])]) / bw
+            else:
+                fractional_bin_width = 0.0
             if fractional_bin_width < 0:
                 fractional_bin_width = 0.0
             integral += fractional_bin_width * bh
@@ -1267,9 +1272,9 @@ class curve(object):
         if yerr is None:
             yerr = self.u_y
         if x is None and y is None:
-            x = self.x;
-            y = self.y;
-        if self.data is 'binned':
+            x = self.x
+            y = self.y
+        if self.data == 'binned':
             # plot the bins
             # setup a matix
             # preallocate this later ***********************************
@@ -1283,31 +1288,36 @@ class curve(object):
                 plot_y = np.append(plot_y,y[i]);
                 plot_x = np.append(plot_x,np.nan);
                 plot_y = np.append(plot_y,np.nan);
-                self.binned_data_x = plot_x
-                self.binned_data_y = plot_y
-            plot.add_line(plot_x,plot_y,name=self.name,linewidth=4.0,linecolor=linecolor,
-                linestyle='-', legend=legend);
-            conn_x = np.array([]);
-            conn_y = np.array([]);
+                # self.binned_data_x = plot_x
+                # self.binned_data_y = plot_y
+            plot.add_line(plot_x, plot_y, name=self.name, linewidth=2.0,
+                          linecolor=linecolor, linestyle='-', legend=legend)
+            conn_x = np.array([])
+            conn_y = np.array([])
             for i in np.arange(1,len(x)):
-                conn_x = np.append(conn_x,x[i]);
-                conn_y = np.append(conn_y,y[i-1]);
-                conn_x = np.append(conn_x,x[i]);
-                conn_y = np.append(conn_y,y[i]);
-                conn_x = np.append(conn_x,np.nan);
-                conn_y = np.append(conn_y,np.nan);
-            plot.add_line(conn_x,conn_y,name=self.name+'connectors',linewidth=0.1,linestyle='-',linecolor=linecolor);
-            plot.markers_off();
-            plot.lines_on();
+                conn_x = np.append(conn_x,x[i])
+                conn_y = np.append(conn_y,y[i-1])
+                conn_x = np.append(conn_x,x[i])
+                conn_y = np.append(conn_y,y[i])
+                conn_x = np.append(conn_x,np.nan)
+                conn_y = np.append(conn_y,np.nan)
+            plot.add_line(conn_x, conn_y, name=self.name+'connectors',
+                          linewidth=0.1, linestyle='-', linecolor=linecolor)
+            plot.markers_off()
+            plot.lines_on()
         elif self.data is 'smooth':
             if yy is False:
-                plot.add_line(x,y,xerr=self.u_x,yerr=self.u_y,name=self.name,linestyle=linestyle,linecolor=linecolor, axes=axes);
+                plot.add_line(x, y, xerr=self.u_x, yerr=self.u_y,
+                              name=self.name, linestyle=linestyle,
+                              linecolor=linecolor, axes=axes);
             else:
-                plot.add_line_yy(x,y,xerr=self.u_x,yerr=self.u_y,name=self.name,linestyle=linestyle,linecolor=linecolor, axes=axes);
+                plot.add_line_yy(x, y, xerr=self.u_x, yerr=self.u_y,
+                                 name=self.name,linestyle=linestyle,
+                                 linecolor=linecolor, axes=axes);
         return plot;
 
     def plot_fit(self, xmin=None, xmax=None, addto=None, # pragma: no cover
-                 linestyle=None,  linecolor=None, # pragma: no cover
+                 linestyle=None,  linecolor='black', # pragma: no cover
                  name=None, axes=None): # pragma: no cover
         if addto is None:
             plot = ahp.pyg2d()
@@ -1323,4 +1333,6 @@ class curve(object):
             name = self.name + 'fit'
         plot.add_line(self.fitx, self.fity, name=name,
                       linestyle=linestyle, linecolor=linecolor, axes=axes)
+        plot.fit_lines_on()
+        plot.fit_markers_off()
         return plot

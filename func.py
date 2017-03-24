@@ -241,17 +241,11 @@ class curve(object):
         if self.data == 'smooth':
             newy = [self.at(_x) for _x in x]
         elif self.data == 'binned':
-            bin_widths = [x2 - x1 for x1, x2 in zip(self.x[:-1], self.x[1:])]
+            bin_widths = [x2 - x1 for x1, x2 in zip(x[:-1], x[1:])]
             # assume the last bin has the same width
             bin_widths = bin_widths + [bin_widths[-1]]
-            if len(x) > len(self.x):
-                print bin_widths
-                print self.x
-                print self.y
             newy = [self.integrate(x_min=_x, x_max=_x + bw)
                     for _x, bw in zip(x, bin_widths)]
-        print self.data, np.min(self.x), np.max(self.x), len(self.x), \
-            np.min(x), np.max(x), len(x), len(newy)
         self.x = np.array(x)
         self.y = np.array(newy)
         self.sort()

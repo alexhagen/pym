@@ -244,8 +244,14 @@ class curve(object):
             bin_widths = [x2 - x1 for x1, x2 in zip(self.x[:-1], self.x[1:])]
             # assume the last bin has the same width
             bin_widths = bin_widths + [bin_widths[-1]]
+            if len(x) > len(self.x):
+                print bin_widths
+                print self.x
+                print self.y
             newy = [self.integrate(x_min=_x, x_max=_x + bw)
                     for _x, bw in zip(x, bin_widths)]
+        print self.data, np.min(self.x), np.max(self.x), len(self.x), \
+            np.min(x), np.max(x), len(x), len(newy)
         self.x = np.array(x)
         self.y = np.array(newy)
         self.sort()
@@ -305,7 +311,9 @@ class curve(object):
             x = [x]
         y = np.ones_like(x)
         for index, xi in zip(range(len(x)), x):
-            if xi in self.x:
+            if np.isnan(xi):
+                y[index] = np.nan
+            elif xi in self.x:
                 y[index] = self.y[list(self.x).index(xi)]
             else:
                 if xi > self.x.min() and xi < self.x.max():
@@ -542,10 +550,10 @@ class curve(object):
         :rtype: float
         """
         # find whether the point is above or below
-        if x <= self.x.min():
+        if x <= np.min(x):
             x1 = self.x[0]
             x2 = self.x[1]
-        elif x >= self.x.max():
+        elif x >= np.max(x):
             x1 = self.x[-1]
             x2 = self.x[-2]
         # now find the slope

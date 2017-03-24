@@ -34,6 +34,13 @@ class dataIntegTestCase(unittest.TestCase):
         print A.integrate()
         self.assertEqual(A.integrate(), 14., 'incorrect binned integral')
 
+    def test_integral_sparse(self):
+        A = pym.curve([0., 5., 10., 15., 20.], [0., 5., 10., 15., 20.],
+                      data='binned')
+        A.rebin([0., 1., 2., 3., 4., 5., 6., 7., 8., 9., 10.])
+        print A.x, A.y
+        self.assertEqual(A.y[3], 5500., 'incorrect rebin of sparse data')
+
     def test_integral_binned_between(self):
         A = pym.curve([0., 1., 2.], [5., 4., 5.], data='binned')
         print A.integrate(x_min=0.5, x_max=1.5)

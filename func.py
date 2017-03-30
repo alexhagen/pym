@@ -241,14 +241,14 @@ class curve(object):
         if self.data == 'smooth':
             newy = [self.at(_x) for _x in x]
         elif self.data == 'binned':
-            if len(self.x) < len(x):
-                bin_widths = [x2 - x1 for x1, x2 in zip(x[:-1], x[1:])]
-            else:
-                bin_widths = [x2 - x1 for x1, x2 in zip(self.x[:-1], self.x[1:])]
+            bin_widths = [x2 - x1 for x1, x2 in zip(x[:-1], x[1:])]
+            print bin_widths[::5]
             # assume the last bin has the same width
             bin_widths = bin_widths + [bin_widths[-1]]
+            print bin_widths[::5]
             newy = [self.integrate(x_min=_x, x_max=_x + bw)
                     for _x, bw in zip(x, bin_widths)]
+            print newy[::5]
         self.x = np.array(x)
         self.y = np.array(newy)
         self.sort()
@@ -308,9 +308,7 @@ class curve(object):
             x = [x]
         y = np.ones_like(x)
         for index, xi in zip(range(len(x)), x):
-            if np.isnan(xi):
-                y[index] = np.nan
-            elif xi in self.x:
+            if xi in self.x:
                 y[index] = self.y[list(self.x).index(xi)]
             else:
                 if xi > self.x.min() and xi < self.x.max():
@@ -547,10 +545,10 @@ class curve(object):
         :rtype: float
         """
         # find whether the point is above or below
-        if x <= np.min(x):
+        if x <= np.min(self.x):
             x1 = self.x[0]
             x2 = self.x[1]
-        elif x >= np.max(x):
+        elif x >= np.max(self.x):
             x1 = self.x[-1]
             x2 = self.x[-2]
         # now find the slope
@@ -806,17 +804,17 @@ class curve(object):
         bin_widths = [x2 - x1 for x1, x2 in zip(self.x[:-1], self.x[1:])]
         # assume the last bin has the same width
         bin_widths = bin_widths + [bin_widths[-1]]
-        bin_heights = self.y
+        bin_heights = np.nan_to_num(self.y)
         if x_min is None:
-            x_min = np.min(self.x)
+            x_min = np.nanmin(self.x)
         if x_max is None:
-            x_max = np.max(self.x) + bin_widths[-1]
+            x_max = np.nanmax(self.x) + bin_widths[-1]
         integral = 0.0
         # for each bin, find what fraction is within the range
         for _x, bw, bh in zip(self.x, bin_widths, bin_heights):
             if bw > 0:
                 fractional_bin_width = np.nansum([np.nanmin([_x + bw, x_max]),
-                                        - np.nanmax([_x, x_min])]) / bw
+                                        - np.nanmax([_x, x_min])])# / bw
             else:
                 fractional_bin_width = 0.0
             if fractional_bin_width < 0:
@@ -1307,18 +1305,18 @@ class curve(object):
                 conn_x = np.append(conn_x,np.nan)
                 conn_y = np.append(conn_y,np.nan)
             plot.add_line(conn_x, conn_y, name=self.name+'connectors',
-                          linewidth=0.1, linestyle='-', linecolor=linecolor)
+                          linewidth=0.1, linestyle='-', linecolor=linecolor, legend=legend)
             plot.markers_off()
             plot.lines_on()
         elif self.data is 'smooth':
             if yy is False:
                 plot.add_line(x, y, xerr=self.u_x, yerr=self.u_y,
                               name=self.name, linestyle=linestyle,
-                              linecolor=linecolor, axes=axes);
+                              linecolor=linecolor, axes=axes, legend=legend)
             else:
                 plot.add_line_yy(x, y, xerr=self.u_x, yerr=self.u_y,
                                  name=self.name,linestyle=linestyle,
-                                 linecolor=linecolor, axes=axes);
+                                 linecolor=linecolor, axes=axes, legend=legend)
         return plot;
 
     def plot_fit(self, xmin=None, xmax=None, addto=None, # pragma: no cover

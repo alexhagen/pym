@@ -131,7 +131,7 @@ class curve(object):
         if self.u_x is not None:
             newux = self.u_x.copy()
         newname = self.name
-        return curve(newx, newy, u_y=newuy, u_x=newux, name=newname)
+        return curve(newx, newy, u_y=newuy, u_x=newux, data=self.data, name=newname)
 
     def crop(self, y_min=None, y_max=None, x_min=None, x_max=None,
              replace=None):

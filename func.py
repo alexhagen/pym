@@ -454,6 +454,22 @@ class curve(object):
             u_y = u_y[0]
         return u_y
 
+    def find_in_data(self, y):
+        idx = np.argwhere(self.y == y)
+        return self.x[idx]
+
+    def max(self):
+        return np.max(self.y)
+
+    def min(self):
+        return np.min(self.y)
+
+    def find_max(self):
+        return self.find_in_data(self.max())
+
+    def find_min(self):
+        return self.find_in_data(self.min())
+
     def find(self, y):
         r""" ``find(y)`` finds values of :math:`x` that have value :math:`y`
 

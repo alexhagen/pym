@@ -82,13 +82,7 @@ plot.export('docs/_static/curve_plotting', ratio='silver')
 plot.show('A pretty chart from data made for a pym curve')
 ```
 
-
-
-<div class='pygfigure' name='A pretty chart from data made for a pym curve' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-<img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='docs/_static/curve_plotting.svg?628034410' />
-<div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 1:</b> A pretty chart from data made for a pym curve</div>
-</div>
-
+![curve plotting](docs/_static/curve_plotting.svg)
 
 
 ### Integration and normalization

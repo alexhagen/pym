@@ -1,5 +1,7 @@
 _build/
 docs/_build/*
+docs/*.html
+.ipynb_checkpoints/
 
 # Mac Files
 .DS_Store

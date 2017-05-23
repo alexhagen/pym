@@ -18,6 +18,9 @@ explanations of the numerical methods used, but is written to be more
 of a practical guide for coders. Good luck and happy coding!
 
 
+.. raw:: html
+   :file: readme.html
+
 func.curve
 ==========
 

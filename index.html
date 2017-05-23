@@ -1,344 +1,1522 @@
-<meta charset="utf-8">
-<title>pym &#8211; Alex Hagen</title>
-<meta name="description" content="a math library in python">
-<meta name="keywords" content="python, numerical methods">
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<!DOCTYPE html>
 
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  tex2jax: {
-    inlineMath: [ ['$','$'], ['\\(','\\)'] ],
-  },
-  "HTML-CSS": {
-    linebreaks: { 
-      automatic: true,
-      width: "80% container", 
-    }
-  },
-  SVG: { 
-    linebreaks: { 
-      automatic: true,
-      width: "80% container", 
-    } 
-  },
-  TeX: {
-    equationNumbers: {
-      autoNumber: "all"
-    },
-  },
-    showMathMenu: false
-});
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Pym - a Python Math library &#8212; pym 0.1a1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="_static/extra.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1a1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
 
-</script>
-
-<script type="text/javascript"
-     src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-
-<meta property="og:locale" content="en_US">
-<meta property="og:title" content="pym &#8211; Alex Hagen">
-<meta property="og:description" content="a math library in python">
-<meta property="og:url" content="http://alexhagen.github.io/">
-<meta property="og:site_name" content="Alex Hagen">
-
-<link rel="icon" type="image/x-icon" href="http://alexhagen.github.io/assets/img/favicon.ico" />
-<link rel="icon" type="image/png" href="http://alexhagen.github.io/assets/img/favicon.ico" />
-
-<link href="http://alexhagen.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="Alex Hagen Feed">
-
-<!-- http://t.co/dKP3o1e -->
-<meta name="HandheldFriendly" content="True">
-<meta name="MobileOptimized" content="320">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- Type -->
-<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Crimson+Text:400,400italic,700,700italic" rel='stylesheet' type='text/css' />
-<link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="http://alexhagen.github.io/assets/css/entypo.css" media="all">
-
-<!-- For all browsers -->
-<link rel="stylesheet" href="http://alexhagen.github.io/assets/css/i.css">
-<link rel="stylesheet" href="http://alexhagen.github.io/assets/css/font-awesome.css" media="all">
-
-<!-- Fresh Squeezed jQuery -->
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-
-<meta http-equiv="cleartype" content="on">
-
-<!-- Load Modernizr -->
-<script src="http://alexhagen.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
-
-<!-- Load the waypoints -->
-<script type="text/javascript" src="http://alexhagen.github.io/js/waypoints.min.js"></script>
-
-<!-- Implement Fuzzy Search -->
-<script type="text/javascript" src="http://alexhagen.github.io/assets/js/fuse.min.js"></script>
+  </head>
+  <body>
 
 
-<div id="bump">
-  <body class="">
-    <header class="site-header darken">
-      <div class="wrap">
-        <hgroup>
-          <a href="/">
-                <span class="logo">
-                  <svg viewBox="0 0 60 60">
-                      <g
-     transform="translate(-72.29956,-765.95028)"
-     id="layer1">
-    <path
-       d="m 109.94318,810.45806 0,-0.88727 c 0.66546,-0.39928 1.28655,-1.15346 1.73019,-2.04074 0.35491,-0.84291 0.48801,-2.04074 0.48801,-3.54911 l 0,-8.87278 -19.429121,0 0,8.87278 c 0,1.50837 0.177455,2.7062 0.532366,3.54911 0.443639,0.88728 1.020371,1.64146 1.730192,2.04074 l 0,0.88727 -6.623153,0 0,-0.88727 c 0.665458,-0.39928 1.286553,-1.15346 1.730191,-2.04074 0.354911,-0.84291 0.532367,-2.04074 0.532367,-3.54911 l 0,-16.05972 c 0,-1.50837 -0.177456,-2.7062 -0.532367,-3.54911 -0.443638,-0.88728 -1.064733,-1.64147 -1.730191,-2.08511 l 0,-0.84291 6.623153,0 0,0.84291 c -0.709821,0.44364 -1.286553,1.19783 -1.730192,2.08511 -0.354911,0.84291 -0.532366,2.04074 -0.532366,3.54911 l 0,6.28929 19.429121,0 0,-6.28929 c 0,-1.50837 -0.1331,-2.7062 -0.48801,-3.54911 -0.44364,-0.88728 -1.06473,-1.64147 -1.73019,-2.08511 l 0,-0.84291 6.79279,0 0,0.84291 c -0.70982,0.44364 -1.28655,1.19783 -1.73019,2.08511 -0.35491,0.84291 -0.53237,2.04074 -0.53237,3.54911 l 0,16.05972 c 0,1.50837 0.17746,2.7062 0.53237,3.54911 0.44364,0.88728 1.02037,1.64146 1.73019,2.04074 l 0,0.88727 -6.79279,0 m -7.9977,-23.51831 -2.751269,6.92589 1.208649,0 1.65925,-4.65172 1.49756,4.65172 1.97731,0 -2.3855,-6.92589 -1.206,0 z m -3.398003,8.55863 -0.678541,1.70695 c -0.356021,0.83072 -0.651813,1.44371 -0.869381,1.79973 -0.217568,0.33624 -0.514384,0.61165 -0.811069,0.7501 l 0,0.39759 3.066688,0 0,-0.39759 c -0.593368,-0.0198 -0.693666,-0.6713 -0.278308,-1.85803 l 0.856128,-2.39875 -1.285517,0 z m 5.542303,0 0.87998,2.59489 c 0.35602,1.00872 0.21944,1.60256 -0.41348,1.66189 l 0,0.39759 3.81679,0 0,-0.39759 c -0.43514,-0.21757 -0.73378,-0.4946 -0.91179,-0.81107 -0.23735,-0.3758 -0.47402,-0.84955 -0.65203,-1.38358 l -0.71035,-2.06213 -2.00912,0 z m -1.79022,-24.5481 c -13.797393,0 -25,11.20261 -25,25 0,13.79739 11.202607,25.00265 25,25.00265 13.79739,0 25,-11.20526 25,-25.00265 0,-13.79739 -11.20261,-25 -25,-25 z m 0,1.69635 c 12.88062,0 23.30365,10.42303 23.30365,23.30365 0,12.88062 -10.42303,23.3063 -23.30365,23.3063 -12.880616,0 -23.303647,-10.42568 -23.303647,-23.3063 0,-12.88062 10.423031,-23.30365 23.303647,-23.30365 z"
-       id="path3863" />
-  </g>
 
-                  </svg>
-                </span>
-            <h1 class="title">Alex Hagen</h1>
-          </a>
-          <a href=""><h1 class="breadcrumb bc-title"></h1></a>
-          <a href=""><h1 class="breadcrumb bc-h1"></h1></a>
-          <a href=""><h1 class="breadcrumb bc-h2"></h1></a>
-          <a href=""><h1 class="breadcrumb bc-h3"></h1></a>
-        </hgroup>
-        <a href="#nav" class="menu"><span class='icons'>☰</span></a>
-        <nav role="navigation">
-          <ul>
+<div id="navbar" class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#"><span><img src="_static/pym_logo.svg"></span>
+        pym</a>
+      <span class="navbar-text navbar-version pull-left"><b>0.1</b></span>
+    </div>
+
+      <div class="collapse navbar-collapse nav-collapse">
+        <ul class="nav navbar-nav">
+          
+            <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Alex Hagen <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
             
-                <li><a href="http://alexhagen.github.io/about" >About</a></li>
+              <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#"> <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Pym - a Python Math library</a></li>
+<li><a class="reference internal" href="#func-curve">func.curve</a></li>
+<li><a class="reference internal" href="#undocumented-python-objects">Undocumented Python objects</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a><ul>
+<li><a class="reference internal" href="#test-coverage">Test Coverage</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
             
-
-          </ul>
-        </nav>
+          
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+          
+          
+            
+              
+            
+          
+          
+          
+          
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="http://alexhagen.github.io/" target="_blank">Alex Hagen</a></li>
+        </ul>
       </div>
-    </header>
+  </div>
+</div>
 
-<!-- MORPHSEARCH -->
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="pym-a-python-math-library">
+<h1>Pym - a Python Math library<a class="headerlink" href="#pym-a-python-math-library" title="Permalink to this headline">¶</a></h1>
+<p>Pym is a library for some numerical methods written in python for general use.
+It strives to be lightweight and easy to use, but if you haven’t read the
+introduction and motivation <a class="reference external" href="http://alexhagen.github.io/pym/">here</a>, you
+might want to.  In general, you should use this library if you want to use
+easy integration, interpolation, extrapolation, and some graphing methods.
+Many of the numerical method algorithms come from Brian Bradie’s great book,
+A Friendly Introduction to Numerical Analysis, and the theory and support for
+those methods can be found in that book. This documentation will give cursory
+explanations of the numerical methods used, but is written to be more
+of a practical guide for coders. Good luck and happy coding!</p>
 
-
-
-
-<section class="article">
-
-
-  <div class="overlay"></div>
-  
-  <div class="featured-image" style="background-image: url(http://alexhagen.github.io/pyg/images/pyg_banner_2.png)"></div>
-  
-
-
-
-      <article class="wrap post">
-
-        <h1>pym - A math and numerical methods library in python</h1>
-
-<p>Last Updated on 11/12/15</p>
-
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="pym---A-math-and-numerical-methods-library-in-python">pym - A math and numerical methods library in python<a class="anchor-link" href="#pym---A-math-and-numerical-methods-library-in-python">&#182;</a></h1><p>Last Updated on 11/12/15</p>
 <p>Written by <a href="http://alexhagen.github.io">Alex Hagen</a></p>
-
 <p>Hosted at <a href="http://github.com/alexhagen/pym">github.com/alexhagen/pym</a></p>
-
 <p>Documentation at <a href="docs/">alexhagen.github.io/pym/docs</a></p>
-
 <p><code>pym</code> (pronounced <i>pim</i>) is a pretty simple numerical methods library for
 python.  It can be used to do interpolation, extrapolation, integration,
-normalization, etc.  In general, it is a replication of Brian Bradie&#39;s book
+normalization, etc.  In general, it is a replication of Brian Bradie's book
 <em>A Friendly Introduction to Numerical Methods</em> in code.  Usage should be fairly
 simple, with the documentation <a href="docs/">documentation</a> providing a practical
 guide to using the library.</p>
 
-<h2>Pym Demonstrations and Screenshots</h2>
-
-<h3>Installation</h3>
-
-<p>To install <code>pym</code>, all we have to do is install <code>numpy</code>, <code>scipy</code>, and
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Pym-Demonstrations-and-Screenshots">Pym Demonstrations and Screenshots<a class="anchor-link" href="#Pym-Demonstrations-and-Screenshots">&#182;</a></h2><h3 id="Installation">Installation<a class="anchor-link" href="#Installation">&#182;</a></h3><p>To install <code>pym</code>, all we have to do is install <code>numpy</code>, <code>scipy</code>, and
 <code>matplotlib</code>, then download <code>pym</code> to our code directory (or wherever, really).
 To do this, we can use</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">
-<span class="gp">$ </span>pip install numpy
-<span class="gp">$ </span>pip install scipy
-<span class="gp">$ </span>pip install matplotlib
-<span class="gp">$ </span>pip install colours
-<span class="gp">$ </span><span class="nb">cd</span> ~/code
-<span class="gp">$ </span>git clone https://github.com/alexhagen/pym.git
-
-</code></pre></div>
+<div class="highlight"><pre><span></span>$ pip install numpy
+$ pip install scipy
+$ pip install matplotlib
+$ pip install colours
+$ <span class="nb">cd</span> ~/code
+$ git clone https://github.com/alexhagen/pym.git
+</pre></div>
 <p>and then, we can use the library within any script by using</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">'HOME'</span><span class="p">]</span> <span class="o">+</span> <span class="s">'/code'</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">pym</span> <span class="kn">import</span> <span class="n">func</span> <span class="k">as</span> <span class="n">pymc</span>
 
-<span class="c"># use pym from here on</span>
-</code></pre></div>
-<h3>Curve creation and graphing using <a href="../pyg/">pyg</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">pym</span> <span class="kn">import</span> <span class="n">func</span> <span class="k">as</span> <span class="n">pym</span>
+</pre></div>
 
-<figure>
-    <img src="http://alexhagen.github.io/pym/images/curve_plottingweb.svg">
-    <figcaption>A curve plotted using the pym and pyg libraries</figcaption>
-</figure>
+</div>
+</div>
+</div>
 
-<p>The basis of <code>pym</code> is the <code>curve</code> class, which holds x and y data, as well as
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Curve-creation-and-graphing">Curve creation and graphing<a class="anchor-link" href="#Curve-creation-and-graphing">&#182;</a></h3><p>The basis of <code>pym</code> is the <code>curve</code> class, which holds x and y data, as well as
 its associated error.  We can create a function with a sinusoid in it by using
 the following code</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">'HOME'</span><span class="p">]</span> <span class="o">+</span> <span class="s">'/code'</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">pym</span> <span class="kn">import</span> <span class="n">func</span> <span class="k">as</span> <span class="n">pymc</span>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">pym</span> <span class="kn">import</span> <span class="n">func</span> <span class="k">as</span> <span class="n">pym</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
-<span class="c"># use numpy to create some trigonometric functions across two periods</span>
+<span class="c1"># use numpy to create some trigonometric functions across two periods</span>
 <span class="n">x_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">4.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
-<span class="n">y1_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x_data</span><span class="p">)</span>
-<span class="n">y2_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x_data</span><span class="p">)</span>
+<span class="n">sin_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x_data</span><span class="p">)</span>
+<span class="n">cos_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x_data</span><span class="p">)</span>
 
-<span class="c"># define these data as ahm.curves to expose the interface to the numerical</span>
-<span class="c"># methods</span>
-<span class="n">y1</span> <span class="o">=</span> <span class="n">pymc</span><span class="o">.</span><span class="n">curve</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y1_data</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'$</span><span class="err">\</span><span class="s">sin </span><span class="err">\</span><span class="s">left( x </span><span class="se">\r</span><span class="s">ight)$'</span><span class="p">)</span>
-<span class="n">y2</span> <span class="o">=</span> <span class="n">pymc</span><span class="o">.</span><span class="n">curve</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y2_data</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'$</span><span class="err">\</span><span class="s">cos </span><span class="err">\</span><span class="s">left( x </span><span class="se">\r</span><span class="s">ight)$'</span><span class="p">)</span>
+<span class="c1"># define these data as ahm.curves to expose the interface to the numerical</span>
+<span class="c1"># methods</span>
+<span class="n">sin</span> <span class="o">=</span> <span class="n">pym</span><span class="o">.</span><span class="n">curve</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">sin_data</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;$\sin \left( x </span><span class="se">\r</span><span class="s1">ight)$&#39;</span><span class="p">)</span>
+<span class="n">cos</span> <span class="o">=</span> <span class="n">pym</span><span class="o">.</span><span class="n">curve</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">cos_data</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;$\cos \left( x </span><span class="se">\r</span><span class="s1">ight)$&#39;</span><span class="p">)</span>
 
-<span class="c"># Plot these using the function pym.plot which returns a pyg.ah2d object</span>
-<span class="n">plot</span> <span class="o">=</span> <span class="n">y1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linecolor</span><span class="o">=</span><span class="s">'#285668'</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s">'-'</span><span class="p">)</span>
-<span class="n">y2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linecolor</span><span class="o">=</span><span class="s">'#FC8D82'</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s">'-'</span><span class="p">,</span> <span class="n">addto</span><span class="o">=</span><span class="n">plot</span><span class="p">)</span>
+<span class="c1"># Plot these using the function pym.plot which returns a pyg.ah2d object</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">sin</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;#285668&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">cos</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;#FC8D82&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">addto</span><span class="o">=</span><span class="n">plot</span><span class="p">)</span>
 
-<span class="c"># make it pretty with some shading, lines, changing limits, and labels</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y1_data</span><span class="p">,</span> <span class="n">y2_data</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s">'#ccccff'</span><span class="p">)</span>
+<span class="c1"># make it pretty with some shading, lines, changing limits, and labels</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">sin_data</span><span class="p">,</span> <span class="n">cos_data</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;#ccccff&#39;</span><span class="p">)</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">lines_on</span><span class="p">()</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">markers_off</span><span class="p">()</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">4.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'$x$'</span><span class="p">)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'$y$'</span><span class="p">)</span>
+<span class="c1">#plot.xlabel(r&#39;x-coordinate ($x$) [$cm$]&#39;)</span>
+<span class="c1">#plot.ylabel(r&#39;y-coordinate ($y$) [$cm$]&#39;)</span>
 
-<span class="c"># export it to a websvg (which doesnt convert text to paths)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s">'../../images/curve_plotting'</span><span class="p">,</span> <span class="n">formats</span><span class="o">=</span><span class="p">[</span><span class="s">'websvg'</span><span class="p">],</span> <span class="n">sizes</span><span class="o">=</span><span class="p">[</span><span class="s">'2'</span><span class="p">])</span>
-</code></pre></div>
-<h3>Integration and normalization</h3>
+<span class="c1"># export it to a websvg (which doesnt convert text to paths)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s1">&#39;_static/curve_plotting&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s1">&#39;A pretty chart from data made for a pym curve&#39;</span><span class="p">)</span>
+</pre></div>
 
-<figure>
-    <img src="http://alexhagen.github.io/pym/images/int_normweb.svg">
-    <figcaption>Illustration of normalization and integration using pym library,
-    visualized through a pyg graph</figcaption>
-</figure>
+</div>
+</div>
+</div>
 
-<p>One of the useful options of <code>pym</code> is the ability to normalize a function,
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+<div class="prompt"></div>
+
+
+<div class="output_html rendered_html output_subarea ">
+
+                <div class='figure' name='A pretty chart from data made for a pym curve' style='align: center; margin-left: auto; margin-right: auto;'>
+                    <img style='margin: auto; max-width:800px; width:1250.000000px; height: auto;' src='_static/curve_plotting.svg?220392317' />
+                    <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 1:</b> A pretty chart from data made for a pym curve</div>
+                </div>
+            
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Integration-and-normalization">Integration and normalization<a class="anchor-link" href="#Integration-and-normalization">&#182;</a></h3><p>One of the useful options of <code>pym</code> is the ability to normalize a function,
 either according to its maximum, or according to its integral.  The following is
 and example of this integration, showing that after integration, we attain an
 integral of 1.0.</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">'HOME'</span><span class="p">]</span> <span class="o">+</span> <span class="s">'/code'</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">pym</span> <span class="kn">import</span> <span class="n">func</span> <span class="k">as</span> <span class="n">pymc</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
-<span class="c"># use numpy to create a monotonic function to play with</span>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># use numpy to create a monotonic function to play with</span>
 <span class="n">x_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
 <span class="n">y_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
-<span class="c"># define these data as ahm.curves to expose the interface to the numerical</span>
-<span class="c"># methods</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">pymc</span><span class="o">.</span><span class="n">curve</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y_data</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'$x^{2}$'</span><span class="p">)</span>
+<span class="c1"># define these data as ahm.curves to expose the interface to the numerical</span>
+<span class="c1"># methods</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">pym</span><span class="o">.</span><span class="n">curve</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y_data</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;$x^{2}$&#39;</span><span class="p">)</span>
 
-<span class="c"># Plot the unmodified function, shade the integral, and add a pointer with the</span>
-<span class="c"># integral value</span>
-<span class="n">plot</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linecolor</span><span class="o">=</span><span class="s">'#285668'</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s">'-'</span><span class="p">)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">y_data</span><span class="p">),</span> <span class="n">y_data</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s">'#ccccff'</span><span class="p">)</span>
+<span class="c1"># Plot the unmodified function, shade the integral, and add a pointer with the</span>
+<span class="c1"># integral value</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;#285668&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">y_data</span><span class="p">),</span> <span class="n">y_data</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;#ccccff&#39;</span><span class="p">)</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">add_data_pointer</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">point</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
-                      <span class="n">string</span><span class="o">=</span><span class="s">r'$</span><span class="err">\</span><span class="s">int f </span><span class="err">\</span><span class="s">left( x </span><span class="err">\</span><span class="s">right) dx = </span><span class="si">%.2</span><span class="s">f$'</span> <span class="o">%</span>
+                      <span class="n">string</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\int f \left( x \right) dx = </span><span class="si">%.2f</span><span class="s1">$&#39;</span> <span class="o">%</span>
                       <span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span> <span class="n">place</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">3.</span><span class="p">))</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">lines_on</span><span class="p">()</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">markers_off</span><span class="p">()</span>
 
-<span class="c"># now normalize the curve with respect to the integral</span>
-<span class="n">y</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s">'int'</span><span class="p">)</span>
-<span class="c"># Plot the modified function, shade the integral, and add a pointer with the</span>
-<span class="c"># integral value</span>
-<span class="n">plot</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">addto</span><span class="o">=</span><span class="n">plot</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s">'#FC8D82'</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s">'-'</span><span class="p">)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">y</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s">'#ffdddd'</span><span class="p">)</span>
+<span class="c1"># now normalize the curve with respect to the integral</span>
+<span class="n">y</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+<span class="c1"># Plot the modified function, shade the integral, and add a pointer with the</span>
+<span class="c1"># integral value</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">addto</span><span class="o">=</span><span class="n">plot</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;#FC8D82&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">y</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;#ffdddd&#39;</span><span class="p">)</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">add_data_pointer</span><span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="n">point</span><span class="o">=</span><span class="mf">0.125</span><span class="p">,</span>
-                      <span class="n">string</span><span class="o">=</span><span class="s">r'$</span><span class="err">\</span><span class="s">int f_{norm} </span><span class="err">\</span><span class="s">left( x </span><span class="err">\</span><span class="s">right) dx = </span><span class="si">%.2</span><span class="s">f$'</span> <span class="o">%</span>
+                      <span class="n">string</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\int f_{norm} \left( x \right) dx = </span><span class="si">%.2f</span><span class="s1">$&#39;</span> <span class="o">%</span>
                       <span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span> <span class="n">place</span><span class="o">=</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">))</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">lines_on</span><span class="p">()</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">markers_off</span><span class="p">()</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'$x$'</span><span class="p">)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'$y$'</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;$x$&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;$y$&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
 
-<span class="c"># export it to a websvg (which doesnt convert text to paths)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s">'../../images/int_norm'</span><span class="p">,</span> <span class="n">formats</span><span class="o">=</span><span class="p">[</span><span class="s">'websvg'</span><span class="p">],</span> <span class="n">sizes</span><span class="o">=</span><span class="p">[</span><span class="s">'2'</span><span class="p">])</span>
-</code></pre></div>
-<h3>Curve arithmetic</h3>
+<span class="c1"># export it to a websvg (which doesnt convert text to paths)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s1">&#39;_static/int_norm&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s1">&#39;Normalized curves have a total integral of 1.0&#39;</span><span class="p">)</span>
+</pre></div>
 
-<p>Curve arithmetic (as in adding curves like <code>curve1 + curve2</code> or multiplying
-them with <code>curve1 * curve2</code>) is coming as soon as I can code it (or need it and
-so have to code it).</p>
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
 
 
+<div class="output_area">
+<div class="prompt"></div>
 
-      </article>
 
-    </section>
+<div class="output_html rendered_html output_subarea ">
+
+                <div class='figure' name='Normalized curves have a total integral of 1.0' style='align: center; margin-left: auto; margin-right: auto;'>
+                    <img style='margin: auto; max-width:800px; width:1250.000000px; height: auto;' src='_static/int_norm.svg?245953991' />
+                    <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 2:</b> Normalized curves have a total integral of 1.0</div>
+                </div>
+            
 </div>
 
 </div>
-<div class="push"></div>
-  <footer class="footer">
-    <aside class="wrap">
-      <div class="footer-col-4">
-        <h5>Alex Hagen</h5>
-        <p class="aside">Graduate Researcher - Purdue University Nuclear Engineering</p>
-      </div>
-      <div class="footer-col-2">
-        <span class="logo">
-          <svg viewBox="0 0 60 60">
-              <g
-     transform="translate(-72.29956,-765.95028)"
-     id="layer1">
-    <path
-       d="m 109.94318,810.45806 0,-0.88727 c 0.66546,-0.39928 1.28655,-1.15346 1.73019,-2.04074 0.35491,-0.84291 0.48801,-2.04074 0.48801,-3.54911 l 0,-8.87278 -19.429121,0 0,8.87278 c 0,1.50837 0.177455,2.7062 0.532366,3.54911 0.443639,0.88728 1.020371,1.64146 1.730192,2.04074 l 0,0.88727 -6.623153,0 0,-0.88727 c 0.665458,-0.39928 1.286553,-1.15346 1.730191,-2.04074 0.354911,-0.84291 0.532367,-2.04074 0.532367,-3.54911 l 0,-16.05972 c 0,-1.50837 -0.177456,-2.7062 -0.532367,-3.54911 -0.443638,-0.88728 -1.064733,-1.64147 -1.730191,-2.08511 l 0,-0.84291 6.623153,0 0,0.84291 c -0.709821,0.44364 -1.286553,1.19783 -1.730192,2.08511 -0.354911,0.84291 -0.532366,2.04074 -0.532366,3.54911 l 0,6.28929 19.429121,0 0,-6.28929 c 0,-1.50837 -0.1331,-2.7062 -0.48801,-3.54911 -0.44364,-0.88728 -1.06473,-1.64147 -1.73019,-2.08511 l 0,-0.84291 6.79279,0 0,0.84291 c -0.70982,0.44364 -1.28655,1.19783 -1.73019,2.08511 -0.35491,0.84291 -0.53237,2.04074 -0.53237,3.54911 l 0,16.05972 c 0,1.50837 0.17746,2.7062 0.53237,3.54911 0.44364,0.88728 1.02037,1.64146 1.73019,2.04074 l 0,0.88727 -6.79279,0 m -7.9977,-23.51831 -2.751269,6.92589 1.208649,0 1.65925,-4.65172 1.49756,4.65172 1.97731,0 -2.3855,-6.92589 -1.206,0 z m -3.398003,8.55863 -0.678541,1.70695 c -0.356021,0.83072 -0.651813,1.44371 -0.869381,1.79973 -0.217568,0.33624 -0.514384,0.61165 -0.811069,0.7501 l 0,0.39759 3.066688,0 0,-0.39759 c -0.593368,-0.0198 -0.693666,-0.6713 -0.278308,-1.85803 l 0.856128,-2.39875 -1.285517,0 z m 5.542303,0 0.87998,2.59489 c 0.35602,1.00872 0.21944,1.60256 -0.41348,1.66189 l 0,0.39759 3.81679,0 0,-0.39759 c -0.43514,-0.21757 -0.73378,-0.4946 -0.91179,-0.81107 -0.23735,-0.3758 -0.47402,-0.84955 -0.65203,-1.38358 l -0.71035,-2.06213 -2.00912,0 z m -1.79022,-24.5481 c -13.797393,0 -25,11.20261 -25,25 0,13.79739 11.202607,25.00265 25,25.00265 13.79739,0 25,-11.20526 25,-25.00265 0,-13.79739 -11.20261,-25 -25,-25 z m 0,1.69635 c 12.88062,0 23.30365,10.42303 23.30365,23.30365 0,12.88062 -10.42303,23.3063 -23.30365,23.3063 -12.880616,0 -23.303647,-10.42568 -23.303647,-23.3063 0,-12.88062 10.423031,-23.30365 23.303647,-23.30365 z"
-       id="path3863" />
-  </g>
 
-          </svg>
-        </span>
-      </div>
+</div>
+</div>
 
-      <div class="footer-col-4 right">
-        <div class="widget-container">
-          <h5 class="updates">Latest Updates</h5>
-          <ul class="commits-list"></ul>
-        </div>
-      </div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Curve-arithmetic">Curve arithmetic<a class="anchor-link" href="#Curve-arithmetic">&#182;</a></h3><p><code>pym</code> makes it easy to do simple artimetic operations on curves.  The arithmetic all happens after copying the curve, so you don't lose anything in place.  The example below illustrates the common identity $$\sin^{2}\left( \theta \right) + \cos^{2}\left( \theta \right) = 1$$.</p>
 
-    </aside>
-  </footer>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">one</span> <span class="o">=</span> <span class="n">sin</span> <span class="o">*</span> <span class="n">sin</span> <span class="o">+</span> <span class="n">cos</span> <span class="o">*</span> <span class="n">cos</span>
+<span class="n">one</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;$\sin^{2}\left( \theta \right) + \cos^{2}\left( \theta \right) = 1$&#39;</span>
+<span class="n">sin2</span> <span class="o">=</span> <span class="n">sin</span> <span class="o">*</span> <span class="n">sin</span>
+<span class="n">cos2</span> <span class="o">=</span> <span class="n">cos</span> <span class="o">*</span> <span class="n">cos</span>
 
-  <!-- If they're out, get some from the cellar -->
-  <script>window.jQuery || document.write('<script src="http://alexhagen.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
-  <script src="http://alexhagen.github.io/assets/js/retina.min.js"></script>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">one</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;#999999&#39;</span><span class="p">)</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">sin2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;#FC8D82&#39;</span><span class="p">,</span> <span class="n">addto</span><span class="o">=</span><span class="n">plot</span><span class="p">)</span>
 
-  <!-- Custom JS -->
-  <script src="http://alexhagen.github.io/assets/js/scripts.js"></script>
-  <script src="http://alexhagen.github.io/js/jquery.timeago.js"></script>
-  <script src="http://alexhagen.github.io/js/main.js"></script>
-  
+<span class="n">plot</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">sin2</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">sin2</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">sin2</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;#ffcccc&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;$\sin^{2} \left( </span><span class="se">\t</span><span class="s1">heta </span><span class="se">\r</span><span class="s1">ight)&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">cos2</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">sin2</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">sin2</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">cos2</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;#ccccff&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;$\sin^{2} \left( </span><span class="se">\t</span><span class="s1">heta </span><span class="se">\r</span><span class="s1">ight)&#39;</span><span class="p">)</span>
 
+<span class="n">plot</span><span class="o">.</span><span class="n">markers_off</span><span class="p">()</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">lines_on</span><span class="p">()</span>
+
+<span class="n">plot</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s1">&#39;_static/identity&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s1">&#39;Trigonometric identity and its contributions from $\cos^{2}$ and $\sin^{2}$&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+<div class="prompt"></div>
+
+
+<div class="output_html rendered_html output_subarea ">
+
+                <div class='figure' name='Trigonometric identity and its contributions from $\cos^{2}$ and $\sin^{2}$' style='align: center; margin-left: auto; margin-right: auto;'>
+                    <img style='margin: auto; max-width:800px; width:1250.000000px; height: auto;' src='_static/identity.svg?1448331479' />
+                    <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 3:</b> Trigonometric identity and its contributions from $\cos^{2}$ and $\sin^{2}$</div>
+                </div>
+            
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Subclassing">Subclassing<a class="anchor-link" href="#Subclassing">&#182;</a></h2><p><code>pym</code> is easily subclassable.  I personally like to define classes for data I download from instruments and write a load script and add some properties to the object.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># coming soon</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Fitting">Fitting<a class="anchor-link" href="#Fitting">&#182;</a></h2><p><code>pym</code> has a quick interface for fitting curves to its curves, and then plotting these.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># coming soon</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Interpolation-and-error-propagation">Interpolation and error propagation<a class="anchor-link" href="#Interpolation-and-error-propagation">&#182;</a></h2><p><code>pym</code> uses a linear interpolation backend to make its curve objects continuous, and it also propagates the error throughout when operations are performed on it.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># coming soon</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+ 
+
+</div>
+<div class="section" id="func-curve">
+<h1>func.curve<a class="headerlink" href="#func-curve" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="func.curve">
+<em class="property">class </em><code class="descclassname">func.</code><code class="descname">curve</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>name=”</em>, <em>u_x=None</em>, <em>u_y=None</em>, <em>data=’smooth’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>An object to expose some numerical methods and plotting tools.</p>
+<p>A <code class="docutils literal"><span class="pre">curve</span></code> object takes any two dimensional dataset and its uncertainty
+(both in the <span class="math">\(x\)</span> and <span class="math">\(y\)</span> direction).  Each data set includes
+<span class="math">\(x\)</span> and <span class="math">\(y\)</span> data and uncertainty associated with that, as well
+as a name and a data shape designation (whether this is smooth data or
+binned).</p>
+<p>There exist three ways to add uncertainty to the measurements.  The first is
+to define an array or list of values that define the absolute uncertainty at
+each <code class="docutils literal"><span class="pre">x</span></code>.  The second is to define a list of tuples that define the lower
+and upper absolute uncertainty at each <code class="docutils literal"><span class="pre">x</span></code>, respectively. The final way is
+to define a two dimensional array, where the first row is the lower absolute
+uncertainty at each <code class="docutils literal"><span class="pre">x</span></code>, and the second row is the upper absolute
+uncertainty at each <code class="docutils literal"><span class="pre">x</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<em>list-like</em>) – The ordinate data of the curve</li>
+<li><strong>u_x</strong> (<em>list-like</em>) – The uncertainty in the ordinate data of the curve</li>
+<li><strong>y</strong> (<em>list-like</em>) – The abscissa data of the curve</li>
+<li><strong>u_y</strong> (<em>list-like</em>) – The uncertainty in the abscissa data of the curve</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – The name of the data set, used for plotting, etc.</li>
+<li><strong>data</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – The type of data, whether ‘smooth’ or ‘binned’. This
+parameter affects the interpolation (and in turn, many other functions)
+by determining what the value is between data points.  For smooth data,
+linear interpolation is enacted to find values between points, for
+binned data, constant interpolation is used.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the <code class="docutils literal"><span class="pre">curve</span></code> object.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#func.curve" title="func.curve">curve</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="func.curve.add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>right</em>, <em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.add" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">add(value)</span></code> adds a value to the curve.</p>
+<p>The <code class="docutils literal"><span class="pre">add</span></code> function will add the provided value to the curve in place.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>right</strong> (<em>number</em>) – the number or curve to be added to the curve</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">curve</span></code> with added <span class="math">\(y\)</span> values</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.add_data">
+<code class="descname">add_data</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>u_x=None</em>, <em>u_y=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.add_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.add_data" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">add_data(x,y)</span></code> adds data to the already populated x and y.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<em>list-like</em>) – The ordinate data to add to the already populated
+curve object.</li>
+<li><strong>y</strong> (<em>list-like</em>) – The abscissa data to add to the already populated
+curve object.</li>
+<li><strong>u_x</strong> (<em>list-like</em>) – The uncertainty in the ordinate data to be added.</li>
+<li><strong>u_y</strong> (<em>list-like</em>) – The uncertainty in the abscissa data to be added.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A curve object with the added data, fully sorted.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#func.curve" title="func.curve">curve</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.at">
+<code class="descname">at</code><span class="sig-paren">(</span><em>x</em>, <em>extrapolation=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.at"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.at" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">at(x)</span></code> finds a value at x.</p>
+<p><code class="docutils literal"><span class="pre">at(x)</span></code> uses interpolation or extrapolation to determine the value
+of the curve at a given point, <span class="math">\(x\)</span>.  The function first checks
+if <span class="math">\(x\)</span> is in the range of the curve.  If it is in the range, the
+function calls <code class="xref py py-func docutils literal"><span class="pre">interpolate()</span></code> to determine the value.  If it is
+not in the range, the function calls <code class="xref py py-func docutils literal"><span class="pre">extrapolate()</span></code> to
+determine the value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – The coordinate of which the value is desired.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the value of the curve at point <span class="math">\(x\)</span></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)">float</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.average">
+<code class="descname">average</code><span class="sig-paren">(</span><em>xmin=None</em>, <em>xmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.average"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.average" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">average()</span></code> will find the average <code class="docutils literal"><span class="pre">y</span></code>-value across the entire
+range.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>xmin</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – The lower bound of <code class="docutils literal"><span class="pre">x</span></code>-value to include in the
+average.  Default:  <code class="docutils literal"><span class="pre">x.min()</span></code></li>
+<li><strong>xmax</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – The upper bound of <code class="docutils literal"><span class="pre">x</span></code>-value to include in the
+average.  Default: <code class="docutils literal"><span class="pre">x.max()</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A float value equal to</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="math">
+\[\bar{y} = \frac{\int_{x_{min}}^{x_{max}} y dx}
+{\int_{x_{min}}^{x_{max}} dx}\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)">float</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.bin_int">
+<code class="descname">bin_int</code><span class="sig-paren">(</span><em>x_min=None</em>, <em>x_max=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.bin_int"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.bin_int" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">bin_int</span></code> integrates a bar chart.</p>
+<p><code class="docutils literal"><span class="pre">bin_int</span></code> is a convenience function used through the class when
+calling <code class="docutils literal"><span class="pre">integrate</span></code>.  It integrates for curves that have the
+<code class="docutils literal"><span class="pre">.data</span></code> property set to <code class="docutils literal"><span class="pre">'binned'</span></code>.  It does this simply by summing
+the bin width and bin heights, such that</p>
+<div class="math">
+\[\int_{x_{min}}^{x_{max}} \approx \sum_{i=1,\dots}^{N} \Delta x
+\cdot y\]</div>
+<p>Note that this function assumes that the last bin has the same bin
+width as the penultimate bin width.  This could be remedied in certain
+ways, but I’m not sure which to choose yet.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x_min</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – <em>Optional</em> the bottom of the range to be integrated.</li>
+<li><strong>x_max</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – <em>Optional</em> the top of the range to be integrated.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the result of the integration.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">copy()</span></code> performs a deep copy of the curve and passes it out to
+another <code class="docutils literal"><span class="pre">curve</span></code> object so that it can be manipulated out-of-place.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a copy of the <code class="docutils literal"><span class="pre">curve</span></code> object calling the function</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#func.curve" title="func.curve">curve</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.crop">
+<code class="descname">crop</code><span class="sig-paren">(</span><em>y_min=None</em>, <em>y_max=None</em>, <em>x_min=None</em>, <em>x_max=None</em>, <em>replace=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.crop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.crop" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">crop(y_min,</span> <span class="pre">y_max,</span> <span class="pre">x_min,</span> <span class="pre">x_max,</span> <span class="pre">replace)</span></code> will find any data
+points that fall outside of the rectangle with corners at
+<code class="docutils literal"><span class="pre">(x_min,</span> <span class="pre">y_min)</span></code> to <code class="docutils literal"><span class="pre">(x_max,</span> <span class="pre">y_max)</span></code> and replace it with the value
+specified as <code class="docutils literal"><span class="pre">return</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x_min</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – A value for which any values with <span class="math">\(x&lt;x_{min}\)</span>
+will be replaced with the value <code class="docutils literal"><span class="pre">replace</span></code>.</li>
+<li><strong>x_max</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – A value for which any values with <span class="math">\(x&gt;x_{max}\)</span>
+will be replaced with the value <code class="docutils literal"><span class="pre">replace</span></code>.</li>
+<li><strong>y_min</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – A value for which any values with <span class="math">\(y&lt;y_{min}\)</span>
+will be replaced with the value <code class="docutils literal"><span class="pre">replace</span></code>.</li>
+<li><strong>y_max</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – A value for which any values with <span class="math">\(y&gt;y_{max}\)</span>
+will be replaced with the value <code class="docutils literal"><span class="pre">replace</span></code>.</li>
+<li><strong>replace</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – The value to replace any value outside of the
+rectangle with.  Default <code class="docutils literal"><span class="pre">None</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the cropped <code class="docutils literal"><span class="pre">curve</span></code> object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.curve_div">
+<code class="descname">curve_div</code><span class="sig-paren">(</span><em>right</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.curve_div"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.curve_div" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">curve_div(curve)</span></code> divides one curve by another.</p>
+<p>This is a helper class, usually only called through <code class="docutils literal"><span class="pre">curve.divide</span></code>,
+or using the <code class="docutils literal"><span class="pre">/</span></code> operator. The class first takes a unique set of
+<code class="docutils literal"><span class="pre">x</span></code> points that are within the range of both curves. Then, it
+divides the <code class="docutils literal"><span class="pre">y</span></code> values by the other.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>right</strong> (<em>number</em>) – the curve to divide by.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the left <code class="docutils literal"><span class="pre">curve</span></code> object, with the values divided in
+place.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.curve_mult">
+<code class="descname">curve_mult</code><span class="sig-paren">(</span><em>mult</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.curve_mult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.curve_mult" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">curve_mult(curve)</span></code> multiplies two curves together.</p>
+<p>This is a helper class, usually only called through <code class="docutils literal"><span class="pre">curve.multiply</span></code>,
+or using the <code class="docutils literal"><span class="pre">*</span></code> operator. The class first takes a unique set of
+<code class="docutils literal"><span class="pre">x</span></code> points that are within the range of both curves. Then, it
+multiplies those two together.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mult</strong> (<em>number</em>) – the curve to multiply by</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the left <code class="docutils literal"><span class="pre">curve</span></code> object, with the values multipled in
+place.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.decimate">
+<code class="descname">decimate</code><span class="sig-paren">(</span><em>R=None</em>, <em>length=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.decimate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.decimate" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">decimate(R)</span></code> will remove all but every <code class="docutils literal"><span class="pre">R</span></code> th point in the
+curve.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>R</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – An integer value telling how often to save a point.</li>
+<li><strong>length</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – <em>Alternate</em>, an integer telling how big you
+want the final array.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the decimated <code class="docutils literal"><span class="pre">curve</span></code> object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.derivative">
+<code class="descname">derivative</code><span class="sig-paren">(</span><em>x</em>, <em>epsilon=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.derivative"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.derivative" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">derivative(x)</span></code> takes the derivative at point <span class="math">\(x\)</span>.</p>
+<p><code class="docutils literal"><span class="pre">derivative(x)</span></code> takes the derivative at point provided <code class="docutils literal"><span class="pre">x</span></code>, using a
+surrounding increment of <span class="math">\(\varepsilon\)</span>, provided by <code class="docutils literal"><span class="pre">epsilon</span></code>.
+<code class="docutils literal"><span class="pre">epsilon</span></code> has a default value of <span class="math">\(\min \frac{\Delta x}{100}\)</span>,
+but you can specify this smaller if your points are closer.  Because
+we’re currently only using linear integration, this won’t change a thing
+as long as its smaller than the change in your ordinate variable.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – The ordinate to take the derivative at.</li>
+<li><strong>epsilon</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – The <span class="math">\(\Delta x\)</span> around the point at
+<span class="math">\(x\)</span> used to calculate the derivative.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the derivative at point <code class="docutils literal"><span class="pre">x</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.divide">
+<code class="descname">divide</code><span class="sig-paren">(</span><em>denominator</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.divide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.divide" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">divide(denominator)</span></code> divides a curve by a value.</p>
+<p>The <code class="docutils literal"><span class="pre">divide</span></code> function will divide the curve by the value provided in
+<code class="docutils literal"><span class="pre">numerator</span></code>.  Note that this will only change the value (<code class="docutils literal"><span class="pre">y</span></code>) of
+the function, not the abscissa (<code class="docutils literal"><span class="pre">x</span></code>).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>denominator</strong> (<em>number</em>) – the number to divide the curve by.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">none</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.divide_by">
+<code class="descname">divide_by</code><span class="sig-paren">(</span><em>numerator</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.divide_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.divide_by" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">divide_by(numerator)</span></code> divides a value by the curve.</p>
+<p>The <code class="docutils literal"><span class="pre">divide</span></code> function will divide the value provided in <code class="docutils literal"><span class="pre">numerator</span></code>
+by the values in the curve.  Note that this will only change the value
+(<code class="docutils literal"><span class="pre">y</span></code>) of the function, not the abscissa (<code class="docutils literal"><span class="pre">x</span></code>).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>numerator</strong> (<em>number</em>) – the number to be divided by the curve.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">none</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.extrapolate">
+<code class="descname">extrapolate</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.extrapolate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.extrapolate" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">extrapolate(x)</span></code> finds value of a point out of the curve range.</p>
+<p>The function uses linear extrapolation to find the value of a point
+without the range of the already existing curve.  First, it determines
+whether the requested point is above or below the existing data. Then,
+it uses <code class="xref py py-func docutils literal"><span class="pre">find_nearest_down()</span></code> or <code class="xref py py-func docutils literal"><span class="pre">find_nearest_up()</span></code> to
+find the nearest point.  Then it uses <code class="xref py py-func docutils literal"><span class="pre">find_nearest_down()</span></code> or
+<code class="xref py py-func docutils literal"><span class="pre">find_nearest_up()</span></code> to find the second nearest point.  Finally,
+it solves the following equation to determine the value</p>
+<div class="math">
+\[y=\frac{\left(y_{\downarrow}-y_{\downarrow \downarrow}
+\right)}{\left(x_{\downarrow}-x_{\downarrow \downarrow}\right)}
+\left(x-x_{\downarrow}\right)+y_{\downarrow}\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the ordinate of the value requested</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the value of the curve at point <span class="math">\(x\)</span></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)">float</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.find">
+<code class="descname">find</code><span class="sig-paren">(</span><em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.find" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">find(y)</span></code> finds values of <span class="math">\(x\)</span> that have value <span class="math">\(y\)</span></p>
+<p>This function takes a parameter <span class="math">\(y\)</span> and finds all of the ordinate
+coordinates that have that value.  Basically, this is a root-finding
+problem, but since we have a linear interpolation, the actual
+root-finding is trivial.  The function first finds all intervals in
+the dataset that include the value <span class="math">\(y\)</span>, and then solves the
+interpolation to find those <span class="math">\(x\)</span> values according to</p>
+<div class="math">
+\[x=\left(y-y_{\downarrow}\right)\frac{\left(x_{\uparrow}
+-x_{\downarrow}\right)}{\left(y_{\uparrow}-y_{\downarrow}\right)}
++x_{\downarrow}\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>y</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the value which ordinate values are desired</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a list of <span class="math">\(x\)</span> that have value <span class="math">\(y\)</span></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.find_first_above">
+<code class="descname">find_first_above</code><span class="sig-paren">(</span><em>y_min</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.find_first_above"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.find_first_above" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">find_first_above(y)</span></code> finds the first <code class="docutils literal"><span class="pre">(x,</span> <span class="pre">y)</span></code> tuple with y</dt>
+<dd>value above the given value y</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>y_min</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the comparitor value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the tuple (x, y) which is the first in <code class="docutils literal"><span class="pre">x</span></code> space where
+<code class="docutils literal"><span class="pre">y</span></code> is above the given y_min</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.find_nearest_down">
+<code class="descname">find_nearest_down</code><span class="sig-paren">(</span><em>x</em>, <em>error=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.find_nearest_down"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.find_nearest_down" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">find_nearest_down(x)</span></code> will find the actual data point that is
+closest in negative <code class="docutils literal"><span class="pre">x</span></code>-distance to the data point <code class="docutils literal"><span class="pre">x</span></code> passed to
+the function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – The data point <code class="docutils literal"><span class="pre">x</span></code> which to find the closest value
+below.</li>
+<li><strong>error</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – If true, the u_x and u_y will be returned at that
+point, even if they are <code class="docutils literal"><span class="pre">None</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a tuple containing the <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> value of the data point
+immediately below in <code class="docutils literal"><span class="pre">x</span></code> value to the value passed to the
+function, optionally containing the <code class="docutils literal"><span class="pre">u_x</span></code> and <code class="docutils literal"><span class="pre">u_y</span></code> value.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.find_nearest_up">
+<code class="descname">find_nearest_up</code><span class="sig-paren">(</span><em>x</em>, <em>error=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.find_nearest_up"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.find_nearest_up" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">find_nearest_up(x,</span> <span class="pre">error=False)</span></code> will find the actual data
+point that is closest in positive <code class="docutils literal"><span class="pre">x</span></code>-distance to the data point
+<code class="docutils literal"><span class="pre">x</span></code> passed to the function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – The data point <code class="docutils literal"><span class="pre">x</span></code> which to find the closest value
+above.</li>
+<li><strong>error</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – If true, the u_x and u_y will be returned at that
+point, even if they are <code class="docutils literal"><span class="pre">None</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a tuple containing the <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> value of the data point
+immediately above in <code class="docutils literal"><span class="pre">x</span></code> value to the value passed to the
+function, optionally containing the <code class="docutils literal"><span class="pre">u_x</span></code> and <code class="docutils literal"><span class="pre">u_y</span></code> value.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)">tuple</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.fit_at">
+<code class="descname">fit_at</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.fit_at"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.fit_at" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">fit_at</span></code> returns the point at coordinate <span class="math">\(x\)</span> from a previously fitted curve.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the ordinate variable for which the fit value is needed.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.fit_cube">
+<code class="descname">fit_cube</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.fit_cube"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.fit_cube" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">fit_cube</span></code> fits a function of order 3 to the curve.</p>
+<p><code class="docutils literal"><span class="pre">fit_cube</span></code> fits a cubic function of form <span class="math">\(y=a x^{3} + b x^{2} +
+c x + d\)</span> to the curve, returning the parameters <span class="math">\(\left(a, b,
+c, d\right)\)</span> as a tuple.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the tuple <span class="math">\(\left(a, b, c, d\right)\)</span></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.fit_exp">
+<code class="descname">fit_exp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.fit_exp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.fit_exp" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">fit_exp</span></code> fits an exponential to the function.</p>
+<p><code class="docutils literal"><span class="pre">fit_exp</span></code> fits an exponential of form <span class="math">\(y=B\cdot \exp \left(
+\alpha\cdot x\right)\)</span> to the curve, returning the parameters
+<span class="math">\(\left(\alpha, B\right)\)</span> as a tuple.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the tuple <span class="math">\(\left(\alpha, B\right)\)</span></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.fit_gauss">
+<code class="descname">fit_gauss</code><span class="sig-paren">(</span><em>guess=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.fit_gauss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.fit_gauss" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">fit_gauss</span></code> fits a gaussian function to the curve.</p>
+<p><code class="docutils literal"><span class="pre">fit_gauss</span></code> fits a gaussian function of form <span class="math">\(y=\alpha \exp
+\left[ -\frac{\left(x - \mu\right)^{2}}{2 \sigma^{2}}\right]\)</span> to the
+curve, returning the parameters <span class="math">\(\left(\alpha, \mu, \sigma\right)\)</span>
+as a tuple.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the tuple <span class="math">\(\left(\alpha, \mu, \sigma\right)\)</span></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.fit_gen">
+<code class="descname">fit_gen</code><span class="sig-paren">(</span><em>fun</em>, <em>guess=None</em>, <em>u_y=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.fit_gen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.fit_gen" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">fit_gen</span></code> fits a general function to the curve.</p>
+<p><code class="docutils literal"><span class="pre">fit_gen</span></code> fits a general function to the curve.  The general function
+is a python function that takes a parameters and an ordinate variable,
+<code class="docutils literal"><span class="pre">x</span></code> and returns the value of the function at that point, <code class="docutils literal"><span class="pre">y</span></code>.  The
+function must have the prototype <code class="docutils literal"><span class="pre">def</span> <span class="pre">func(x,</span> <span class="pre">alpha,</span> <span class="pre">beta,</span> <span class="pre">...):</span></code>.
+Then, the coefficients are returned as a tuple.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the coefficients to the general function</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.fit_lin">
+<code class="descname">fit_lin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.fit_lin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.fit_lin" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">fit_lin</span></code> fits a linear function to the curve.</p>
+<p><code class="docutils literal"><span class="pre">fit_lin</span></code> fits a linear function of form <span class="math">\(y=m\cdot x + b\)</span> to the
+curve, returning the parameters <span class="math">\(\left(m, b\right)\)</span> as a tuple.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the tuple <span class="math">\(\left(m, b\right)\)</span></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.fit_square">
+<code class="descname">fit_square</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.fit_square"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.fit_square" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">fit_square</span></code> fits a function of order 2 to the curve.</p>
+<p><code class="docutils literal"><span class="pre">fit_square</span></code> fits a quadratic function of form <span class="math">\(y=a x^{2} + b x
++ c\)</span> to the curve, returning the parameters <span class="math">\(\left(a, b,
+c\right)\)</span> as a tuple.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the tuple <span class="math">\(\left(a, b, c\right)\)</span></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.inrange">
+<code class="descname">inrange</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.inrange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.inrange" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">inrange(x)</span></code> checks if a point is within the range of data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – The data point to check if it is in the range of the
+existing curve data.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Whether or not the data is in the range of the curve data.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.integrate">
+<code class="descname">integrate</code><span class="sig-paren">(</span><em>x_min=None</em>, <em>x_max=None</em>, <em>quad=’lin’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.integrate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.integrate" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">integrate</span></code> integrates under the curve.</p>
+<p><code class="docutils literal"><span class="pre">integrate</span></code> will integrate under the given curve, providing the
+result to <span class="math">\(\int_{x_{min}}^{x_{max}}\)</span>.  <code class="docutils literal"><span class="pre">x_min</span></code> and <code class="docutils literal"><span class="pre">x_max</span></code>
+can be provided to change the range of integration.  <code class="docutils literal"><span class="pre">quad</span></code> can also
+be provided to change the quadrature, but the only quadrature currently
+supported is <code class="docutils literal"><span class="pre">'lin'</span></code> which uses trapezoidal rule to integrate the
+curve.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x_min</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – <em>Optional</em> the bottom of the range to be integrated.</li>
+<li><strong>x_max</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – <em>Optional</em> the top of the range to be integrated.</li>
+<li><strong>quad</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – <em>Optional</em> the “quadrature” to be used for numerical
+integration.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the result of the integration.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.interpolate">
+<code class="descname">interpolate</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.interpolate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.interpolate" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">interpolate(x)</span></code> finds the value of a point in the curve range.</p>
+<p>The function uses linear interpolation to find the value of a point in
+the range of the curve data.  First, it uses
+<code class="xref py py-func docutils literal"><span class="pre">find_nearest_down()</span></code> and <code class="xref py py-func docutils literal"><span class="pre">find_nearest_up()</span></code> to find the
+two points comprising the interval which <span class="math">\(x\)</span> exists in.  Then, it
+casts the linear interpolation as a line in point slope form and solves</p>
+<div class="math">
+\[y=\frac{\left(y_{1}-y_{0}\right)}{\left(x_{1}-x_{0}\right)}
+\left(x-x_{0}\right)+y_{0}\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – The coordinate of the desired value.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the value of the curve at <span class="math">\(x\)</span></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)">float</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.multiply">
+<code class="descname">multiply</code><span class="sig-paren">(</span><em>mult</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.multiply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.multiply" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">multiply(mult)</span></code> multiplies the curve by a value.</p>
+<p>The <code class="docutils literal"><span class="pre">multiply</span></code> function will multiply the curve by the value passed
+to it in <code class="docutils literal"><span class="pre">mult</span></code>.  This value can be an array with the same size or a
+scalar of type integer or float.  Note that this will only change the
+value (<code class="docutils literal"><span class="pre">y</span></code>) of the function, not the abscissa (<code class="docutils literal"><span class="pre">x</span></code>).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mult</strong> (<em>number</em>) – the number to multiply the curve by</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the curve after multiplication</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.normalize">
+<code class="descname">normalize</code><span class="sig-paren">(</span><em>xmin=None</em>, <em>xmax=None</em>, <em>norm=’int’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">normalize()</span></code> normalizes the entire curve to be normalized.</p>
+<p><strong>Caution! This will change all of the y values in the entire curve!</strong></p>
+<p>Normalize will take the data of the curve (optionally just the data
+between <code class="docutils literal"><span class="pre">xmin</span></code> and <code class="docutils literal"><span class="pre">xmax</span></code>) and normalize it based on the option
+given by <code class="docutils literal"><span class="pre">norm</span></code>.  The options for norm are <code class="docutils literal"><span class="pre">max</span></code> and <code class="docutils literal"><span class="pre">int</span></code>. For a
+<code class="docutils literal"><span class="pre">max</span></code> normalization, first the function finds the maximum value of
+the curve in the range of the <span class="math">\(x\)</span> data and adjusts all <span class="math">\(y\)</span>
+values according to</p>
+<div class="math">
+\[y = \frac{y}{y_{max}}\]</div>
+<p>For an <code class="docutils literal"><span class="pre">int</span></code> normalization, the function adjusts all <span class="math">\(y\)</span> values
+according to</p>
+<div class="math">
+\[y=\frac{y}{\int_{x_{min}}^{x_{max}}y \left( x \right) dx}\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>xmin</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – optional argument giving the lower bound of the
+integral in an integral normalization or the lower bound in which
+to find the max in a max normalization</li>
+<li><strong>xmax</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – optional argument giving the upper bound of the
+integral in an integral normalization or the upper bound in which
+to find the max in a max normalization</li>
+<li><strong>norm</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – a string of ‘max’ or ‘int’ (default ‘max’) which
+defines which of the two types of normalization to perform</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.rebin">
+<code class="descname">rebin</code><span class="sig-paren">(</span><em>x=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.rebin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.rebin" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">rebin</span></code> redistributes the curve along a new set of x values</p>
+<p><code class="docutils literal"><span class="pre">rebin(x)</span></code> takes a list-like input of new points on the ordinate and
+redistributes the abscissa so that the x values are only on those
+points.  For continuous/smooth data, this simply interpolates the
+previous curve to the new points.  For binned data, this integrates
+between left bin points and redistributes the fraction of data between
+those points.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<em>list</em>) – the new x values to redistribute the curve. If binned,
+this indicates the left edge</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the curve object with redistributed values</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.rolling_avg">
+<code class="descname">rolling_avg</code><span class="sig-paren">(</span><em>bin_width=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.rolling_avg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.rolling_avg" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">rolling_avg(bin_width)</span></code> redistributes the data on a certain bin
+width, propogating the error needed.</p>
+<p>If we have data in an array such as</p>
+<div class="math">
+\[\begin{split}\left[\begin{array}{c}
+    \vec{x}\\
+    \vec{y}
+    \end{array}\right]=\left[\begin{array}{cccc}
+    0.1 &amp; 0.75 &amp; 1.75 &amp; 1.9\\
+    1.0 &amp; 2.0 &amp; 3.0 &amp; 4.0
+    \end{array}\right]\end{split}\]</div>
+<p>and we want to see the data only on integer bins, we will return</p>
+<div class="math">
+\[\begin{split}\left[\begin{array}{c}
+    \vec{x}\\
+    \vec{y}
+    \end{array}\right]=\left[\begin{array}{cc}
+    0.0 &amp; 2.0\\
+    1.5 &amp; 3.5
+    \end{array}\right]\end{split}\]</div>
+<p>This function will also return the uncertainty in each bin, taking into
+account both the uncertainty of each value in the bin, as well as the
+uncertainty caused by standard deviation within the bin itself.  This
+can be expressed by</p>
+<div class="math">
+\[\begin{split}\left[\begin{array}{c}
+    \vec{x}\\
+    \vec{y}\\
+    \vec{u}_{x}\\
+    \vec{u}_{y}
+    \end{array}\right]=\left[\begin{array}{c}
+    \frac{\sum_{x\text{ in bin}}x}{N_{x}}\\
+    \frac{\sum_{x\text{ in bin}}y}{N_{y}}\\
+    \frac{\sum_{x\text{ in bin}}\sqrt{
+        \left(\frac{\text{bin width}}{2}\right)^{2}
+        +\text{mean}\left(\sigma_{x}\right)^{2}}}{N_{x}}\\
+    \frac{\sum_{x\text{ in bin}}\sqrt{\sigma_{y}^{2}
+        +stdev_{y}^{2}}}{N_{x}}
+    \end{array}\right]\end{split}\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bin_width</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – The width in which the redistribution will
+happen.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">The redistributed curve.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="func.curve.round_to_amt">
+<em class="property">static </em><code class="descname">round_to_amt</code><span class="sig-paren">(</span><em>num</em>, <em>amt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.round_to_amt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.round_to_amt" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">round_to_amt</span></code> is a static method that round a number to an</dt>
+<dd>arbitrary interval</dd>
+</dl>
+<p>Given a number <code class="docutils literal"><span class="pre">num</span></code> such as <span class="math">\(1.2\)</span> and an amount <code class="docutils literal"><span class="pre">amt</span></code> such
+as <span class="math">\(0.25\)</span>, <code class="docutils literal"><span class="pre">round_to_amt</span></code> would return <span class="math">\(1.20\)</span> because
+that is the closest value downward on a <span class="math">\(0.25\)</span> wide grid.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>num</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the number to be rounded.</li>
+<li><strong>amt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the amount to round the number to.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the number after it has been rounded.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.sort">
+<code class="descname">sort</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.sort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.sort" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">sort()</span></code> sorts the list depending on the <span class="math">\(x\)</span> coordinate.</p>
+<p><code class="docutils literal"><span class="pre">sort()</span></code> sorts all of the data input to the curve so that it is
+ordered from decreasing <span class="math">\(x\)</span> to increasing <span class="math">\(x\)</span>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the <code class="docutils literal"><span class="pre">curve</span></code> object, but it has been sorted in-place.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#func.curve" title="func.curve">curve</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.trapezoidal">
+<code class="descname">trapezoidal</code><span class="sig-paren">(</span><em>x_min</em>, <em>x_max</em>, <em>quad=’lin’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.trapezoidal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.trapezoidal" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">trapezoidal()</span></code> uses the trapezoidal rule to integrate the curve.</p>
+<p><code class="docutils literal"><span class="pre">trapezoidal(x_min,</span> <span class="pre">x_max)</span></code> integrates the curve using the
+trapezoidal rule, i.e.</p>
+<div class="math">
+\[\int_{x_{min}}^{x_{max}}y dx \approx
+\sum_{i=1,\dots}^{N} \left(x_{\uparrow} - x_{\downarrow}\right)
+\cdot \left( \frac{y_{\downarrow} + y_{uparrow}}{2}\right)\]</div>
+<p>Right now, it uses <span class="math">\(10 \times N_{x}\)</span> points to integrate between
+values, but that is completely arbitrary and I’ll be looking into
+changing this. There is also the ability to pass <code class="docutils literal"><span class="pre">quad</span></code> to the
+function as <code class="docutils literal"><span class="pre">'log'</span></code> <strong>CURRENTLY FAILING</strong> and it will calculate the
+trapezoids in logarithmic space, giving exact integrals for exponential
+functions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x_min</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the left bound of integration.</li>
+<li><strong>x_max</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the right bound of integration.</li>
+<li><strong>quad</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the type of quadrature to use, currently only <code class="docutils literal"><span class="pre">'lin'</span></code>
+or <code class="docutils literal"><span class="pre">'log'</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the integral of the curve from trapezoidal rule.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="func.curve.u_y_at">
+<code class="descname">u_y_at</code><span class="sig-paren">(</span><em>x</em>, <em>dx=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve.u_y_at"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve.u_y_at" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">u_y_at(x)</span></code> finds a the uncertainty of a value at x.</p>
+<p><code class="docutils literal"><span class="pre">u_y_at(x)</span></code> uses interpolation or extrapolation to determine the
+uncertainty of the value of the curve at a given point, <span class="math">\(x\)</span>.  The
+function first checks if <span class="math">\(x\)</span> is in the range of the curve.  If it
+is in the range, the function calls <code class="xref py py-func docutils literal"><span class="pre">interpolate()</span></code> and
+<code class="xref py py-func docutils literal"><span class="pre">propogate_error()</span></code> to find the uncertainty of the point.  If it
+is not in the range, the function calls <code class="xref py py-func docutils literal"><span class="pre">extrapolate()</span></code> and
+<code class="xref py py-func docutils literal"><span class="pre">propogate_error()</span></code> to determine the value.</p>
+<p>We use the following equation to perform the interpolation:</p>
+<div class="math">
+\[y\left(x\right) = \left(x-x_{\downarrow}\right)
+    \frac{\left(y_{\uparrow}-y_{\downarrow}\right)}
+         {\left(x_{\uparrow}-x_{\downarrow}\right)}\]</div>
+<p>And using the <em>error propagation formula</em> from (Knoll, 1999), which is</p>
+<div class="math">
+\[\sigma_{\zeta}^{2} =
+    \left(\frac{\partial\zeta}{\partial x}\right)^{2}\sigma_{x}^{2}
+    +
+    \left(\frac{\partial\zeta}{\partial y}\right)^{2}\sigma_{y}^{2}\]</div>
+<p>for a derived value <span class="math">\(\zeta\)</span>, we can apply this to interpolation
+and get:</p>
+<div class="math">
+\[\sigma_{y}^{2} =
+    \left(\frac{\partial y}{\partial x}\right)^{2}\sigma_{x}^{2}
+    +
+    \left(\frac{\partial y}{\partial x_{\downarrow}}\right)^{2}
+    \sigma_{x_{\downarrow}}^{2}
+    +
+    \left(\frac{\partial y}{\partial x_{\uparrow}}\right)^{2}
+    \sigma_{x_{\uparrow}}^{2}
+    +
+    \left(\frac{\partial y}{\partial y_{\downarrow}}\right)^{2}
+    \sigma_{y_{\downarrow}}^{2}
+    +
+    \left(\frac{\partial y}{\partial y_{\uparrow}}\right)^{2}
+    \sigma_{y_{\uparrow}}^{2}\]</div>
+<p>and, performing the derivatives, we can get:</p>
+<div class="math">
+\[\begin{split}\sigma_{y}^{2}=\left(\frac{\left(y_{\uparrow}-y_{\downarrow}\right)}
+{\left(x_{\uparrow}-x_{\downarrow}\right)}\right)^{2}
+\sigma_{x}^{2}+\left(-\left(x-x_{\uparrow}\right)
+\frac{\left(y_{\uparrow}-y_{\downarrow}\right)}
+{\left(x_{\uparrow}-x_{\downarrow}\right)^{2}}\right)^{2}
+\sigma_{x_{\downarrow}}^{2}+\left(\left(x-x_{\downarrow}\right)
+\frac{\left(y_{\uparrow}-y_{\downarrow}\right)}{
+\left(x_{\uparrow}-x_{\downarrow}\right)^{2}}\right)^{2}
+\sigma_{x_{\uparrow}}^{2}\\+\left(-\frac{\left(x-x_{\downarrow}
+\right)}{\left(x_{\uparrow}-x_{\downarrow}\right)}\right)^{2}
+\sigma_{y_{\downarrow}}^{2}+\left(\frac{
+\left(x-x_{\downarrow}\right)}{\left(x_{\uparrow}-x_{\downarrow}
+\right)}\right)^{2}\sigma_{y_{\uparrow}}^{2}\end{split}\]</div>
+<p>Finally, if we take <span class="math">\(m=\frac{\left(y_{\uparrow}-y_{\downarrow}
+\right)}{\left(x_{\uparrow}-x_{\downarrow}\right)}\)</span>, and
+<span class="math">\(\Delta\xi=\frac{\left(x-x_{\downarrow}\right)}{\left(x_{
+\uparrow}-x_{\downarrow}\right)}\)</span>, we can get:</p>
+<div class="math">
+\[\sigma_{y}^{2}=m^{2}\left[\sigma_{x}^{2}+
+\sigma_{y_{\downarrow}}^{2}+\sigma_{y_{\uparrow}}^{2}+
+\Delta\xi^{2}\left(\sigma_{x_{\downarrow}}^{2}+
+\sigma_{x_{\uparrow}}^{2}\right)\right]\]</div>
+<p>and the square root of that is the uncertainty.</p>
+<div class="math">
+\[\sigma_{y}=m\sqrt{\sigma_{x}^{2}+\sigma_{y_{\downarrow}}^{2}+
+\sigma_{y_{\uparrow}}^{2}+\Delta\xi^{2}\left(
+\sigma_{x_{\downarrow}}^{2}+\sigma_{x_{\uparrow}}^{2}\right)}\]</div>
+<p>Note that if an uncertainty in x is not supplied, that the first term
+will go to zero, giving</p>
+<div class="math">
+\[\require{cancel}
+\sigma_{y}=m\sqrt{\cancel{\sigma_{x}^{2}}
++\sigma_{y_{\downarrow}}^{2}+
+\sigma_{y_{\uparrow}}^{2}+\Delta\xi^{2}\left(
+\sigma_{x_{\downarrow}}^{2}+\sigma_{x_{\uparrow}}^{2}\right)}\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – The coordinate of which the value is desired.</li>
+<li><strong>dx</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – <em>Optional</em> The uncertainty in the x coordinate
+requested, given in the above equations as <span class="math">\(\sigma_{x}\)</span>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><span class="math">\(\sigma_{y}\)</span>, the uncertainty of the value of the curve
+at point <span class="math">\(x\)</span></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)">float</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="undocumented-python-objects">
+<h1>Undocumented Python objects<a class="headerlink" href="#undocumented-python-objects" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="test-coverage">
+<h2>Test Coverage<a class="headerlink" href="#test-coverage" title="Permalink to this headline">¶</a></h2>
+<iframe width=100% height=230px
+ frameBorder="0" src="coverage/index.html"></iframe><p>Contents:</p>
+<div class="toctree-wrapper compound">
+</div>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015, Alex Hagen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.1.<br/>
+    </p>
+  </div>
+</footer>
   </body>
-
-  <script type="text/javascript">
-  var waypoints1 = $('h1').waypoint({
-    handler: function(direction) {
-      $('.bc-title').text('AH');
-      $('.bc-h1').text(" > " + $(this).attr("abbr"));
-    },
-    offset: 59
-  })
-  var waypoints2 = $('h2').waypoint({
-    handler: function(direction) {
-      $('.bc-title').text('AH');
-      $('.bc-h2').text(" > " + $(this).attr("abbr"));
-    },
-    offset: 59
-  })
-</script>
 </html>
-

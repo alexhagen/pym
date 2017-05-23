@@ -82,7 +82,7 @@ plot.export('docs/_static/curve_plotting', ratio='silver')
 plot.show('A pretty chart from data made for a pym curve')
 ```
 
-![curve plotting](docs/_static/curve_plotting.svg)
+![curve plotting](docs/_static/curve_plotting.svg?raw=yes)
 
 
 ### Integration and normalization

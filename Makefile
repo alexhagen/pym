@@ -1,4 +1,4 @@
-all: tests
+all: tests docs publish
 
 tests: FORCE
 	nosetests --with-coverage --cover-html --cover-package=pym --cover-html-dir=docs/_build/html/coverage
@@ -8,7 +8,8 @@ docs: FORCE
 	cd ~/code/pym/; \
 	jupyter nbconvert docs/pym_readme.ipynb --to html --template=basic --execute; \
 	mv docs/pym_readme.html docs/readme.html; \
-	pandoc docs/readme.html --to=markdown_github -o README.md; \
+	jupyter nbconvert docs/pym_readme.ipynb --to markdown --execute; \
+	mv docs/readme.md README.md; \
   cd ~/code/pym/docs; \
 	make coverage; \
 	cp _build/coverage/python.txt ./doc_coverage.rst; \

@@ -11,6 +11,7 @@ docs: FORCE
 	cd ~/code/pym/; \
 	jupyter nbconvert docs/pym_readme.ipynb --to html --template=basic --execute; \
 	mv docs/pym_readme.html docs/readme.html; \
+	pandoc docs/readme.html -o README.md; \
   cd ~/code/pym/docs; \
 	make coverage; \
 	cp _build/coverage/python.txt ./doc_coverage.rst; \

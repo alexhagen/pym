@@ -82,7 +82,7 @@ plot.export('docs/_static/curve_plotting', ratio='silver')
 plot.show('A pretty chart from data made for a pym curve')
 ```
 
-![curve plotting](docs/_static/curve_plotting.svg?raw=yes)
+![curve plotting](docs/_static/curve_plotting.svg?raw=fixyourshitgithub)
 
 
 ### Integration and normalization
@@ -136,7 +136,7 @@ plot.show('Normalized curves have a total integral of 1.0')
 
 
 <div class='pygfigure' name='Normalized curves have a total integral of 1.0' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-<img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='docs/_static/int_norm.svg?327370735' />
+<img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='docs/_static/int_norm.svg?raw=fixyourshitgithub' />
 <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 2:</b> Normalized curves have a total integral of 1.0</div>
 </div>
 

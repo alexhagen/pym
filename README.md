@@ -84,11 +84,11 @@ plot.show('A pretty chart from data made for a pym curve')
 
 
 
-                <div class='pygfigure' name='A pretty chart from data made for a pym curve' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='docs/_static/curve_plotting.svg?628034410' />
-                    <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 1:</b> A pretty chart from data made for a pym curve</div>
-                </div>
-            
+<div class='pygfigure' name='A pretty chart from data made for a pym curve' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
+<img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='docs/_static/curve_plotting.svg?628034410' />
+<div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 1:</b> A pretty chart from data made for a pym curve</div>
+</div>
+
 
 
 ### Integration and normalization
@@ -141,11 +141,11 @@ plot.show('Normalized curves have a total integral of 1.0')
 
 
 
-                <div class='pygfigure' name='Normalized curves have a total integral of 1.0' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='docs/_static/int_norm.svg?327370735' />
-                    <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 2:</b> Normalized curves have a total integral of 1.0</div>
-                </div>
-            
+<div class='pygfigure' name='Normalized curves have a total integral of 1.0' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
+<img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='docs/_static/int_norm.svg?327370735' />
+<div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 2:</b> Normalized curves have a total integral of 1.0</div>
+</div>
+
 
 
 ### Curve arithmetic
@@ -178,11 +178,11 @@ plot.show('Trigonometric identity and its contributions from $\cos^{2}$ and $\si
 
 
 
-                <div class='pygfigure' name='Trigonometric identity and its contributions from $\cos^{2}$ and $\sin^{2}$' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='docs/_static/identity.svg?745487422' />
-                    <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 3:</b> Trigonometric identity and its contributions from $\cos^{2}$ and $\sin^{2}$</div>
-                </div>
-            
+<div class='pygfigure' name='Trigonometric identity and its contributions from $\cos^{2}$ and $\sin^{2}$' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
+<img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='docs/_static/identity.svg?745487422' />
+<div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 3:</b> Trigonometric identity and its contributions from $\cos^{2}$ and $\sin^{2}$</div>
+</div>
+
 
 
 ## Subclassing
@@ -218,7 +218,7 @@ class trail(pym.curve):
         # finally, we initalize the parent class ``curve`` of this object with the data downloaded
         # and the name
         super(trail, self).__init__(mile, elev, name=trail_name)
-        
+
 # lets download three long distance western trails
 pct = trail('pacific crest trail')
 cdt = trail('continental divide trail')
@@ -243,7 +243,7 @@ plot.show('First section elevation of several long distance hiking trails')
                     <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='docs/_static/trail_elevations.svg?153905143' />
                     <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 4:</b> First section elevation of several long distance hiking trails</div>
                 </div>
-            
+
 
 
 ## Fitting

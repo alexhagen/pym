@@ -18,10 +18,12 @@ docs: FORCE
 	make html; \
 
 publish: FORCE
-	cd ~/code/pym/docs/; \
+	cd ~/code/pym/docs; \
 	cp -r _build/html/* ~/pages/pym; \
-	cd ~/pages/pym/docs; \
+	cd ~/pages/pym; \
 	git add *; \
+	touch .nojekyll; \
+	git add .nojekyll; \
 	git commit -am "$(shell git log -1 --pretty=%B | tr -d '\n')"; \
 	git push origin gh-pages; \
 	cd ~/code/pym

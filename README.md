@@ -191,7 +191,7 @@ In \[2\]:
 name="A pretty chart from data made for a pym curve"
 style="text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;">
 
-![](_static/curve_plotting.svg?1729216546)
+![](_static/curve_plotting.svg?594072040)
 <div class="figurecaption" style="margin: auto; text-align: center;">
 
 **Figure 1:** A pretty chart from data made for a pym curve
@@ -311,7 +311,7 @@ In \[3\]:
 name="Normalized curves have a total integral of 1.0"
 style="text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;">
 
-![](_static/int_norm.svg?1050454494)
+![](_static/int_norm.svg?83514618)
 <div class="figurecaption" style="margin: auto; text-align: center;">
 
 **Figure 2:** Normalized curves have a total integral of 1.0
@@ -415,7 +415,7 @@ In \[4\]:
 name="Trigonometric identity and its contributions from $\cos^{2}$ and $\sin^{2}$"
 style="text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;">
 
-![](_static/identity.svg?1619550959)
+![](_static/identity.svg?729022304)
 <div class="figurecaption" style="margin: auto; text-align: center;">
 
 **Figure 3:** Trigonometric identity and its contributions from
@@ -545,7 +545,7 @@ In \[5\]:
 name="First section elevation of several long distance hiking trails"
 style="text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;">
 
-![](_static/trail_elevations.svg?750206327)
+![](_static/trail_elevations.svg?1838488066)
 <div class="figurecaption" style="margin: auto; text-align: center;">
 
 **Figure 4:** First section elevation of several long distance hiking

@@ -3,8 +3,10 @@ all: tests docs publish
 tests: FORCE
 	nosetests --with-coverage --cover-html --cover-package=pym --cover-html-dir=docs/_build/html/coverage; \
 	nosetests --with-coverage --cover-package=pym; \
+	cd ~/code/pym/docs; \
 	make coverage; \
-	cp _build/coverage/python.txt ./doc_coverage.rst;
+	cp _build/coverage/python.txt ./doc_coverage.rst; \
+	cd ~/code/pym/
 
 docs: FORCE
 	jupyter nbconvert docs/pym_readme.ipynb --to html --template=basic --execute; \

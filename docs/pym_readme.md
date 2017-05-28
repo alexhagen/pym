@@ -80,7 +80,7 @@ plot.show('A pretty chart from data made for a pym curve')
 
 
                 <div class='pygfigure' name='A pretty chart from data made for a pym curve' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/curve_plotting.svg?750480266' />
+                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/curve_plotting.svg?603351684' />
                     <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 1:</b> A pretty chart from data made for a pym curve</div>
                 </div>
             
@@ -137,7 +137,7 @@ plot.show('Normalized curves have a total integral of 1.0')
 
 
                 <div class='pygfigure' name='Normalized curves have a total integral of 1.0' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/int_norm.svg?1900945700' />
+                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/int_norm.svg?193162053' />
                     <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 2:</b> Normalized curves have a total integral of 1.0</div>
                 </div>
             
@@ -174,7 +174,7 @@ plot.show('Trigonometric identity and its contributions from $\cos^{2}$ and $\si
 
 
                 <div class='pygfigure' name='Trigonometric identity and its contributions from $\cos^{2}$ and $\sin^{2}$' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/identity.svg?683575342' />
+                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/identity.svg?1584943411' />
                     <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 3:</b> Trigonometric identity and its contributions from $\cos^{2}$ and $\sin^{2}$</div>
                 </div>
             
@@ -235,7 +235,7 @@ plot.show('First section elevation of several long distance hiking trails')
 
 
                 <div class='pygfigure' name='First section elevation of several long distance hiking trails' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/trail_elevations.svg?519946448' />
+                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/trail_elevations.svg?118859925' />
                     <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 4:</b> First section elevation of several long distance hiking trails</div>
                 </div>
             
@@ -292,14 +292,14 @@ times_f = [time.strftime('%Y', time.gmtime(_x)) for _x in times]
 plot.ax.xaxis.set_ticks(times)
 plot.ax.xaxis.set_ticklabels(times_f)
 # finally, lets export
-plot.export('trail_running', ratio='silver')
+plot.export('_static/trail_running', ratio='silver')
 plot.show('Fitting Trail Running Trends with a sinusoid to show its periodic nature')
 ```
 
 
 
                 <div class='pygfigure' name='Fitting Trail Running Trends with a sinusoid to show its periodic nature' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='trail_running.svg?1301352968' />
+                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/trail_running.svg?1442826436' />
                     <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 5:</b> Fitting Trail Running Trends with a sinusoid to show its periodic nature</div>
                 </div>
             

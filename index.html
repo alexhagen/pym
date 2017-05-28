@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class Documentation for func.curve &#8212; pym 0.1a1 documentation</title>
+    <title>Pym - a Python Math library &#8212; pym 0.1a1 documentation</title>
     
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -78,7 +78,8 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Class Documentation for func.curve</a></li>
+<li><a class="reference internal" href="#">Pym - a Python Math library</a></li>
+<li><a class="reference internal" href="#func-curve">func.curve</a></li>
 <li><a class="reference internal" href="#undocumented-python-objects">Undocumented Python objects</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a><ul>
 <li><a class="reference internal" href="#test-coverage">Test Coverage</a></li>
@@ -120,7 +121,19 @@
   <div class="row">
     <div class="col-md-12 content">
       
-  
+  <div class="section" id="pym-a-python-math-library">
+<h1>Pym - a Python Math library<a class="headerlink" href="#pym-a-python-math-library" title="Permalink to this headline">¶</a></h1>
+<p>Pym is a library for some numerical methods written in python for general use.
+It strives to be lightweight and easy to use, but if you haven’t read the
+introduction and motivation <a class="reference external" href="http://alexhagen.github.io/pym/">here</a>, you
+might want to.  In general, you should use this library if you want to use
+easy integration, interpolation, extrapolation, and some graphing methods.
+Many of the numerical method algorithms come from Brian Bradie’s great book,
+A Friendly Introduction to Numerical Analysis, and the theory and support for
+those methods can be found in that book. This documentation will give cursory
+explanations of the numerical methods used, but is written to be more
+of a practical guide for coders. Good luck and happy coding!</p>
+
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
@@ -129,7 +142,7 @@
 <h1 id="pym---A-math-and-numerical-methods-library-in-python">pym - A math and numerical methods library in python<a class="anchor-link" href="#pym---A-math-and-numerical-methods-library-in-python">&#182;</a></h1><p>Last Updated on 11/12/15</p>
 <p>Written by <a href="http://alexhagen.github.io">Alex Hagen</a></p>
 <p>Hosted at <a href="http://github.com/alexhagen/pym">github.com/alexhagen/pym</a></p>
-<p>Documentation at <a href="http://alexhagen.github.io/pym/">alexhagen.github.io/pym/</a></p>
+<p>Documentation at <a href="docs/">alexhagen.github.io/pym/docs</a></p>
 <p><code>pym</code> (pronounced <i>pim</i>) is a pretty simple numerical methods library for
 python.  It can be used to do interpolation, extrapolation, integration,
 normalization, etc.  In general, it is a replication of Brian Bradie's book
@@ -208,17 +221,16 @@ the following code</p>
 <span class="n">plot</span> <span class="o">=</span> <span class="n">cos</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;#FC8D82&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">addto</span><span class="o">=</span><span class="n">plot</span><span class="p">)</span>
 
 <span class="c1"># make it pretty with some shading, lines, changing limits, and labels</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">sin</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">sin</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">sin</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;#ccccff&#39;</span><span class="p">)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">cos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">cos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">cos</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;#ffcccc&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">sin_data</span><span class="p">,</span> <span class="n">cos_data</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;#ccccff&#39;</span><span class="p">)</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">lines_on</span><span class="p">()</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">markers_off</span><span class="p">()</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">4.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;x-coordinate ($x$) [$cm$]&#39;</span><span class="p">)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;y-coordinate ($y$) [$cm$]&#39;</span><span class="p">)</span>
+<span class="c1">#plot.xlabel(r&#39;x-coordinate ($x$) [$cm$]&#39;)</span>
+<span class="c1">#plot.ylabel(r&#39;y-coordinate ($y$) [$cm$]&#39;)</span>
 
 <span class="c1"># export it to a websvg (which doesnt convert text to paths)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s1">&#39;_static/curve_plotting&#39;</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="s1">&#39;silver&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s1">&#39;_static/curve_plotting&#39;</span><span class="p">)</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s1">&#39;A pretty chart from data made for a pym curve&#39;</span><span class="p">)</span>
 </pre></div>
 
@@ -230,12 +242,14 @@ the following code</p>
 <div class="output">
 
 
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
+
 
 <div class="output_html rendered_html output_subarea ">
 
-                <div class='pygfigure' name='A pretty chart from data made for a pym curve' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/curve_plotting.svg?401636465' />
+                <div class='figure' name='A pretty chart from data made for a pym curve' style='align: center; margin-left: auto; margin-right: auto;'>
+                    <img style='margin: auto; max-width:800px; width:1250.000000px; height: auto;' src='_static/curve_plotting.svg?1860736812' />
                     <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 1:</b> A pretty chart from data made for a pym curve</div>
                 </div>
             
@@ -294,13 +308,13 @@ integral of 1.0.</p>
                       <span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span> <span class="n">place</span><span class="o">=</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">))</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">lines_on</span><span class="p">()</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">markers_off</span><span class="p">()</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;x-coordinate ($x$) [$cm$]&#39;</span><span class="p">)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;y-coordinate ($y$) [$cm$]&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;$x$&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;$y$&#39;</span><span class="p">)</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
 
 <span class="c1"># export it to a websvg (which doesnt convert text to paths)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s1">&#39;_static/int_norm&#39;</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="s1">&#39;silver&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s1">&#39;_static/int_norm&#39;</span><span class="p">)</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s1">&#39;Normalized curves have a total integral of 1.0&#39;</span><span class="p">)</span>
 </pre></div>
 
@@ -312,12 +326,14 @@ integral of 1.0.</p>
 <div class="output">
 
 
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
+
 
 <div class="output_html rendered_html output_subarea ">
 
-                <div class='pygfigure' name='Normalized curves have a total integral of 1.0' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/int_norm.svg?1268519564' />
+                <div class='figure' name='Normalized curves have a total integral of 1.0' style='align: center; margin-left: auto; margin-right: auto;'>
+                    <img style='margin: auto; max-width:800px; width:1250.000000px; height: auto;' src='_static/int_norm.svg?339796519' />
                     <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 2:</b> Normalized curves have a total integral of 1.0</div>
                 </div>
             
@@ -352,17 +368,13 @@ integral of 1.0.</p>
 <span class="n">plot</span> <span class="o">=</span> <span class="n">one</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;#999999&#39;</span><span class="p">)</span>
 <span class="n">plot</span> <span class="o">=</span> <span class="n">sin2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;#FC8D82&#39;</span><span class="p">,</span> <span class="n">addto</span><span class="o">=</span><span class="n">plot</span><span class="p">)</span>
 
-<span class="n">plot</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">sin2</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">sin2</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">sin2</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;#ffcccc&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\sin^{2} \left( \theta \right)&#39;</span><span class="p">)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">cos2</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">sin2</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">sin2</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">cos2</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;#ccccff&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\sin^{2} \left( \theta \right)&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">sin2</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">sin2</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">sin2</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;#ffcccc&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;$\sin^{2} \left( </span><span class="se">\t</span><span class="s1">heta </span><span class="se">\r</span><span class="s1">ight)&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">cos2</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">sin2</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">sin2</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">cos2</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;#ccccff&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;$\sin^{2} \left( </span><span class="se">\t</span><span class="s1">heta </span><span class="se">\r</span><span class="s1">ight)&#39;</span><span class="p">)</span>
 
 <span class="n">plot</span><span class="o">.</span><span class="n">markers_off</span><span class="p">()</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">lines_on</span><span class="p">()</span>
 
-<span class="n">plot</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
-<span class="c1">#plot.legend(loc=1)</span>
-
-<span class="n">plot</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s1">&#39;_static/identity&#39;</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="s1">&#39;silver&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s1">&#39;_static/identity&#39;</span><span class="p">)</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s1">&#39;Trigonometric identity and its contributions from $\cos^{2}$ and $\sin^{2}$&#39;</span><span class="p">)</span>
 </pre></div>
 
@@ -374,12 +386,14 @@ integral of 1.0.</p>
 <div class="output">
 
 
-<div class="output_area"><div class="prompt"></div>
+<div class="output_area">
+<div class="prompt"></div>
+
 
 <div class="output_html rendered_html output_subarea ">
 
-                <div class='pygfigure' name='Trigonometric identity and its contributions from $\cos^{2}$ and $\sin^{2}$' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/identity.svg?752651494' />
+                <div class='figure' name='Trigonometric identity and its contributions from $\cos^{2}$ and $\sin^{2}$' style='align: center; margin-left: auto; margin-right: auto;'>
+                    <img style='margin: auto; max-width:800px; width:1250.000000px; height: auto;' src='_static/identity.svg?981919967' />
                     <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 3:</b> Trigonometric identity and its contributions from $\cos^{2}$ and $\sin^{2}$</div>
                 </div>
             
@@ -396,7 +410,7 @@ integral of 1.0.</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Subclassing">Subclassing<a class="anchor-link" href="#Subclassing">&#182;</a></h2><p><code>pym</code> is easily subclassable.  I personally like to define classes for data I download from instruments and write a load script and add some properties to the object. The following example shows elevation plotting for the Pacific Crest Trail using the wonderful <a href="www.postholer.com">postholer.com</a>.</p>
+<h2 id="Subclassing">Subclassing<a class="anchor-link" href="#Subclassing">&#182;</a></h2><p><code>pym</code> is easily subclassable.  I personally like to define classes for data I download from instruments and write a load script and add some properties to the object.</p>
 
 </div>
 </div>
@@ -406,73 +420,10 @@ integral of 1.0.</p>
 <div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">urllib</span>
-<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
-
-<span class="k">class</span> <span class="nc">trail</span><span class="p">(</span><span class="n">pym</span><span class="o">.</span><span class="n">curve</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trail_name</span><span class="p">):</span>
-        <span class="c1"># first we have to download the trail off of postholer.com</span>
-        <span class="n">trail_string</span> <span class="o">=</span> <span class="n">trail_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;http://www.postholer.com/databook/{trail}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">trail</span><span class="o">=</span><span class="n">trail_string</span><span class="p">)</span>
-        <span class="n">page</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-        <span class="n">pagestr</span> <span class="o">=</span> <span class="n">page</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">pagestr</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>
-        <span class="c1"># then we have to find the table with the mileage and elevation data</span>
-        <span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;table&quot;</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;tr&quot;</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;td&quot;</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="n">cell</span><span class="o">.</span><span class="n">string</span> <span class="o">==</span> <span class="s2">&quot;Elev&quot;</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="n">table</span>
-                        <span class="k">break</span>
-        <span class="c1"># then we read the mileage and elevation data into lists</span>
-        <span class="n">mile</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">elev</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;tr&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]:</span>
-            <span class="n">mile</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;td&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">string</span><span class="p">)])</span>
-            <span class="n">elev</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;td&quot;</span><span class="p">)[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">string</span><span class="p">)])</span>
-        <span class="c1"># finally, we initalize the parent class ``curve`` of this object with the data downloaded</span>
-        <span class="c1"># and the name</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">trail</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">mile</span><span class="p">,</span> <span class="n">elev</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">trail_name</span><span class="p">)</span>
-        
-<span class="c1"># lets download three long distance western trails</span>
-<span class="n">pct</span> <span class="o">=</span> <span class="n">trail</span><span class="p">(</span><span class="s1">&#39;pacific crest trail&#39;</span><span class="p">)</span>
-<span class="n">cdt</span> <span class="o">=</span> <span class="n">trail</span><span class="p">(</span><span class="s1">&#39;continental divide trail&#39;</span><span class="p">)</span>
-<span class="n">ct</span> <span class="o">=</span> <span class="n">trail</span><span class="p">(</span><span class="s1">&#39;colorado trail&#39;</span><span class="p">)</span>
-<span class="c1"># now that we&#39;ve initialized the ``trail``s, we can treat them as curves</span>
-<span class="n">plot</span> <span class="o">=</span> <span class="n">pct</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;#7299c6&#39;</span><span class="p">)</span>
-<span class="n">plot</span> <span class="o">=</span> <span class="n">cdt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;#baa892&#39;</span><span class="p">,</span> <span class="n">addto</span><span class="o">=</span><span class="n">plot</span><span class="p">)</span>
-<span class="n">plot</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;#3f4b00&#39;</span><span class="p">,</span> <span class="n">addto</span><span class="o">=</span><span class="n">plot</span><span class="p">)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Miles since trail start ($s$) [$\unit{mi}$]&quot;</span><span class="p">)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Elevation ($E$) [$\unit{ft}$]&quot;</span><span class="p">)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">lines_on</span><span class="p">()</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">markers_off</span><span class="p">()</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">12000</span><span class="p">)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s1">&#39;_static/trail_elevations&#39;</span><span class="p">)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s1">&#39;First section elevation of several long distance hiking trails&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># coming soon</span>
 </pre></div>
 
 </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt"></div>
-
-<div class="output_html rendered_html output_subarea ">
-
-                <div class='pygfigure' name='First section elevation of several long distance hiking trails' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/trail_elevations.svg?402582695' />
-                    <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 4:</b> First section elevation of several long distance hiking trails</div>
-                </div>
-            
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -482,7 +433,7 @@ integral of 1.0.</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Fitting">Fitting<a class="anchor-link" href="#Fitting">&#182;</a></h2><p><code>pym</code> has a quick interface for fitting functions to its curves, and then plotting these.</p>
+<h2 id="Fitting">Fitting<a class="anchor-link" href="#Fitting">&#182;</a></h2><p><code>pym</code> has a quick interface for fitting curves to its curves, and then plotting these.</p>
 
 </div>
 </div>
@@ -525,8 +476,9 @@ integral of 1.0.</p>
 </div>
  
 
-<div class="section" id="class-documentation-for-func-curve">
-<h1>Class Documentation for func.curve<a class="headerlink" href="#class-documentation-for-func-curve" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="func-curve">
+<h1>func.curve<a class="headerlink" href="#func-curve" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="func.curve">
 <em class="property">class </em><code class="descclassname">func.</code><code class="descname">curve</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>name=”</em>, <em>u_x=None</em>, <em>u_y=None</em>, <em>data=’smooth’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/func.html#curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#func.curve" title="Permalink to this definition">¶</a></dt>
@@ -1562,7 +1514,7 @@ at point <span class="math">\(x\)</span></p>
     </p>
     <p>
         &copy; Copyright 2015, Alex Hagen.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.2+.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.1.<br/>
     </p>
   </div>
 </footer>

@@ -14,7 +14,7 @@ docs: FORCE
   cd ~/code/pym/docs; \
 	make coverage; \
 	cp _build/coverage/python.txt ./doc_coverage.rst; \
-	make html; \
+	make html
 
 publish: FORCE
 	mkdir -p ~/pages/pym; \

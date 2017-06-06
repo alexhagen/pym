@@ -107,15 +107,15 @@ class curve(object):
         :return: A curve object with the added data, fully sorted.
         :rtype: curve
         """
-        self.x = np.append(self.x, x)
-        self.y = np.append(self.y, y)
+        self.x = np.append([float(item) for item in self.x], list(x))
+        self.y = np.append([float(item) for item in self.y], list(y))
         if self.u_x is not None:
-            self.u_x = np.append(self.u_x, u_x)
+            self.u_x = np.append([float(item) for item in self.u_x], list(u_x))
         if self.u_y is not None:
-            self.u_y = np.append(self.u_y, u_y)
+            self.u_y = np.append([float(item) for item in self.u_y], list(u_y))
         self.sort()
 
-    def copy(self):
+    def copy(self, name=None):
         r""" ``copy()`` performs a deep copy of the curve and passes it out to
         another ``curve`` object so that it can be manipulated out-of-place.
 
@@ -130,7 +130,10 @@ class curve(object):
             newuy = self.u_y.copy()
         if self.u_x is not None:
             newux = self.u_x.copy()
-        newname = self.name
+        if name is not None:
+            newname = name
+        else:
+            newname = self.name
         return curve(newx, newy, u_y=newuy, u_x=newux, data=self.data, name=newname)
 
     def crop(self, y_min=None, y_max=None, x_min=None, x_max=None,
@@ -1156,7 +1159,9 @@ class curve(object):
         :rtype: curve
         """
         left = self.copy()
-        left.add_data(other.x, other.y)
+        _x = [float(item) for item in other.x]
+        _y = [float(item) for item in other.y]
+        left.add_data(_x, _y)
         return left
 
     ###########################################################################

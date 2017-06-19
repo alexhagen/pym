@@ -1235,6 +1235,21 @@ class curve(object):
         self.fit_gen(gauss_fun, guess=guess)
         return self
 
+    def fit_pow(self, guess=None):
+        r""" ``fit_gauss`` fits a gaussian function to the curve.
+
+        ``fit_gauss`` fits a gaussian function of form :math:`y=\alpha \exp
+        \left[ -\frac{\left(x - \mu\right)^{2}}{2 \sigma^{2}}\right]` to the
+        curve, returning the parameters :math:`\left(\alpha, \mu, \sigma\right)`
+        as a tuple.
+
+        :returns: the tuple :math:`\left(\alpha, \mu, \sigma\right)`
+        """
+        def pow_fun(x, a, n):
+            return a * np.power(x - mu, n)
+        self.fit_gen(pow_fun, guess=guess)
+        return self
+
     def fit_at(self,x):
         r""" ``fit_at`` returns the point at coordinate :math:`x` from a previously fitted curve.
 

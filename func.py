@@ -1246,7 +1246,7 @@ class curve(object):
         :returns: the tuple :math:`\left(\alpha, \mu, \sigma\right)`
         """
         def pow_fun(x, a, n):
-            return a * np.power(x - mu, n)
+            return a * np.power(x, n)
         self.fit_gen(pow_fun, guess=guess)
         return self
 

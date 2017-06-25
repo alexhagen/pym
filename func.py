@@ -1161,7 +1161,11 @@ class curve(object):
         left = self.copy()
         _x = [float(item) for item in other.x]
         _y = [float(item) for item in other.y]
-        left.add_data(_x, _y)
+        if self.u_x is not None and other.u_x is not None:
+            _u_x = [float(item) for item in other.u_x]
+        if self.u_y is not None and other.u_y is not None:
+            _u_y = [float(item) for item in other.u_y]
+        left.add_data(_x, _y, u_x=_u_x, u_y=_u_y)
         return left
 
     ###########################################################################

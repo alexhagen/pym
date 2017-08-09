@@ -122,6 +122,8 @@
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">nanmean</span>
 <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">curve_fit</span>
 <span class="kn">from</span> <span class="nn">scipy.odr</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">scipy.fftpack</span> <span class="k">as</span> <span class="nn">sft</span>
+<span class="kn">import</span> <span class="nn">peakutils</span>
 
 
 <div class="viewcode-block" id="curve"><a class="viewcode-back" href="../index.html#func.curve">[docs]</a><span class="k">class</span> <span class="nc">curve</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -222,15 +224,15 @@
 <span class="sd">        :return: A curve object with the added data, fully sorted.</span>
 <span class="sd">        :rtype: curve</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">],</span> <span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">],</span> <span class="nb">list</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_x</span><span class="p">,</span> <span class="n">u_x</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span><span class="p">],</span> <span class="nb">list</span><span class="p">(</span><span class="n">u_x</span><span class="p">))</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_y</span><span class="p">,</span> <span class="n">u_y</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span><span class="p">],</span> <span class="nb">list</span><span class="p">(</span><span class="n">u_y</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="curve.copy"><a class="viewcode-back" href="../index.html#func.curve.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="curve.copy"><a class="viewcode-back" href="../index.html#func.curve.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``copy()`` performs a deep copy of the curve and passes it out to</span>
 <span class="sd">        another ``curve`` object so that it can be manipulated out-of-place.</span>
 
@@ -245,7 +247,10 @@
             <span class="n">newuy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">newux</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">newname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">newname</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">newname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
         <span class="k">return</span> <span class="n">curve</span><span class="p">(</span><span class="n">newx</span><span class="p">,</span> <span class="n">newy</span><span class="p">,</span> <span class="n">u_y</span><span class="o">=</span><span class="n">newuy</span><span class="p">,</span> <span class="n">u_x</span><span class="o">=</span><span class="n">newux</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">newname</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="curve.crop"><a class="viewcode-back" href="../index.html#func.curve.crop">[docs]</a>    <span class="k">def</span> <span class="nf">crop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1271,8 +1276,59 @@
 <span class="sd">        :rtype: curve</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">left</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">_x</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">]</span>
+        <span class="n">_y</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">u_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_u_x</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">u_x</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_u_x</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">u_y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_u_y</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">u_y</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_u_y</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">left</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">_x</span><span class="p">,</span> <span class="n">_y</span><span class="p">,</span> <span class="n">u_x</span><span class="o">=</span><span class="n">_u_x</span><span class="p">,</span> <span class="n">u_y</span><span class="o">=</span><span class="n">_u_y</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">left</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1"># Analysis - tests in tests/test_analysis.py</span>
+    <span class="c1">###########################################################################</span>
+<div class="viewcode-block" id="curve.fft"><a class="viewcode-back" href="../index.html#func.curve.fft">[docs]</a>    <span class="k">def</span> <span class="nf">fft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_curve</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``fft`` finds the fft of the curve</span>
+
+<span class="sd">        ``fft`` assumes that the values contained in ``curve.x`` are time</span>
+<span class="sd">        values and are evenly distributed, and returns the fft of the values in</span>
+<span class="sd">        ``curve.y`` versus ``curve.x``.</span>
+
+<span class="sd">        :param bool pos: if ``True``, returns only the positive frequency</span>
+<span class="sd">            components</span>
+<span class="sd">        :param bool curve: if ``True``, returns the data as a curve</span>
+<span class="sd">        :returns: ``f`` the array of frequencies and ``a`` the amplitude of</span>
+<span class="sd">            of components present at that frequency</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># use scipy&#39;s fft to find the negative and positive fft</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="c1"># determine the number of samples for determination of the nyquist</span>
+        <span class="c1"># frequency</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="c1"># Find the period</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">pos</span><span class="p">:</span>
+            <span class="c1"># distribute frequencies up to the nyquist frequency</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">fftfreq</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">T</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span>
+            <span class="c1"># return only the positive frequency components</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">return_curve</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">curve</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_fft&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">f</span><span class="p">,</span> <span class="n">a</span></div>
+
+<div class="viewcode-block" id="curve.find_peaks"><a class="viewcode-back" href="../index.html#func.curve.find_peaks">[docs]</a>    <span class="k">def</span> <span class="nf">find_peaks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thres</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">min_dist</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``find_peaks`` finds the peaks in the curve &quot;&quot;&quot;</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">peakutils</span><span class="o">.</span><span class="n">indexes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">thres</span><span class="o">=</span><span class="n">thres</span><span class="p">,</span> <span class="n">min_dist</span><span class="o">=</span><span class="n">min_dist</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span></div>
+
+
+
 
     <span class="c1">###########################################################################</span>
     <span class="c1"># Curve Fitting - tests in tests/test_curve_fitting.py</span>
@@ -1343,6 +1399,21 @@
         <span class="k">def</span> <span class="nf">gauss_fun</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sig</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">mu</span><span class="p">,</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="mf">2.</span><span class="p">)))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fit_gen</span><span class="p">(</span><span class="n">gauss_fun</span><span class="p">,</span> <span class="n">guess</span><span class="o">=</span><span class="n">guess</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="curve.fit_pow"><a class="viewcode-back" href="../index.html#func.curve.fit_pow">[docs]</a>    <span class="k">def</span> <span class="nf">fit_pow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guess</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``fit_gauss`` fits a gaussian function to the curve.</span>
+
+<span class="sd">        ``fit_gauss`` fits a gaussian function of form :math:`y=\alpha \exp</span>
+<span class="sd">        \left[ -\frac{\left(x - \mu\right)^{2}}{2 \sigma^{2}}\right]` to the</span>
+<span class="sd">        curve, returning the parameters :math:`\left(\alpha, \mu, \sigma\right)`</span>
+<span class="sd">        as a tuple.</span>
+
+<span class="sd">        :returns: the tuple :math:`\left(\alpha, \mu, \sigma\right)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="nf">pow_fun</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit_gen</span><span class="p">(</span><span class="n">pow_fun</span><span class="p">,</span> <span class="n">guess</span><span class="o">=</span><span class="n">guess</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="curve.fit_at"><a class="viewcode-back" href="../index.html#func.curve.fit_at">[docs]</a>    <span class="k">def</span> <span class="nf">fit_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
@@ -1484,7 +1555,7 @@
     </p>
     <p>
         &copy; Copyright 2015, Alex Hagen.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.2.<br/>
     </p>
   </div>
 </footer>

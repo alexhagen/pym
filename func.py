@@ -7,6 +7,8 @@ from pyg import twod as ahp
 from scipy import nanmean
 from scipy.optimize import curve_fit
 from scipy.odr import *
+import scipy.fftpack as sft
+import peakutils
 
 
 class curve(object):
@@ -1171,6 +1173,47 @@ class curve(object):
             _u_y = None
         left.add_data(_x, _y, u_x=_u_x, u_y=_u_y)
         return left
+
+    ###########################################################################
+    # Analysis - tests in tests/test_analysis.py
+    ###########################################################################
+    def fft(self, pos=True, return_curve=True):
+        r""" ``fft`` finds the fft of the curve
+
+        ``fft`` assumes that the values contained in ``curve.x`` are time
+        values and are evenly distributed, and returns the fft of the values in
+        ``curve.y`` versus ``curve.x``.
+
+        :param bool pos: if ``True``, returns only the positive frequency
+            components
+        :param bool curve: if ``True``, returns the data as a curve
+        :returns: ``f`` the array of frequencies and ``a`` the amplitude of
+            of components present at that frequency
+        """
+        # use scipy's fft to find the negative and positive fft
+        arr = sft.rfft(self.y)
+        # determine the number of samples for determination of the nyquist
+        # frequency
+        N = len(self.y)
+        # Find the period
+        T = self.x[1] - self.x[0]
+        if pos:
+            # distribute frequencies up to the nyquist frequency
+            f = sft.fftfreq(N, d=T)[0:N/2]
+            # return only the positive frequency components
+            a = arr[0:N/2]
+        if return_curve:
+            return curve(f, a, self.name + '_fft')
+        else:
+            return f, a
+
+    def find_peaks(self, thres=0.3, min_dist=1):
+        r""" ``find_peaks`` finds the peaks in the curve """
+        idx = peakutils.indexes(self.y, thres=thres, min_dist=min_dist)
+        return self.x[idx]
+
+
+
 
     ###########################################################################
     # Curve Fitting - tests in tests/test_curve_fitting.py

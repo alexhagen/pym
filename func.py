@@ -1177,7 +1177,7 @@ class curve(object):
     ###########################################################################
     # Analysis - tests in tests/test_analysis.py
     ###########################################################################
-    def fft(self, pos=True, return_curve=True):
+    def fft(self, pos=True, return_curve=True, real=True):
         r""" ``fft`` finds the fft of the curve
 
         ``fft`` assumes that the values contained in ``curve.x`` are time
@@ -1191,7 +1191,10 @@ class curve(object):
             of components present at that frequency
         """
         # use scipy's fft to find the negative and positive fft
-        arr = sft.rfft(self.y)
+        if real:
+            arr = sft.rfft(self.y)
+        else:
+            arr = sft.fft(self.y)
         # determine the number of samples for determination of the nyquist
         # frequency
         N = len(self.y)
@@ -1202,6 +1205,11 @@ class curve(object):
             f = sft.fftfreq(N, d=T)[0:N/2]
             # return only the positive frequency components
             a = arr[0:N/2]
+        else:
+            # distribute frequencies up to the nyquist frequency
+            f = sft.fftfreq(N, d=T)
+            # return only the positive frequency components
+            a = arr
         if return_curve:
             return curve(f, a, self.name + '_fft')
         else:

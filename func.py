@@ -1221,6 +1221,16 @@ class curve(object):
         return self.x[idx]
 
 
+    def save_to_file(self, filename='curve.txt'):
+        with open(filename, 'w') as f:
+            f.write('# %s' % self.name)
+            for x, y in zip(self.x, self.y):
+                f.write('%g, %g\n' % (x, y))
+        return self
+
+    def load_from_file(self, filename):
+        x, y = np.loadtxt(filename, unpack=True, skiprows=1, delimiter=',')
+        return curve(x, y)
 
 
     ###########################################################################

@@ -1215,6 +1215,23 @@ class curve(object):
         else:
             return f, a
 
+    def strip_duplicates(self):
+        averages = {}
+        counts = {}
+        for name, value in zip(self.x, self.y):
+            if name in averages:
+                averages[name] += value
+                counts[name] += 1
+            else:
+                averages[name] = value
+                counts[name] = 1
+        for name in averages:
+            averages[name] = averages[name]/float(counts[name])
+        xs = [float(x) for x in averages.keys()]
+        ys = list(averages.values())
+        return curve(xs, ys, self.name)
+
+
     def find_peaks(self, thres=0.3, min_dist=1):
         r""" ``find_peaks`` finds the peaks in the curve """
         idx = peakutils.indexes(self.y, thres=thres, min_dist=min_dist)

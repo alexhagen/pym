@@ -1387,7 +1387,7 @@ class curve(object):
              linestyle=None, linecolor='black', # pragma: no cover
              yy=False, xerr=None, yerr=None, # pragma: no cover
              legend=True, env='plot', axes=None, # pragma: no cover
-             polar=False): # pragma: no cover
+             polar=False, xx=False): # pragma: no cover
         if addto is None:
             plot = ahp.pyg2d(env=env, polar=polar);
         else:
@@ -1431,15 +1431,19 @@ class curve(object):
             plot.markers_off()
             plot.lines_on()
         elif self.data is 'smooth':
-            if yy is False:
+            if yy is False and xx is False:
                 plot.add_line(x, y, xerr=self.u_x, yerr=self.u_y,
                               name=self.name, linestyle=linestyle,
                               linecolor=linecolor, axes=axes, legend=legend)
-            else:
+            elif yy is True and xx is False:
                 plot.add_line_yy(x, y, xerr=self.u_x, yerr=self.u_y,
                                  name=self.name,linestyle=linestyle,
                                  linecolor=linecolor, axes=axes, legend=legend)
-        return plot;
+            elif xx is True and yy is False:
+                plot.add_line_xx(x, y, xerr=self.u_x, yerr=self.u_y,
+                                 name=self.name,linestyle=linestyle,
+                                 linecolor=linecolor, axes=axes, legend=legend)
+        return plot
 
     def plot_fit(self, xmin=None, xmax=None, addto=None, # pragma: no cover
                  linestyle=None,  linecolor='black', # pragma: no cover

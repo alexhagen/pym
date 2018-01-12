@@ -1387,7 +1387,7 @@ class curve(object):
              linestyle=None, linecolor='black', # pragma: no cover
              yy=False, xerr=None, yerr=None, # pragma: no cover
              legend=True, env='plot', axes=None, # pragma: no cover
-             polar=False, xx=False): # pragma: no cover
+             polar=False, xx=False, alpha=1.0, **kwargs): # pragma: no cover
         if addto is None:
             plot = ahp.pyg2d(env=env, polar=polar);
         else:
@@ -1416,7 +1416,8 @@ class curve(object):
                 # self.binned_data_x = plot_x
                 # self.binned_data_y = plot_y
             plot.add_line(plot_x, plot_y, name=self.name, linewidth=2.0,
-                          linecolor=linecolor, linestyle='-', legend=legend)
+                          linecolor=linecolor, linestyle='-', legend=legend,
+                          alpha=alpha, **kwargs)
             conn_x = np.array([])
             conn_y = np.array([])
             for i in np.arange(1,len(x)):
@@ -1427,22 +1428,22 @@ class curve(object):
                 conn_x = np.append(conn_x,np.nan)
                 conn_y = np.append(conn_y,np.nan)
             plot.add_line(conn_x, conn_y, name=self.name+'connectors',
-                          linewidth=0.1, linestyle='-', linecolor=linecolor, legend=legend)
+                          linewidth=0.1, linestyle='-', linecolor=linecolor, legend=legend, alpha=alpha,  **kwargs)
             plot.markers_off()
             plot.lines_on()
         elif self.data is 'smooth':
             if yy is False and xx is False:
                 plot.add_line(x, y, xerr=self.u_x, yerr=self.u_y,
                               name=self.name, linestyle=linestyle,
-                              linecolor=linecolor, axes=axes, legend=legend)
+                              linecolor=linecolor, axes=axes, legend=legend, alpha=alpha,  **kwargs)
             elif yy is True and xx is False:
                 plot.add_line_yy(x, y, xerr=self.u_x, yerr=self.u_y,
                                  name=self.name,linestyle=linestyle,
-                                 linecolor=linecolor, axes=axes, legend=legend)
+                                 linecolor=linecolor, axes=axes, legend=legend, alpha=alpha,  **kwargs)
             elif xx is True and yy is False:
                 plot.add_line_xx(x, y, xerr=self.u_x, yerr=self.u_y,
                                  name=self.name,linestyle=linestyle,
-                                 linecolor=linecolor, axes=axes, legend=legend)
+                                 linecolor=linecolor, axes=axes, legend=legend, alpha=alpha, **kwargs)
         return plot
 
     def plot_fit(self, xmin=None, xmax=None, addto=None, # pragma: no cover

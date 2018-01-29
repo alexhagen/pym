@@ -1415,7 +1415,13 @@ class curve(object):
                 plot_y = np.append(plot_y,np.nan);
                 # self.binned_data_x = plot_x
                 # self.binned_data_y = plot_y
-            plot.add_line(plot_x, plot_y, name=self.name, linewidth=2.0,
+            if yy:
+                fun = plot.add_line_yy
+            elif xx:
+                fun = plot.add_line_xx
+            else:
+                fun = plot.add_line
+            fun(plot_x, plot_y, name=self.name, linewidth=2.0,
                           linecolor=linecolor, linestyle='-', legend=legend,
                           alpha=alpha, **kwargs)
             conn_x = np.array([])
@@ -1427,7 +1433,7 @@ class curve(object):
                 conn_y = np.append(conn_y,y[i])
                 conn_x = np.append(conn_x,np.nan)
                 conn_y = np.append(conn_y,np.nan)
-            plot.add_line(conn_x, conn_y, name=self.name+'connectors',
+            fun(conn_x, conn_y, name=self.name+'connectors',
                           linewidth=0.1, linestyle='-', linecolor=linecolor, legend=legend, alpha=alpha,  **kwargs)
             plot.markers_off()
             plot.lines_on()

@@ -1,18 +1,16 @@
-import math
 import numpy as np
 import sys
 import os
-sys.path.append(os.environ['HOME'] + '/code/')
-from pyg import twod as ahp
-from scipy import nanmean
 from scipy.optimize import curve_fit
 from scipy.odr import *
 import scipy.fftpack as sft
 import peakutils
+sys.path.append(os.environ['HOME'] + '/code/')
+from pyg import twod as ahp
 
 
 class curve(object):
-    r""" An object to expose some numerical methods and plotting tools.
+    r"""An object to expose some numerical methods and plotting tools.
 
     A ``curve`` object takes any two dimensional dataset and its uncertainty
     (both in the :math:`x` and :math:`y` direction).  Each data set includes
@@ -20,13 +18,13 @@ class curve(object):
     as a name and a data shape designation (whether this is smooth data or
     binned).
 
-    There exist three ways to add uncertainty to the measurements.  The first is
-    to define an array or list of values that define the absolute uncertainty at
-    each ``x``.  The second is to define a list of tuples that define the lower
-    and upper absolute uncertainty at each ``x``, respectively. The final way is
-    to define a two dimensional array, where the first row is the lower absolute
-    uncertainty at each ``x``, and the second row is the upper absolute
-    uncertainty at each ``x``.
+    There exist three ways to add uncertainty to the measurements.  The first
+    is to define an array or list of values that define the absolute
+    uncertainty at each ``x``.  The second is to define a list of tuples that
+    define the lower and upper absolute uncertainty at each ``x``,
+    respectively. The final way is to define a two dimensional array, where the
+    first row is the lower absolute uncertainty at each ``x``, and the second
+    row is the upper absolute uncertainty at each ``x``.
 
     :param list-like x: The ordinate data of the curve
     :param list-like u_x: The uncertainty in the ordinate data of the curve
@@ -68,8 +66,13 @@ class curve(object):
             self.u_y = u_y
         self.sort()
 
+    def rename(self, name):
+        r"""Rename the current curve."""
+        self.name = name
+        return self
+
     def sort(self):
-        r""" ``sort()`` sorts the list depending on the :math:`x` coordinate.
+        r"""Sort the list depending on the :math:`x` coordinate.
 
         ``sort()`` sorts all of the data input to the curve so that it is
         ordered from decreasing :math:`x` to increasing :math:`x`.
@@ -98,7 +101,7 @@ class curve(object):
                 self.u_y = self.u_y[idx]
 
     def add_data(self, x, y, u_x=None, u_y=None):
-        """ ``add_data(x,y)`` adds data to the already populated x and y.
+        """Add data to the already populated x and y.
 
         :param list-like x: The ordinate data to add to the already populated
             curve object.
@@ -118,7 +121,7 @@ class curve(object):
         self.sort()
 
     def copy(self, name=None):
-        r""" ``copy()`` performs a deep copy of the curve and passes it out to
+        r"""Perform a deep copy of the curve and passes it out to
         another ``curve`` object so that it can be manipulated out-of-place.
 
         :return: a copy of the ``curve`` object calling the function
@@ -136,11 +139,14 @@ class curve(object):
             newname = name
         else:
             newname = self.name
-        return curve(newx, newy, u_y=newuy, u_x=newux, data=self.data, name=newname)
+        return curve(newx, newy, u_y=newuy, u_x=newux, data=self.data,
+                     name=newname)
 
     def crop(self, y_min=None, y_max=None, x_min=None, x_max=None,
              replace=None):
-        r""" ``crop(y_min, y_max, x_min, x_max, replace)`` will find any data
+        r"""Crop the data within the specified rectange.
+
+        ``crop(y_min, y_max, x_min, x_max, replace)`` will find any data
         points that fall outside of the rectangle with corners at
         ``(x_min, y_min)`` to ``(x_max, y_max)`` and replace it with the value
         specified as ``return``.
@@ -215,8 +221,7 @@ class curve(object):
         return self
 
     def find_first_above(self, y_min):
-        r""" ``find_first_above(y)`` finds the first ``(x, y)`` tuple with y
-            value above the given value y
+        r"""Find the first point with y value above the given value y.
 
         :param float y_min: the comparitor value
         :returns: the tuple (x, y) which is the first in ``x`` space where
@@ -230,7 +235,7 @@ class curve(object):
         return (np.nan, np.nan)
 
     def rebin(self, x=None):
-        r""" ``rebin`` redistributes the curve along a new set of x values
+        r"""Redistribute the curve along a new set of x values.
 
         ``rebin(x)`` takes a list-like input of new points on the ordinate and
         redistributes the abscissa so that the x values are only on those
@@ -260,9 +265,7 @@ class curve(object):
         return self
 
     def decimate(self, R=None, length=None):
-        r""" ``decimate(R)`` will remove all but every ``R`` th point in the
-        curve.
-
+        r"""Remove all but every ``R`` th point in the curve.
 
         :param int R: An integer value telling how often to save a point.
         :param int length: *Alternate*, an integer telling how big you
@@ -283,7 +286,7 @@ class curve(object):
     # Data Retrieving and Interpolation - tests in tests/test_data_interp.py
     ###########################################################################
     def inrange(self, x):
-        """ ``inrange(x)`` checks if a point is within the range of data.
+        """Check if a point is within the range of data.
 
         :param float x: The data point to check if it is in the range of the
             existing curve data.
@@ -1383,8 +1386,9 @@ class curve(object):
     ###########################################################################
     # Curve Plotting - no tests currently
     ###########################################################################
-    def plot(self, x=None, y=None, addto=None, # pragma: no cover
-             linestyle=None, linecolor='black', # pragma: no cover
+    def plot(self, x=None, y=None, addto=None,  # pragma: no cover
+             linestyle=None, linecolor='black',  # pragma: no cover
+             markerstyle=None,  # pragma: no cover
              yy=False, xerr=None, yerr=None, # pragma: no cover
              legend=True, env='plot', axes=None, # pragma: no cover
              polar=False, xx=False, alpha=1.0, **kwargs): # pragma: no cover
@@ -1422,7 +1426,9 @@ class curve(object):
             else:
                 fun = plot.add_line
             fun(plot_x, plot_y, name=self.name, linewidth=2.0,
-                          linecolor=linecolor, linestyle='-', legend=legend,
+                          linecolor=linecolor, linestyle='-',
+                          markerstyle=markerstyle,
+                          legend=legend,
                           alpha=alpha, **kwargs)
             conn_x = np.array([])
             conn_y = np.array([])
@@ -1434,22 +1440,22 @@ class curve(object):
                 conn_x = np.append(conn_x,np.nan)
                 conn_y = np.append(conn_y,np.nan)
             fun(conn_x, conn_y, name=self.name+'connectors',
-                          linewidth=0.1, linestyle='-', linecolor=linecolor, legend=legend, alpha=alpha,  **kwargs)
+                          linewidth=0.1, linestyle='-', linecolor=linecolor, markerstyle=markerstyle, gend=legend, alpha=alpha,  **kwargs)
             plot.markers_off()
             plot.lines_on()
         elif self.data is 'smooth':
             if yy is False and xx is False:
                 plot.add_line(x, y, xerr=self.u_x, yerr=self.u_y,
                               name=self.name, linestyle=linestyle,
-                              linecolor=linecolor, axes=axes, legend=legend, alpha=alpha,  **kwargs)
+                              linecolor=linecolor, markerstyle=markerstyle, axes=axes, legend=legend, alpha=alpha,  **kwargs)
             elif yy is True and xx is False:
                 plot.add_line_yy(x, y, xerr=self.u_x, yerr=self.u_y,
                                  name=self.name,linestyle=linestyle,
-                                 linecolor=linecolor, axes=axes, legend=legend, alpha=alpha,  **kwargs)
+                                 linecolor=linecolor, markerstyle=markerstyle, axes=axes, legend=legend, alpha=alpha,  **kwargs)
             elif xx is True and yy is False:
                 plot.add_line_xx(x, y, xerr=self.u_x, yerr=self.u_y,
                                  name=self.name,linestyle=linestyle,
-                                 linecolor=linecolor, axes=axes, legend=legend, alpha=alpha, **kwargs)
+                                 linecolor=linecolor, markerstyle=markerstyle, axes=axes, legend=legend, alpha=alpha, **kwargs)
         return plot
 
     def plot_fit(self, xmin=None, xmax=None, addto=None, # pragma: no cover

@@ -1382,6 +1382,13 @@ class curve(object):
         self.coeffs = coeffs
         self.fit_exp_bool = True
         return self
+        
+        def return_fit(self):
+        r"""Return the fit as a ``curve``."""
+        self.fitx = np.linspace(xmin, xmax, num=1000)
+        self.fity = self.fit_at(self.fitx)
+        name = self.name + 'fit'
+        return curve(self.fitx, self.fity, name)
 
     ###########################################################################
     # Curve Plotting - no tests currently

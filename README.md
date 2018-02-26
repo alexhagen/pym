@@ -79,11 +79,11 @@ plot.show('A pretty chart from data made for a pym curve')
 
 
 
-				<div class='pygfigure' name='['Aprettychartfromdatamadeforapymcurve']' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-					<img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/curve_plotting.svg?1062751778' />
-					<div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 1:</b> A pretty chart from data made for a pym curve</div>
-				</div>
-			
+                <div class='pygfigure' name='['Aprettychartfromdatamadeforapymcurve']' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
+                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/curve_plotting.svg?1361738579' />
+                    <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 1:</b> A pretty chart from data made for a pym curve</div>
+                </div>
+            
 
 
 ### Integration and normalization
@@ -136,11 +136,11 @@ plot.show('Normalized curves have a total integral of 1.0')
 
 
 
-				<div class='pygfigure' name='['Normalizedcurveshaveatotalintegralof10']' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-					<img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/int_norm.svg?794024911' />
-					<div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 2:</b> Normalized curves have a total integral of 1.0</div>
-				</div>
-			
+                <div class='pygfigure' name='['Normalizedcurveshaveatotalintegralof10']' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
+                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/int_norm.svg?857313664' />
+                    <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 2:</b> Normalized curves have a total integral of 1.0</div>
+                </div>
+            
 
 
 ### Curve arithmetic
@@ -173,11 +173,11 @@ plot.show('Trigonometric identity and its contributions from $\cos^{2}$ and $\si
 
 
 
-				<div class='pygfigure' name='['Trigonometricidentityanditscontributionsfromcos2andsin2']' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-					<img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/identity.svg?840223759' />
-					<div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 3:</b> Trigonometric identity and its contributions from $\cos^{2}$ and $\sin^{2}$</div>
-				</div>
-			
+                <div class='pygfigure' name='['Trigonometricidentityanditscontributionsfromcos2andsin2']' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
+                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/identity.svg?388690306' />
+                    <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 3:</b> Trigonometric identity and its contributions from $\cos^{2}$ and $\sin^{2}$</div>
+                </div>
+            
 
 
 ## Subclassing
@@ -234,11 +234,11 @@ plot.show('First section elevation of several long distance hiking trails')
 
 
 
-				<div class='pygfigure' name='['Firstsectionelevationofseverallongdistancehikingtrails']' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-					<img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/trail_elevations.svg?1549482154' />
-					<div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 4:</b> First section elevation of several long distance hiking trails</div>
-				</div>
-			
+                <div class='pygfigure' name='['Firstsectionelevationofseverallongdistancehikingtrails']' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
+                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/trail_elevations.svg?1286643612' />
+                    <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 4:</b> First section elevation of several long distance hiking trails</div>
+                </div>
+            
 
 
 ## Fitting
@@ -298,11 +298,11 @@ plot.show('Fitting Trail Running Trends with a sinusoid to show its periodic nat
 
 
 
-				<div class='pygfigure' name='['FittingTrailRunningTrendswithasinusoidtoshowitsperiodicnature']' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-					<img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/trail_running.svg?1476881419' />
-					<div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 5:</b> Fitting Trail Running Trends with a sinusoid to show its periodic nature</div>
-				</div>
-			
+                <div class='pygfigure' name='['FittingTrailRunningTrendswithasinusoidtoshowitsperiodicnature']' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
+                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/trail_running.svg?1901261353' />
+                    <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 5:</b> Fitting Trail Running Trends with a sinusoid to show its periodic nature</div>
+                </div>
+            
 
 
 ## Interpolation and error propagation

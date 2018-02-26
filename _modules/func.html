@@ -113,21 +113,19 @@
     <div class="col-md-12 content">
       
   <h1>Source code for func</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;HOME&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;/code/&#39;</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">pyg</span> <span class="k">import</span> <span class="n">twod</span> <span class="k">as</span> <span class="n">ahp</span>
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">nanmean</span>
 <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">curve_fit</span>
 <span class="kn">from</span> <span class="nn">scipy.odr</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">scipy.fftpack</span> <span class="k">as</span> <span class="nn">sft</span>
 <span class="kn">import</span> <span class="nn">peakutils</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;HOME&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;/code/&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pyg</span> <span class="k">import</span> <span class="n">twod</span> <span class="k">as</span> <span class="n">ahp</span>
 
 
 <div class="viewcode-block" id="curve"><a class="viewcode-back" href="../index.html#func.curve">[docs]</a><span class="k">class</span> <span class="nc">curve</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; An object to expose some numerical methods and plotting tools.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;An object to expose some numerical methods and plotting tools.</span>
 
 <span class="sd">    A ``curve`` object takes any two dimensional dataset and its uncertainty</span>
 <span class="sd">    (both in the :math:`x` and :math:`y` direction).  Each data set includes</span>
@@ -135,13 +133,13 @@
 <span class="sd">    as a name and a data shape designation (whether this is smooth data or</span>
 <span class="sd">    binned).</span>
 
-<span class="sd">    There exist three ways to add uncertainty to the measurements.  The first is</span>
-<span class="sd">    to define an array or list of values that define the absolute uncertainty at</span>
-<span class="sd">    each ``x``.  The second is to define a list of tuples that define the lower</span>
-<span class="sd">    and upper absolute uncertainty at each ``x``, respectively. The final way is</span>
-<span class="sd">    to define a two dimensional array, where the first row is the lower absolute</span>
-<span class="sd">    uncertainty at each ``x``, and the second row is the upper absolute</span>
-<span class="sd">    uncertainty at each ``x``.</span>
+<span class="sd">    There exist three ways to add uncertainty to the measurements.  The first</span>
+<span class="sd">    is to define an array or list of values that define the absolute</span>
+<span class="sd">    uncertainty at each ``x``.  The second is to define a list of tuples that</span>
+<span class="sd">    define the lower and upper absolute uncertainty at each ``x``,</span>
+<span class="sd">    respectively. The final way is to define a two dimensional array, where the</span>
+<span class="sd">    first row is the lower absolute uncertainty at each ``x``, and the second</span>
+<span class="sd">    row is the upper absolute uncertainty at each ``x``.</span>
 
 <span class="sd">    :param list-like x: The ordinate data of the curve</span>
 <span class="sd">    :param list-like u_x: The uncertainty in the ordinate data of the curve</span>
@@ -183,8 +181,13 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span> <span class="o">=</span> <span class="n">u_y</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 
+<div class="viewcode-block" id="curve.rename"><a class="viewcode-back" href="../index.html#func.curve.rename">[docs]</a>    <span class="k">def</span> <span class="nf">rename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Rename the current curve.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
 <div class="viewcode-block" id="curve.sort"><a class="viewcode-back" href="../index.html#func.curve.sort">[docs]</a>    <span class="k">def</span> <span class="nf">sort</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``sort()`` sorts the list depending on the :math:`x` coordinate.</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Sort the list depending on the :math:`x` coordinate.</span>
 
 <span class="sd">        ``sort()`` sorts all of the data input to the curve so that it is</span>
 <span class="sd">        ordered from decreasing :math:`x` to increasing :math:`x`.</span>
@@ -213,7 +216,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_y</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="curve.add_data"><a class="viewcode-back" href="../index.html#func.curve.add_data">[docs]</a>    <span class="k">def</span> <span class="nf">add_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">u_x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ``add_data(x,y)`` adds data to the already populated x and y.</span>
+        <span class="sd">&quot;&quot;&quot;Add data to the already populated x and y.</span>
 
 <span class="sd">        :param list-like x: The ordinate data to add to the already populated</span>
 <span class="sd">            curve object.</span>
@@ -233,7 +236,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="curve.copy"><a class="viewcode-back" href="../index.html#func.curve.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``copy()`` performs a deep copy of the curve and passes it out to</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Perform a deep copy of the curve and passes it out to</span>
 <span class="sd">        another ``curve`` object so that it can be manipulated out-of-place.</span>
 
 <span class="sd">        :return: a copy of the ``curve`` object calling the function</span>
@@ -251,11 +254,14 @@
             <span class="n">newname</span> <span class="o">=</span> <span class="n">name</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">newname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
-        <span class="k">return</span> <span class="n">curve</span><span class="p">(</span><span class="n">newx</span><span class="p">,</span> <span class="n">newy</span><span class="p">,</span> <span class="n">u_y</span><span class="o">=</span><span class="n">newuy</span><span class="p">,</span> <span class="n">u_x</span><span class="o">=</span><span class="n">newux</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">newname</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">curve</span><span class="p">(</span><span class="n">newx</span><span class="p">,</span> <span class="n">newy</span><span class="p">,</span> <span class="n">u_y</span><span class="o">=</span><span class="n">newuy</span><span class="p">,</span> <span class="n">u_x</span><span class="o">=</span><span class="n">newux</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                     <span class="n">name</span><span class="o">=</span><span class="n">newname</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="curve.crop"><a class="viewcode-back" href="../index.html#func.curve.crop">[docs]</a>    <span class="k">def</span> <span class="nf">crop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
              <span class="n">replace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``crop(y_min, y_max, x_min, x_max, replace)`` will find any data</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Crop the data within the specified rectange.</span>
+
+<span class="sd">        ``crop(y_min, y_max, x_min, x_max, replace)`` will find any data</span>
 <span class="sd">        points that fall outside of the rectangle with corners at</span>
 <span class="sd">        ``(x_min, y_min)`` to ``(x_max, y_max)`` and replace it with the value</span>
 <span class="sd">        specified as ``return``.</span>
@@ -330,8 +336,7 @@
         <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="curve.find_first_above"><a class="viewcode-back" href="../index.html#func.curve.find_first_above">[docs]</a>    <span class="k">def</span> <span class="nf">find_first_above</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_min</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``find_first_above(y)`` finds the first ``(x, y)`` tuple with y</span>
-<span class="sd">            value above the given value y</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Find the first point with y value above the given value y.</span>
 
 <span class="sd">        :param float y_min: the comparitor value</span>
 <span class="sd">        :returns: the tuple (x, y) which is the first in ``x`` space where</span>
@@ -345,7 +350,7 @@
         <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="curve.rebin"><a class="viewcode-back" href="../index.html#func.curve.rebin">[docs]</a>    <span class="k">def</span> <span class="nf">rebin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``rebin`` redistributes the curve along a new set of x values</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Redistribute the curve along a new set of x values.</span>
 
 <span class="sd">        ``rebin(x)`` takes a list-like input of new points on the ordinate and</span>
 <span class="sd">        redistributes the abscissa so that the x values are only on those</span>
@@ -375,9 +380,7 @@
         <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="curve.decimate"><a class="viewcode-back" href="../index.html#func.curve.decimate">[docs]</a>    <span class="k">def</span> <span class="nf">decimate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``decimate(R)`` will remove all but every ``R`` th point in the</span>
-<span class="sd">        curve.</span>
-
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Remove all but every ``R`` th point in the curve.</span>
 
 <span class="sd">        :param int R: An integer value telling how often to save a point.</span>
 <span class="sd">        :param int length: *Alternate*, an integer telling how big you</span>
@@ -398,7 +401,7 @@
     <span class="c1"># Data Retrieving and Interpolation - tests in tests/test_data_interp.py</span>
     <span class="c1">###########################################################################</span>
 <div class="viewcode-block" id="curve.inrange"><a class="viewcode-back" href="../index.html#func.curve.inrange">[docs]</a>    <span class="k">def</span> <span class="nf">inrange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ``inrange(x)`` checks if a point is within the range of data.</span>
+        <span class="sd">&quot;&quot;&quot;Check if a point is within the range of data.</span>
 
 <span class="sd">        :param float x: The data point to check if it is in the range of the</span>
 <span class="sd">            existing curve data.</span>
@@ -1292,7 +1295,7 @@
     <span class="c1">###########################################################################</span>
     <span class="c1"># Analysis - tests in tests/test_analysis.py</span>
     <span class="c1">###########################################################################</span>
-<div class="viewcode-block" id="curve.fft"><a class="viewcode-back" href="../index.html#func.curve.fft">[docs]</a>    <span class="k">def</span> <span class="nf">fft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_curve</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="curve.fft"><a class="viewcode-back" href="../index.html#func.curve.fft">[docs]</a>    <span class="k">def</span> <span class="nf">fft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_curve</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">real</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``fft`` finds the fft of the curve</span>
 
 <span class="sd">        ``fft`` assumes that the values contained in ``curve.x`` are time</span>
@@ -1306,7 +1309,10 @@
 <span class="sd">            of components present at that frequency</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># use scipy&#39;s fft to find the negative and positive fft</span>
-        <span class="n">arr</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">real</span><span class="p">:</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
         <span class="c1"># determine the number of samples for determination of the nyquist</span>
         <span class="c1"># frequency</span>
         <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
@@ -1317,10 +1323,32 @@
             <span class="n">f</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">fftfreq</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">T</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span>
             <span class="c1"># return only the positive frequency components</span>
             <span class="n">a</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># distribute frequencies up to the nyquist frequency</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">sft</span><span class="o">.</span><span class="n">fftfreq</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">T</span><span class="p">)</span>
+            <span class="c1"># return only the positive frequency components</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">arr</span>
         <span class="k">if</span> <span class="n">return_curve</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">curve</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_fft&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">f</span><span class="p">,</span> <span class="n">a</span></div>
+
+    <span class="k">def</span> <span class="nf">strip_duplicates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">averages</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">averages</span><span class="p">:</span>
+                <span class="n">averages</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span>
+                <span class="n">counts</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">averages</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="n">counts</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">averages</span><span class="p">:</span>
+            <span class="n">averages</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">averages</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">counts</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+        <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">averages</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+        <span class="n">ys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">averages</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">curve</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
 
 <div class="viewcode-block" id="curve.find_peaks"><a class="viewcode-back" href="../index.html#func.curve.find_peaks">[docs]</a>    <span class="k">def</span> <span class="nf">find_peaks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thres</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">min_dist</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``find_peaks`` finds the peaks in the curve &quot;&quot;&quot;</span>
@@ -1328,6 +1356,16 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span></div>
 
 
+    <span class="k">def</span> <span class="nf">save_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;curve.txt&#39;</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;# </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">):</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%g</span><span class="s1">, </span><span class="si">%g</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">load_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">unpack</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">curve</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 
 
     <span class="c1">###########################################################################</span>
@@ -1460,14 +1498,22 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fit_exp_bool</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
+<div class="viewcode-block" id="curve.return_fit"><a class="viewcode-back" href="../index.html#func.curve.return_fit">[docs]</a>    <span class="k">def</span> <span class="nf">return_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Return the fit as a ``curve``.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_at</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitx</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;fit&#39;</span>
+        <span class="k">return</span> <span class="n">curve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fity</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
+
     <span class="c1">###########################################################################</span>
     <span class="c1"># Curve Plotting - no tests currently</span>
     <span class="c1">###########################################################################</span>
-    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">addto</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># pragma: no cover</span>
-             <span class="n">linestyle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="c1"># pragma: no cover</span>
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">addto</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># pragma: no cover</span>
+             <span class="n">linestyle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>  <span class="c1"># pragma: no cover</span>
+             <span class="n">markerstyle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># pragma: no cover</span>
              <span class="n">yy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">xerr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">yerr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># pragma: no cover</span>
              <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s1">&#39;plot&#39;</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># pragma: no cover</span>
-             <span class="n">polar</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span> <span class="c1"># pragma: no cover</span>
+             <span class="n">polar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">xx</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> <span class="c1"># pragma: no cover</span>
         <span class="k">if</span> <span class="n">addto</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">plot</span> <span class="o">=</span> <span class="n">ahp</span><span class="o">.</span><span class="n">pyg2d</span><span class="p">(</span><span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">polar</span><span class="o">=</span><span class="n">polar</span><span class="p">);</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1495,8 +1541,17 @@
                 <span class="n">plot_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plot_y</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">);</span>
                 <span class="c1"># self.binned_data_x = plot_x</span>
                 <span class="c1"># self.binned_data_y = plot_y</span>
-            <span class="n">plot</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="n">plot_x</span><span class="p">,</span> <span class="n">plot_y</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
-                          <span class="n">linecolor</span><span class="o">=</span><span class="n">linecolor</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">yy</span><span class="p">:</span>
+                <span class="n">fun</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">add_line_yy</span>
+            <span class="k">elif</span> <span class="n">xx</span><span class="p">:</span>
+                <span class="n">fun</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">add_line_xx</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fun</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">add_line</span>
+            <span class="n">fun</span><span class="p">(</span><span class="n">plot_x</span><span class="p">,</span> <span class="n">plot_y</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+                          <span class="n">linecolor</span><span class="o">=</span><span class="n">linecolor</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span>
+                          <span class="n">markerstyle</span><span class="o">=</span><span class="n">markerstyle</span><span class="p">,</span>
+                          <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span>
+                          <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="n">conn_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
             <span class="n">conn_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
@@ -1506,20 +1561,24 @@
                 <span class="n">conn_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn_y</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
                 <span class="n">conn_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn_x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
                 <span class="n">conn_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn_y</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
-            <span class="n">plot</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="n">conn_x</span><span class="p">,</span> <span class="n">conn_y</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s1">&#39;connectors&#39;</span><span class="p">,</span>
-                          <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="n">linecolor</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">)</span>
+            <span class="n">fun</span><span class="p">(</span><span class="n">conn_x</span><span class="p">,</span> <span class="n">conn_y</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s1">&#39;connectors&#39;</span><span class="p">,</span>
+                          <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="n">linecolor</span><span class="p">,</span> <span class="n">markerstyle</span><span class="o">=</span><span class="n">markerstyle</span><span class="p">,</span> <span class="n">gend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>  <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="n">plot</span><span class="o">.</span><span class="n">markers_off</span><span class="p">()</span>
             <span class="n">plot</span><span class="o">.</span><span class="n">lines_on</span><span class="p">()</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="ow">is</span> <span class="s1">&#39;smooth&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">yy</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">yy</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">xx</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
                 <span class="n">plot</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">xerr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u_x</span><span class="p">,</span> <span class="n">yerr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u_y</span><span class="p">,</span>
                               <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">,</span>
-                              <span class="n">linecolor</span><span class="o">=</span><span class="n">linecolor</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">axes</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
+                              <span class="n">linecolor</span><span class="o">=</span><span class="n">linecolor</span><span class="p">,</span> <span class="n">markerstyle</span><span class="o">=</span><span class="n">markerstyle</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">axes</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>  <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">yy</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="n">xx</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
                 <span class="n">plot</span><span class="o">.</span><span class="n">add_line_yy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">xerr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u_x</span><span class="p">,</span> <span class="n">yerr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u_y</span><span class="p">,</span>
                                  <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">,</span>
-                                 <span class="n">linecolor</span><span class="o">=</span><span class="n">linecolor</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">axes</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">plot</span><span class="p">;</span>
+                                 <span class="n">linecolor</span><span class="o">=</span><span class="n">linecolor</span><span class="p">,</span> <span class="n">markerstyle</span><span class="o">=</span><span class="n">markerstyle</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">axes</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>  <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">xx</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="n">yy</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="n">plot</span><span class="o">.</span><span class="n">add_line_xx</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">xerr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u_x</span><span class="p">,</span> <span class="n">yerr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u_y</span><span class="p">,</span>
+                                 <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">,</span>
+                                 <span class="n">linecolor</span><span class="o">=</span><span class="n">linecolor</span><span class="p">,</span> <span class="n">markerstyle</span><span class="o">=</span><span class="n">markerstyle</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">axes</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">plot</span>
 
     <span class="k">def</span> <span class="nf">plot_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">addto</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># pragma: no cover</span>
                  <span class="n">linestyle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="c1"># pragma: no cover</span>

@@ -80,7 +80,7 @@ plot.show('A pretty chart from data made for a pym curve')
 
 
                 <div class='pygfigure' name='['Aprettychartfromdatamadeforapymcurve']' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/curve_plotting.svg?1361738579' />
+                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/curve_plotting.svg?71472094' />
                     <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 1:</b> A pretty chart from data made for a pym curve</div>
                 </div>
             
@@ -137,7 +137,7 @@ plot.show('Normalized curves have a total integral of 1.0')
 
 
                 <div class='pygfigure' name='['Normalizedcurveshaveatotalintegralof10']' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/int_norm.svg?857313664' />
+                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/int_norm.svg?615485330' />
                     <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 2:</b> Normalized curves have a total integral of 1.0</div>
                 </div>
             
@@ -174,7 +174,7 @@ plot.show('Trigonometric identity and its contributions from $\cos^{2}$ and $\si
 
 
                 <div class='pygfigure' name='['Trigonometricidentityanditscontributionsfromcos2andsin2']' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/identity.svg?388690306' />
+                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/identity.svg?514421281' />
                     <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 3:</b> Trigonometric identity and its contributions from $\cos^{2}$ and $\sin^{2}$</div>
                 </div>
             
@@ -235,7 +235,7 @@ plot.show('First section elevation of several long distance hiking trails')
 
 
                 <div class='pygfigure' name='['Firstsectionelevationofseverallongdistancehikingtrails']' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/trail_elevations.svg?1286643612' />
+                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/trail_elevations.svg?267377959' />
                     <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 4:</b> First section elevation of several long distance hiking trails</div>
                 </div>
             
@@ -299,7 +299,7 @@ plot.show('Fitting Trail Running Trends with a sinusoid to show its periodic nat
 
 
                 <div class='pygfigure' name='['FittingTrailRunningTrendswithasinusoidtoshowitsperiodicnature']' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/trail_running.svg?1901261353' />
+                    <img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/trail_running.svg?1120768171' />
                     <div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 5:</b> Fitting Trail Running Trends with a sinusoid to show its periodic nature</div>
                 </div>
             

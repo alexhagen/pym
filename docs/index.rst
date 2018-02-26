@@ -15,7 +15,10 @@ Class Documentation for func.curve
 
 .. include:: doc_coverage.rst
 
-.. automodule:: symfunc
+Class Documentation for symfunc.symfunc
+=======================================
+
+.. autoclass:: symfunc.symfunc
   :members:
   :show-inheritance:
 

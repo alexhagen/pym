@@ -1447,7 +1447,7 @@ class curve(object):
                 conn_x = np.append(conn_x,np.nan)
                 conn_y = np.append(conn_y,np.nan)
             fun(conn_x, conn_y, name=self.name+'connectors',
-                          linewidth=0.1, linestyle='-', linecolor=linecolor, markerstyle=markerstyle, gend=legend, alpha=alpha,  **kwargs)
+                          linewidth=0.1, linestyle='-', linecolor=linecolor, markerstyle=markerstyle, legend=legend, alpha=alpha,  **kwargs)
             plot.markers_off()
             plot.lines_on()
         elif self.data is 'smooth':

@@ -44,6 +44,7 @@ class curve(object):
     # Data Input - tests in tests/test_data_input.py
     ###########################################################################
     def __init__(self, x, y, name='', u_x=None, u_y=None, data='smooth'):
+        self.plot_kwargs = {}
         self.name = name
         self.data = data
         self.epsilon = 0.05
@@ -65,6 +66,10 @@ class curve(object):
         else:
             self.u_y = u_y
         self.sort()
+
+    def set_plot_kwargs(self, **kwargs):
+        r"""Add or replace values in the plot kwargs dictionary."""
+        self.plot_kwargs.update(kwargs)
 
     def rename(self, name):
         r"""Rename the current curve."""
@@ -319,7 +324,7 @@ class curve(object):
             if xi in self.x:
                 y[index] = self.y[list(self.x).index(xi)]
             else:
-                if xi > self.x.min() and xi < self.x.max():
+                if xi > np.min(self.x) and xi < np.max(self.x.max):
                     if self.data == 'binned':
                         _, y[index] = self.find_nearest_down(xi)
                     else:
@@ -569,10 +574,10 @@ class curve(object):
         :rtype: float
         """
         # find whether the point is above or below
-        if x <= np.min(self.x):
+        if x < np.min(self.x):
             x1 = self.x[0]
             x2 = self.x[1]
-        elif x >= np.max(self.x):
+        elif x > np.max(self.x):
             x1 = self.x[-1]
             x2 = self.x[-2]
         # now find the slope
@@ -1399,6 +1404,10 @@ class curve(object):
              yy=False, xerr=None, yerr=None, # pragma: no cover
              legend=True, env='plot', axes=None, # pragma: no cover
              polar=False, xx=False, alpha=1.0, **kwargs): # pragma: no cover
+        #print kwargs
+        #print self.plot_kwargs
+        kwargs.update(self.plot_kwargs)
+        #print kwargs
         if addto is None:
             plot = ahp.pyg2d(env=env, polar=polar);
         else:

@@ -340,6 +340,10 @@ class curve(object):
             y = y[0]
         return y
 
+    def __call__(self, x):
+        """Returns the value of the function at point ``x``."""
+        return self.at(x)
+
     def u_y_at(self, x, dx=0.0):
         r""" ``u_y_at(x)`` finds a the uncertainty of a value at x.
 

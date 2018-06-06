@@ -1300,7 +1300,7 @@ class curve(object):
         self.fit_exp_bool = True
         return self
 
-    def fit_gen(self, fun, guess=None, u_y=None):
+    def fit_gen(self, fun, guess=None, u_y=None, transpose=False):
         r""" ``fit_gen`` fits a general function to the curve.
 
         ``fit_gen`` fits a general function to the curve.  The general function
@@ -1312,11 +1312,19 @@ class curve(object):
         :returns: the coefficients to the general function
         """
         self.fun = fun
-        fit = curve_fit(fun, self.x, self.y, p0=guess,
+        if transpose:
+            _x = self.y
+            _y = self.x
+        else:
+            _x = self.x
+            _y = self.y
+        fit = curve_fit(fun, _x, _y, p0=guess,
                         sigma=u_y, absolute_sigma=True)
         self.coeffs = fit[0]
         self.fit_exp_bool = False
+        self.fit_transpose = transpose
         return self
+
 
     def fit_gauss(self, guess=None):
         r""" ``fit_gauss`` fits a gaussian function to the curve.
@@ -1485,12 +1493,20 @@ class curve(object):
             plot = ahp.pyg2d()
         else:
             plot = addto
-        if xmin is None:
-            xmin = self.x.min()
-        if xmax is None:
-            xmax = self.x.max()
-        self.fitx = np.linspace(xmin, xmax, num=1000)
-        self.fity = self.fit_at(self.fitx)
+        if self.fit_transpose:
+            if xmin is None:
+                xmin = self.y.min()
+            if xmax is None:
+                xmax = self.y.max()
+            self.fity = np.linspace(xmax, xmin, num=1000)
+            self.fitx = self.fit_at(self.fity)
+        else:
+            if xmin is None:
+                xmin = self.x.min()
+            if xmax is None:
+                xmax = self.x.max()
+            self.fitx = np.linspace(xmin, xmax, num=1000)
+            self.fity = self.fit_at(self.fitx)
         if name is None:
             name = self.name + 'fit'
         plot.add_line(self.fitx, self.fity, name=name,

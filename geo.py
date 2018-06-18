@@ -1,6 +1,6 @@
 import numpy as np
 import math
-import ..calc.math as ahmath
+#import ..calc.math as ahmath
 
 class coord_transform(object):
 	def __init__(self,target='cartesian'):
@@ -38,7 +38,7 @@ class solid_angle(object):
 		-  cartesian (default): x,y,z
 		-  spherical: r, \\theta, \\psi
 		-  cylindrical: r, \\theta, z
-		The values of coordinate system will not change the result, but will 
+		The values of coordinate system will not change the result, but will
 		instead help with input of the geometry
 		'''
 		# define our coordinate system
@@ -87,7 +87,7 @@ class solid_angle(object):
 				# perform the monte carlo simulation 1E9 times
 				#######  WE COULD CHANGE THIS TO AUTO DETECT CONVERGENCE #######
 				for i in range(0,1E9):
-					# emit one particle from a random point in the current 
+					# emit one particle from a random point in the current
 					# source, with arbitrary direction
 					# find a random point inside the current source
 					####### WE COULD MOVE THIS ROUTINE TO THE SHAPE CLASS ######
@@ -108,4 +108,4 @@ class solid_angle(object):
 						pass;
 					elif det.shape is 'rectangular-parallelpiped':
 						pass;
-		return sa;	
+		return sa;

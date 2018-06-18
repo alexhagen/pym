@@ -48,6 +48,7 @@ class curve(object):
         self.name = name
         self.data = data
         self.epsilon = 0.05
+        self.fit_transpose = False
         # assert that x and y are 1d lists of same size
         if isinstance(x, list):
             self.x = np.array(x)

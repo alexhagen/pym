@@ -49,6 +49,8 @@ class curve(object):
         self.data = data
         self.epsilon = 0.05
         self.fit_transpose = False
+        self.binned_data_x = None
+        self.binned_data_y = None
         # assert that x and y are 1d lists of same size
         if isinstance(x, list):
             self.x = np.array(x)
@@ -1411,6 +1413,24 @@ class curve(object):
     ###########################################################################
     # Curve Plotting - no tests currently
     ###########################################################################
+    def prepare_binned_data(self, x=None, y=None):
+        if x is None and y is None:
+            x = self.x
+            y = self.y
+        plot_x = np.array([]);
+        plot_y = np.array([]);
+        # plot the thick bars
+        for i in np.arange(0,len(x)-1):
+            plot_x = np.append(plot_x,x[i]);
+            plot_y = np.append(plot_y,y[i]);
+            plot_x = np.append(plot_x,x[i+1]);
+            plot_y = np.append(plot_y,y[i]);
+            plot_x = np.append(plot_x,np.nan);
+            plot_y = np.append(plot_y,np.nan);
+            self.binned_data_x = plot_x
+            self.binned_data_y = plot_y
+
+
     def plot(self, x=None, y=None, addto=None,  # pragma: no cover
              linestyle=None, linecolor='black',  # pragma: no cover
              markerstyle=None,  # pragma: no cover
@@ -1433,21 +1453,9 @@ class curve(object):
             x = self.x
             y = self.y
         if self.data == 'binned':
-            # plot the bins
-            # setup a matix
-            # preallocate this later ***********************************
-            plot_x = np.array([]);
-            plot_y = np.array([]);
-            # plot the thick bars
-            for i in np.arange(0,len(x)-1):
-                plot_x = np.append(plot_x,x[i]);
-                plot_y = np.append(plot_y,y[i]);
-                plot_x = np.append(plot_x,x[i+1]);
-                plot_y = np.append(plot_y,y[i]);
-                plot_x = np.append(plot_x,np.nan);
-                plot_y = np.append(plot_y,np.nan);
-                # self.binned_data_x = plot_x
-                # self.binned_data_y = plot_y
+            self.prepare_binned_data(x, y)
+            plot_x = self.binned_data_x
+            plot_y = self.binned_data_y
             if yy:
                 fun = plot.add_line_yy
             elif xx:

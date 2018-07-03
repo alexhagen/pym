@@ -1442,9 +1442,9 @@ class curve(object):
         kwargs.update(self.plot_kwargs)
         #print kwargs
         if addto is None:
-            plot = ahp.pyg2d(env=env, polar=polar);
+            plot = ahp.pyg2d(env=env, polar=polar)
         else:
-            plot = addto;
+            plot = addto
         if xerr is None:
             xerr = self.u_x
         if yerr is None:
@@ -1484,15 +1484,20 @@ class curve(object):
             if yy is False and xx is False:
                 plot.add_line(x, y, xerr=self.u_x, yerr=self.u_y,
                               name=self.name, linestyle=linestyle,
-                              linecolor=linecolor, markerstyle=markerstyle, axes=axes, legend=legend, alpha=alpha,  **kwargs)
+                              linecolor=linecolor, markerstyle=markerstyle,
+                              axes=axes, legend=legend, alpha=alpha, **kwargs)
             elif yy is True and xx is False:
                 plot.add_line_yy(x, y, xerr=self.u_x, yerr=self.u_y,
-                                 name=self.name,linestyle=linestyle,
-                                 linecolor=linecolor, markerstyle=markerstyle, axes=axes, legend=legend, alpha=alpha,  **kwargs)
+                                 name=self.name, linestyle=linestyle,
+                                 linecolor=linecolor, markerstyle=markerstyle,
+                                 axes=axes, legend=legend, alpha=alpha,
+                                 **kwargs)
             elif xx is True and yy is False:
                 plot.add_line_xx(x, y, xerr=self.u_x, yerr=self.u_y,
-                                 name=self.name,linestyle=linestyle,
-                                 linecolor=linecolor, markerstyle=markerstyle, axes=axes, legend=legend, alpha=alpha, **kwargs)
+                                 name=self.name, linestyle=linestyle,
+                                 linecolor=linecolor, markerstyle=markerstyle,
+                                 axes=axes, legend=legend, alpha=alpha,
+                                 **kwargs)
         return plot
 
     def plot_fit(self, xmin=None, xmax=None, addto=None, # pragma: no cover

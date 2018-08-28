@@ -8,6 +8,11 @@ import peakutils
 sys.path.append(os.environ['HOME'] + '/code/')
 from pyg import twod as ahp
 
+def log10space(x1, x2, N=10):
+    """Return `N` values between `x1` and `x2`, spaced by their `log10` values.
+    """
+    return np.power(10., np.log10(x1), np.log10(x2), N)
+
 
 class curve(object):
     r"""An object to expose some numerical methods and plotting tools.

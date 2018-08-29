@@ -5,11 +5,21 @@ from scipy.optimize import curve_fit
 from scipy.odr import *
 import scipy.fftpack as sft
 import peakutils
-sys.path.append(os.environ['HOME'] + '/code/')
 from pyg import twod as ahp
+
 
 def log10space(x1, x2, N=10):
     """Return `N` values between `x1` and `x2`, spaced by their `log10` values.
+
+    Numpy's logspace is silly because it wants you to put in the first exponent
+    and last exponent, which means you have to call log10 anyways.  This is my
+    shortcut.
+
+    :param float x1: start value
+    :param float x2: end value
+    :param int N: Number of values to create, default `10`
+    :return: values log10 spaced between `x1` and `x2`
+    :rtype: list
     """
     return np.power(10., np.log10(x1), np.log10(x2), N)
 

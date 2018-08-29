@@ -1410,10 +1410,10 @@ class curve(object):
 
         :returns: the tuple :math:`\left(a, b, c, d\right)`
         """
-        def cube_func(coeffs,x):
-            return np.polyval(coeffs,x);
-        coeffs = np.polyfit(self.x,self.y,3);
-        self.fun = cube_func;
+        def cube_func(coeffs, x):
+            return np.polyval(coeffs, x)
+        coeffs = np.polyfit(self.x, self.y, 3)
+        self.fun = cube_func
         self.coeffs = coeffs
         self.fit_exp_bool = True
         return self
@@ -1432,16 +1432,16 @@ class curve(object):
         if x is None and y is None:
             x = self.x
             y = self.y
-        plot_x = np.array([]);
-        plot_y = np.array([]);
+        plot_x = np.array([])
+        plot_y = np.array([])
         # plot the thick bars
-        for i in np.arange(0,len(x)-1):
-            plot_x = np.append(plot_x,x[i]);
-            plot_y = np.append(plot_y,y[i]);
-            plot_x = np.append(plot_x,x[i+1]);
-            plot_y = np.append(plot_y,y[i]);
-            plot_x = np.append(plot_x,np.nan);
-            plot_y = np.append(plot_y,np.nan);
+        for i in np.arange(0, len(x)-1):
+            plot_x = np.append(plot_x, x[i])
+            plot_y = np.append(plot_y, y[i])
+            plot_x = np.append(plot_x, x[i+1])
+            plot_y = np.append(plot_y, y[i])
+            plot_x = np.append(plot_x, np.nan)
+            plot_y = np.append(plot_y, np.nan)
             self.binned_data_x = plot_x
             self.binned_data_y = plot_y
 
@@ -1449,9 +1449,9 @@ class curve(object):
     def plot(self, x=None, y=None, addto=None,  # pragma: no cover
              linestyle=None, linecolor='black',  # pragma: no cover
              markerstyle=None,  # pragma: no cover
-             yy=False, xerr=None, yerr=None, # pragma: no cover
-             legend=True, env='plot', axes=None, # pragma: no cover
-             polar=False, xx=False, alpha=1.0, **kwargs): # pragma: no cover
+             yy=False, xerr=None, yerr=None,  # pragma: no cover
+             legend=True, env='plot', axes=None,  # pragma: no cover
+             polar=False, xx=False, alpha=1.0, **kwargs):  # pragma: no cover
         #print kwargs
         #print self.plot_kwargs
         kwargs.update(self.plot_kwargs)
@@ -1484,15 +1484,15 @@ class curve(object):
                           alpha=alpha, **kwargs)
             conn_x = np.array([])
             conn_y = np.array([])
-            for i in np.arange(1,len(x)):
-                conn_x = np.append(conn_x,x[i])
-                conn_y = np.append(conn_y,y[i-1])
-                conn_x = np.append(conn_x,x[i])
-                conn_y = np.append(conn_y,y[i])
-                conn_x = np.append(conn_x,np.nan)
-                conn_y = np.append(conn_y,np.nan)
+            for i in np.arange(1, len(x)):
+                conn_x = np.append(conn_x, x[i])
+                conn_y = np.append(conn_y, y[i-1])
+                conn_x = np.append(conn_x, x[i])
+                conn_y = np.append(conn_y, y[i])
+                conn_x = np.append(conn_x, np.nan)
+                conn_y = np.append(conn_y, np.nan)
             fun(conn_x, conn_y, name=self.name+'connectors',
-                          linewidth=0.1, linestyle='-', linecolor=linecolor, markerstyle=markerstyle, legend=legend, alpha=alpha,  **kwargs)
+                linewidth=0.1, linestyle='-', linecolor=linecolor, markerstyle=markerstyle, legend=legend, alpha=alpha,  **kwargs)
             plot.markers_off()
             plot.lines_on()
         elif self.data is 'smooth':
@@ -1515,9 +1515,9 @@ class curve(object):
                                  **kwargs)
         return plot
 
-    def plot_fit(self, xmin=None, xmax=None, addto=None, # pragma: no cover
-                 linestyle=None,  linecolor='black', # pragma: no cover
-                 name=None, axes=None): # pragma: no cover
+    def plot_fit(self, xmin=None, xmax=None, addto=None,  # pragma: no cover
+                 linestyle=None,  linecolor='black',  # pragma: no cover
+                 name=None, axes=None):  # pragma: no cover
         if addto is None:
             plot = ahp.pyg2d()
         else:

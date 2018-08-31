@@ -806,7 +806,7 @@ class curve(object):
     ###########################################################################
     # Data Integration and Normalization - tests in tests/test_data_integ.py
     ###########################################################################
-    def integrate(self, x_min=None, x_max=None, quad='lin'):
+    def integrate(self, x_min=None, x_max=None, quad='lin', numpoints=None):
         r""" ``integrate`` integrates under the curve.
 
         ``integrate`` will integrate under the given curve, providing the
@@ -827,7 +827,7 @@ class curve(object):
                 x_min = np.min(self.x)
             if x_max is None:
                 x_max = np.max(self.x)
-            return self.trapezoidal(x_min=x_min, x_max=x_max, quad=quad)
+            return self.trapezoidal(x_min=x_min, x_max=x_max, quad=quad, numpoints=numpoints)
         else:
             return self.bin_int(x_min, x_max)
 
@@ -893,7 +893,7 @@ class curve(object):
             epsilon = np.min(np.abs(xs)) / 100.
         return (self.at(x + epsilon) - self.at(x - epsilon)) / (2. * epsilon)
 
-    def trapezoidal(self, x_min, x_max, quad='lin'):
+    def trapezoidal(self, x_min, x_max, quad='lin', numpoints=None):
         r""" ``trapezoidal()`` uses the trapezoidal rule to integrate the curve.
 
         ``trapezoidal(x_min, x_max)`` integrates the curve using the
@@ -918,7 +918,8 @@ class curve(object):
             or ``'log'``
         :returns: the integral of the curve from trapezoidal rule.
         """
-        numpoints = len(self.x) * 10
+        if numpoints is None:
+            numpoints = len(self.x) * 10
         if quad is 'lin':
             x_sub = np.linspace(x_min, x_max, numpoints)
             # then, between each x, we find the value there

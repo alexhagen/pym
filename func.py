@@ -21,7 +21,7 @@ def log10space(x1, x2, N=10):
     :return: values log10 spaced between `x1` and `x2`
     :rtype: list
     """
-    return np.power(10., np.log10(x1), np.log10(x2), N)
+    return np.power(10., np.linspace(np.log10(x1), np.log10(x2), N))
 
 
 class curve(object):
@@ -69,10 +69,14 @@ class curve(object):
         # assert that x and y are 1d lists of same size
         if isinstance(x, list):
             self.x = np.array(x)
+        elif isinstance(x, float):
+            self.x = np.array(list(x))
         else:
             self.x = x
         if isinstance(y, list):
             self.y = np.array(y)
+        elif isinstance(y, float):
+            self.y = np.array(list(y))
         else:
             self.y = y
         if isinstance(u_x, list):
@@ -135,6 +139,9 @@ class curve(object):
         :return: A curve object with the added data, fully sorted.
         :rtype: curve
         """
+        if isinstance(x, float):
+            x = [x]
+            y = [y]
         self.x = np.append([float(item) for item in self.x], list(x))
         self.y = np.append([float(item) for item in self.y], list(y))
         if self.u_x is not None:

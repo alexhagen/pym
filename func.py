@@ -1,3 +1,4 @@
+from __future__ import print_function, division
 import numpy as np
 import sys
 import os
@@ -282,13 +283,13 @@ class curve(object):
             newy = [self.at(_x) for _x in x]
         elif self.data == 'binned':
             bin_widths = [x2 - x1 for x1, x2 in zip(x[:-1], x[1:])]
-            print bin_widths[::5]
+            #print (bin_widths[::5])
             # assume the last bin has the same width
             bin_widths = bin_widths + [bin_widths[-1]]
-            print bin_widths[::5]
+            #print (bin_widths[::5])
             newy = [self.integrate(x_min=_x, x_max=_x + bw)
                     for _x, bw in zip(x, bin_widths)]
-            print newy[::5]
+            #print (newy[::5])
         self.x = np.array(x)
         self.y = np.array(newy)
         self.sort()

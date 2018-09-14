@@ -347,8 +347,10 @@ class curve(object):
             x = [x]
         y = np.ones_like(x)
         for index, xi in zip(range(len(x)), x):
+            if isinstance(xi, int):
+                xi = float(xi)
             if xi in self.x:
-                y[index] = self.y[list(self.x).index(xi)]
+                y[index] = self.y[np.argwhere(self.x == xi).flatten()]#list(self.x).index(xi)]
             else:
                 if xi > np.min(self.x) and xi < np.max(self.x.max):
                     if self.data == 'binned':
@@ -580,6 +582,7 @@ class curve(object):
         m = (y_up - y_down) / (x_up - x_down)
         # find the y value
         y = y_down + x_dist * m
+        print ('interp', y_down, x_dist, y_up, x_down)
         return y
 
     def extrapolate(self, x):
@@ -615,6 +618,7 @@ class curve(object):
         # find the y change between closest point and new point
         dy = m * (x - x1)
         # find the new point
+        print("extrap", x1, self.at(x1), dy)
         return self.at(x1) + dy
 
     def find_nearest_down(self, x, error=False):
@@ -630,6 +634,7 @@ class curve(object):
             immediately below in ``x`` value to the value passed to the
             function, optionally containing the ``u_x`` and ``u_y`` value.
         """
+        x = float(x)
         dx = x - self.x
         dx[dx < 0.] = np.inf
         idx = np.abs(dx).argmin()
@@ -658,6 +663,7 @@ class curve(object):
             function, optionally containing the ``u_x`` and ``u_y`` value.
         :rtype: tuple
         """
+        x = float(x)
         dx = x - self.x
         dx[dx > 0.] = np.inf
         idx = np.abs(dx).argmin()

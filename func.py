@@ -582,7 +582,7 @@ class curve(object):
         m = (y_up - y_down) / (x_up - x_down)
         # find the y value
         y = y_down + x_dist * m
-        print ('interp', y_down, x_dist, y_up, x_down)
+        #print ('interp', y_down, x_dist, y_up, x_down)
         return y
 
     def extrapolate(self, x):
@@ -618,7 +618,7 @@ class curve(object):
         # find the y change between closest point and new point
         dy = m * (x - x1)
         # find the new point
-        print("extrap", x1, self.at(x1), dy)
+        #print("extrap", x1, self.at(x1), dy)
         return self.at(x1) + dy
 
     def find_nearest_down(self, x, error=False):
@@ -841,9 +841,25 @@ class curve(object):
                 x_min = np.min(self.x)
             if x_max is None:
                 x_max = np.max(self.x)
-            return self.trapezoidal(x_min=x_min, x_max=x_max, quad=quad, numpoints=numpoints)
+            if numpoints is None:
+                numpoints = 10
+            if quad == 'lin':
+                return self.trapezoidal(x_min=x_min, x_max=x_max, quad=quad, numpoints=numpoints)
+            elif quad == 4:
+                return self.boole(x_min=x_min, x_max=x_max, numpoints=numpoints)
         else:
             return self.bin_int(x_min, x_max)
+
+    def boole(self, x_min, x_max, numpoints):
+        _sum = 0.0
+        pts = np.linspace(x_min, x_max, numpoints)
+        for a, b in zip(pts[:-1], pts[1:]):
+            deltax = (b - a) / 4.0
+            _sum += (b - a) * (7.0 * self.at(a) + 32.0 * self.at(a + deltax)
+                               + 12.0 * self.at(a + 2.0 * deltax)
+                               + 32.0 * self.at(a + 3.0 * deltax)
+                               + self.at(b)) / 90.0
+        return _sum
 
     def bin_int(self, x_min=None, x_max=None):
         r""" ``bin_int`` integrates a bar chart.

@@ -324,7 +324,7 @@ class curve(object):
         :return: Whether or not the data is in the range of the curve data.
         :rtype: bool
         """
-        if x >= self.x.min() and x <= self.x.max():
+        if x >= self.xmin() and x <= self.xmax():
             return True
         else:
             return False
@@ -352,7 +352,7 @@ class curve(object):
             if xi in self.x:
                 y[index] = self.y[np.argwhere(self.x == xi).flatten()]#list(self.x).index(xi)]
             else:
-                if xi > np.min(self.x) and xi < np.max(self.x.max):
+                if xi > np.min(self.x) and xi < np.max(self.xmax()):
                     if self.data == 'binned':
                         _, y[index] = self.find_nearest_down(xi)
                     else:
@@ -483,7 +483,7 @@ class curve(object):
             if xi in self.x:
                 u_y[index] = self.u_y[list(self.x).index(xi)]
             else:
-                if xi > self.x.min() and xi < self.x.max():
+                if xi > self.xmin() and xi < self.xmax():
                     # if it is in the data range, interpolate
                     xi1, y1, uxi1, uy1 = self.find_nearest_down(xi, error=True)
                     xi2, y2, uxi2, uy2 = self.find_nearest_up(xi, error=True)
@@ -508,6 +508,12 @@ class curve(object):
 
     def min(self):
         return np.min(self.y)
+
+    def xmax(self):
+        return np.max(self.x)
+
+    def xmin(self):
+        return np.min(self.x)
 
     def find_max(self):
         return self.find_in_data(self.max())
@@ -697,9 +703,9 @@ class curve(object):
         :rtype: float
         """
         if xmin is None:
-            xmin = self.x.min()
+            xmin = self.xmin()
         if xmax is None:
-            xmax = self.x.max()
+            xmax = self.xmax()
         mean = self.integrate(xmin, xmax) \
             / (xmax - xmin)
         return mean
@@ -1562,9 +1568,9 @@ class curve(object):
             self.fitx = self.fit_at(self.fity)
         else:
             if xmin is None:
-                xmin = self.x.min()
+                xmin = self.xmin()
             if xmax is None:
-                xmax = self.x.max()
+                xmax = self.xmax()
             self.fitx = np.linspace(xmin, xmax, num=1000)
             self.fity = self.fit_at(self.fitx)
         if name is None:

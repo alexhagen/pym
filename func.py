@@ -352,7 +352,7 @@ class curve(object):
             if xi in self.x:
                 y[index] = self.y[np.argwhere(self.x == xi).flatten()]#list(self.x).index(xi)]
             else:
-                if xi > np.min(self.x) and xi < np.max(self.x.max):
+                if xi > np.min(self.x) and xi < np.max(self.x.max()):
                     if self.data == 'binned':
                         _, y[index] = self.find_nearest_down(xi)
                     else:

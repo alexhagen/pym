@@ -11,21 +11,29 @@ from sklearn.neighbors import KernelDensity
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import LeaveOneOut
 
+
 def kde1d(qs, bandwidth=None, **kwargs):
+    """Return a `pym.curve` object which is the kde of `qs`.
+
+    :param list qs: a list of observations
+    :param float bandwidth: the bandwidth of the KDE
+    :return: a curve with that KDE
+    :rtype: `pym.curve`
+    """
     if bandwidth is None:
         bandwidths = 10 ** np.linspace(-1, 1, 100)
         grid = GridSearchCV(KernelDensity(kernel='gaussian'),
                             {'bandwidth': bandwidths},
                             cv=LeaveOneOut())
-        grid.fit(x[:, None]);
+        grid.fit(x[:, None])
         bandwidth = grid.best_params_['bandwidth']
     kde = KernelDensity(bandwidth=bandwidth, kernel='gaussian')
     kde.fit(x[:, None])
-
     # score_samples returns the log of the probability density
     logprob = kde.score_samples(x_d[:, None])
     curve = pym.curve(x_d, np.exp(logprob))
     return curve(x_d, np.exp(logprob), **kwargs)
+
 
 def log10space(x1, x2, N=10):
     """Return `N` values between `x1` and `x2`, spaced by their `log10` values.

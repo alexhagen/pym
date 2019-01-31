@@ -1350,10 +1350,12 @@ class curve(object):
         :returns: the tuple :math:`\left(\alpha, B\right)`
         """
         def exp_func(coeffs=None, x=None):
+            """ y = exp({} * x) """
             return np.exp(np.polyval(coeffs, x))
         polyx = np.array([x1 for x1 in self.x], dtype=float)
         logy = np.array([np.log(y1) for y1 in self.y], dtype=float)
         coeffs = np.polyfit(polyx, logy, 1.0)
+        self.fit_fun = exp_func
         self.fun = exp_func
         self.coeffs = coeffs
         self.fit_exp_bool = True
@@ -1396,6 +1398,7 @@ class curve(object):
         fit = curve_fit(fun, _x, _y, p0=guess,
                         sigma=u_y, absolute_sigma=True)
         self.coeffs = fit[0]
+        self.fit_fun = fun
         self.fit_exp_bool = False
         self.fit_transpose = transpose
         return self
@@ -1416,6 +1419,9 @@ class curve(object):
         self.fit_gen(gauss_fun, guess=guess)
         return self
 
+    def print_fit_details(self):
+        print(self.fit_fun.__doc__.format(*self.coeffs))
+
     def fit_pow(self, guess=None):
         r""" ``fit_gauss`` fits a gaussian function to the curve.
 
@@ -1427,6 +1433,7 @@ class curve(object):
         :returns: the tuple :math:`\left(\alpha, \mu, \sigma\right)`
         """
         def pow_fun(x, a, n):
+            """ y = {} * x ^ {} """
             return a * np.power(x, n)
         self.fit_gen(pow_fun, guess=guess)
         return self

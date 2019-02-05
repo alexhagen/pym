@@ -929,6 +929,20 @@ class curve(object):
             integral += fractional_bin_width * bh
         return integral
 
+    def prime(self, epsilon=None):
+        if epsilon is None:
+            epsilon = (np.max(self.x) - np.min(self.x)) / 100.0
+        _x = self.x
+        _y = [self.derivative(__x, epsilon=epsilon) for __x in _x]
+        return curve(_x, _y, name=self.name + "_prime")
+
+    def find_zero_crossings(self):
+        zcs = []
+        for _x, y1, y2 in zip(self.x[:-11], self.y[:-1], self.y[1:]):
+            if np.sign(y1) != np.sign(y2):
+                zcs.append(_x)
+        return zcs
+
     def derivative(self, x, epsilon=None):
         r""" ``derivative(x)`` takes the derivative at point :math:`x`.
 

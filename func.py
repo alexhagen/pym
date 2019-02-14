@@ -6,6 +6,7 @@ from scipy.optimize import curve_fit
 from scipy.odr import *
 import scipy.fftpack as sft
 import peakutils
+sys.path.append(os.path.join(os.path.expanduser("~"), 'code/pyg/'))
 from pyg import twod as ahp
 from sklearn.neighbors import KernelDensity
 from sklearn.model_selection import GridSearchCV

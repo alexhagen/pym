@@ -1,1 +1,3 @@
-from func import curve
+from .func import curve
+
+__all__ = ["func"]

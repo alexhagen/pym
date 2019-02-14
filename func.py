@@ -6,8 +6,6 @@ from scipy.optimize import curve_fit
 from scipy.odr import *
 import scipy.fftpack as sft
 import peakutils
-sys.path.append(os.path.join(os.path.expanduser("~"), 'code/pyg/'))
-from pyg import twod as ahp
 from sklearn.neighbors import KernelDensity
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import LeaveOneOut
@@ -1531,8 +1529,8 @@ class curve(object):
              yy=False, xerr=None, yerr=None,  # pragma: no cover
              legend=True, env='plot', axes=None,  # pragma: no cover
              polar=False, xx=False, alpha=1.0, **kwargs):  # pragma: no cover
-        #print kwargs
-        #print self.plot_kwargs
+        sys.path.append(os.path.join(os.path.expanduser("~"), 'code/pyg/'))
+        from pyg import twod as ahp
         kwargs.update(self.plot_kwargs)
         #print kwargs
         if addto is None:
@@ -1597,6 +1595,8 @@ class curve(object):
     def plot_fit(self, xmin=None, xmax=None, addto=None,  # pragma: no cover
                  linestyle=None,  linecolor='black',  # pragma: no cover
                  name=None, axes=None):  # pragma: no cover
+        sys.path.append(os.path.join(os.path.expanduser("~"), 'code/pyg/'))
+        from pyg import twod as ahp
         if addto is None:
             plot = ahp.pyg2d()
         else:

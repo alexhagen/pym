@@ -529,10 +529,10 @@ class curve(object):
         return self.x[idx]
 
     def max(self):
-        return np.max(self.y)
+        return np.nanmax(self.y)
 
     def min(self):
-        return np.min(self.y)
+        return np.nanmin(self.y)
 
     def find_max(self):
         return self.find_in_data(self.max())

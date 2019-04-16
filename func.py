@@ -1523,12 +1523,12 @@ class curve(object):
             self.binned_data_y = plot_y
 
 
-    def plot(self, x=None, y=None, addto=None,  # pragma: no cover
-             linestyle=None, linecolor='black',  # pragma: no cover
-             markerstyle=None,  # pragma: no cover
-             yy=False, xerr=None, yerr=None,  # pragma: no cover
-             legend=True, env='plot', axes=None,  # pragma: no cover
-             polar=False, xx=False, alpha=1.0, **kwargs):  # pragma: no cover
+    def plot(self, x=None, y=None, addto=None,               # pragma: no cover
+             linestyle=None, linecolor='black',              # pragma: no cover
+             markerstyle=None,                               # pragma: no cover
+             yy=False, xerr=None, yerr=None,                 # pragma: no cover
+             legend=True, env='plot', axes=None,             # pragma: no cover
+             polar=False, xx=False, alpha=1.0, **kwargs):    # pragma: no cover
         sys.path.append(os.path.join(os.path.expanduser("~"), 'code/pyg/'))
         from pyg import twod as ahp
         kwargs.update(self.plot_kwargs)
@@ -1558,7 +1558,7 @@ class curve(object):
                           linecolor=linecolor, linestyle='-',
                           markerstyle=markerstyle,
                           legend=legend,
-                          alpha=alpha, **kwargs)
+                          alpha=alpha, axes=axes, **kwargs)
             conn_x = np.array([])
             conn_y = np.array([])
             for i in np.arange(1, len(x)):
@@ -1569,7 +1569,9 @@ class curve(object):
                 conn_x = np.append(conn_x, np.nan)
                 conn_y = np.append(conn_y, np.nan)
             fun(conn_x, conn_y, name=self.name+'connectors',
-                linewidth=0.1, linestyle='-', linecolor=linecolor, markerstyle=markerstyle, legend=legend, alpha=alpha,  **kwargs)
+                linewidth=0.1, linestyle='-', linecolor=linecolor,
+                markerstyle=markerstyle, legend=legend, alpha=alpha,
+                axes=axes, **kwargs)
             plot.markers_off()
             plot.lines_on()
         elif self.data is 'smooth':

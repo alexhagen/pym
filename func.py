@@ -306,6 +306,7 @@ class curve(object):
         """
         if self.data == 'smooth':
             newy = [self.at(_x) for _x in x]
+            #newuy = [self.u_y_at(_x) for _x in x]
         elif self.data == 'binned':
             bin_widths = [x2 - x1 for x1, x2 in zip(x[:-1], x[1:])]
             #print (bin_widths[::5])
@@ -317,6 +318,7 @@ class curve(object):
             #print (newy[::5])
         self.x = np.array(x)
         self.y = np.array(newy)
+        #self.u_y = np.array(newuy)
         self.sort()
         return self
 
@@ -512,6 +514,10 @@ class curve(object):
                     # if it is in the data range, interpolate
                     xi1, y1, uxi1, uy1 = self.find_nearest_down(xi, error=True)
                     xi2, y2, uxi2, uy2 = self.find_nearest_up(xi, error=True)
+                    if uxi1 is None:
+                        uxi1 = 0.0
+                    if uxi2 is None:
+                        uxi2 = 0.0
                     m = (y2 - y1) / (xi2 - xi1)
                     dxi = (xi - xi1) / (xi2 - xi1)
                     u_y[index] = m * np.sqrt(dx**2. + uy1**2. + uy2**2. +
@@ -702,6 +708,9 @@ class curve(object):
             return (self.x[idx], self.y[idx], ux, uy)
         else:
             return (self.x[idx], self.y[idx])
+
+    def mean(self, *args, **kwargs):
+        return self.average(*args, **kwargs)
 
     def average(self, xmin=None, xmax=None):
         r""" ``average()`` will find the average ``y``-value across the entire
